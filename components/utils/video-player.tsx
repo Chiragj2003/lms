@@ -9,7 +9,7 @@ import { useConfettiStore } from "@/hooks/use-confetti-store";
 import { toast } from "sonner";
 import axios from "axios";
 import { useCertificate } from "@/hooks/use-certificate-modal";
-import { useSession } from "next-auth/react";
+import { useSession } from "@/lib/auth-client";
 
 
 interface VideoPlayerProps {

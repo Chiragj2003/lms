@@ -43,3 +43,6 @@ videos/*
 !videos/*.js
 !videos/*.ts
 public/_next-video
+
+# local auth backup (contains tokens)
+.backup/

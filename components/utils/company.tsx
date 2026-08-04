@@ -1,8 +1,7 @@
-import { SiFord } from "react-icons/si";
+import { SiFord, SiSamsung } from "react-icons/si";
 import { TbBrandDisney } from "react-icons/tb";
 import { RiNetflixFill } from "react-icons/ri";
 import { FaSpotify } from "react-icons/fa";
-import { SiAdobe } from "react-icons/si";
 
 export const Company = () => {
     return (
@@ -14,7 +13,7 @@ export const Company = () => {
                     <TbBrandDisney className="h-16 w-16 text-zinc-500" />
                     <RiNetflixFill className="h-14 w-14 text-zinc-500" />
                     <FaSpotify className="h-14 w-14 text-zinc-500" />
-                    <SiAdobe className="h-14 w-14 text-zinc-500" />
+                    <SiSamsung className="h-14 w-14 text-zinc-500" />
                 </div>
             </div>
         </section>

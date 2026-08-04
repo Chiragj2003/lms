@@ -8,12 +8,11 @@ import { Actions } from "@/components/quiz/actions";
 
 
 interface QuizPageProps {
-    params : { courseId: string, chapterId: string }
+    params : Promise<{ courseId: string, chapterId: string }>
 }
 
-const QuizPage = async({
-    params
-} : QuizPageProps) => {
+const QuizPage = async (props: QuizPageProps) => {
+    const params = await props.params;
 
     const session = await auth();
     if (!session) {

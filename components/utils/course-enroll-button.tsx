@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
+import { useSession } from '@/lib/auth-client';
 
 import axios from 'axios';
 import { toast } from 'sonner';
@@ -29,7 +29,7 @@ export const CourseEnrollButton = ({
 
     const onClick = async()=>{
 
-        if (session.status==="unauthenticated") {
+        if (!session.isPending && !session.data) {
             router.push("/login");
             return;
         }

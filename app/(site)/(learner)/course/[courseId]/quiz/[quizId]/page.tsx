@@ -12,19 +12,18 @@ export const metadata : Metadata = {
 }
 
 interface QuizPageProps {
-    params : { courseId: string, quizId: string }
+    params : Promise<{ courseId: string, quizId: string }>
 }
 
-const QuizPage = async({
-    params
-}:  QuizPageProps) => {
-    
+const QuizPage = async (props:  QuizPageProps) => {
+    const params = await props.params;
+
     const session = await auth();
     if (!session || !session.user || !session.user.id) {
         return redirect("/");
     }
 
-        
+
     const quiz = await getQuizById(params.courseId, params.quizId, session.user.id);
 
     if (!quiz) {
@@ -38,7 +37,7 @@ const QuizPage = async({
     if ( quiz.result[0] ) {
         return redirect(`/course/${params.courseId}/quiz/${params.quizId}/result`)
     }
-    
+
     return (
         <main
             className="px-6 max-w-3xl w-full mx-auto"

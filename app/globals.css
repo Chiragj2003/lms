@@ -23,33 +23,38 @@ body,
 
 @layer base {
   :root {
+    /* Ink & Highlight: ink carries the identity, amber is the one accent. */
     --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
+    --foreground: 219 27% 19%;
 
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
+    --card-foreground: 219 27% 19%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
+    --popover-foreground: 219 27% 19%;
 
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
+    --primary: 219 27% 19%;
+    --primary-foreground: 210 40% 98%;
 
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
+    --secondary: 220 30% 96%;
+    --secondary-foreground: 219 27% 19%;
 
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
+    --muted: 220 30% 96%;
+    --muted-foreground: 219 15% 45%;
 
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
+    --accent: 220 30% 96%;
+    --accent-foreground: 219 27% 19%;
 
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
+    --border: 220 22% 90%;
+    --input: 220 22% 90%;
+    /* Amber focus ring: on-brand and clearly visible against ink. */
+    --ring: 38 92% 50%;
+
+    --highlight: 38 92% 50%;
+    --highlight-foreground: 220 32% 13%;
 
     --radius: 0.5rem;
     --chart-1: 12 76% 61%;
@@ -61,33 +66,36 @@ body,
   }
 
   .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
+    --background: 220 32% 10%;
+    --foreground: 210 40% 98%;
 
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
+    --card: 220 30% 13%;
+    --card-foreground: 210 40% 98%;
 
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 220 30% 13%;
+    --popover-foreground: 210 40% 98%;
 
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 219 27% 19%;
 
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
+    --secondary: 220 25% 18%;
+    --secondary-foreground: 210 40% 98%;
 
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
+    --muted: 220 25% 18%;
+    --muted-foreground: 220 15% 65%;
 
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
+    --accent: 220 25% 18%;
+    --accent-foreground: 210 40% 98%;
 
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0 62.8% 40%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
+    --border: 220 25% 20%;
+    --input: 220 25% 20%;
+    --ring: 38 92% 50%;
+
+    --highlight: 38 92% 55%;
+    --highlight-foreground: 220 32% 13%;
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
@@ -102,5 +110,37 @@ body,
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  /* Signature: the highlighter swipe. The one mark a learner makes when
+     something matters. Use once per view, on the phrase that carries it. */
+  .mark-highlight {
+    background-image: linear-gradient(
+      to bottom,
+      transparent 58%,
+      hsl(var(--highlight) / 0.55) 58%,
+      hsl(var(--highlight) / 0.55) 92%,
+      transparent 92%
+    );
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    /* Slight skew so it reads as a hand-drawn stroke, not a CSS rectangle. */
+    padding-inline: 0.12em;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+}
+
+/* Quality floor: don't animate for people who asked us not to. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

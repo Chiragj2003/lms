@@ -3,10 +3,8 @@ import { db } from "@/lib/db";
 import { QuizResponseSchema } from "@/schemas/quiz-response.schema";
 import { NextResponse } from "next/server";
 
-export async function POST (
-    req : Request,
-    { params } : { params : { quizId: string } }
-) {
+export async function POST(req : Request, props: { params : Promise<{ quizId: string }> }) {
+    const params = await props.params;
     try {
         
         const session = await auth();

@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useSession } from "next-auth/react";
+import { useSession } from "@/lib/auth-client";
 import { usePathname, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { UserAvatar } from "@/components/account/user-avatar";
@@ -73,7 +73,7 @@ export const Header = ({
                     </Badge>
                 </div>
                 {
-                    session.status === "unauthenticated" ? (
+                    (!session.isPending && !session.data) ? (
                         <Button
                             onClick={()=>router.push("/login")}
                             className={cn(

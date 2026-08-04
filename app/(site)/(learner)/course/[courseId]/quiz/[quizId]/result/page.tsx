@@ -13,22 +13,21 @@ export const metadata : Metadata = {
 }
 
 interface QuizResultPageProps {
-    params : {
+    params : Promise<{
         courseId: string;
         quizId: string;
-    }
+    }>
 }
 
-const QuizResultPage = async({
-    params
-}: QuizResultPageProps ) => {
+const QuizResultPage = async (props: QuizResultPageProps) => {
+    const params = await props.params;
 
     const session = await auth();
     if (!session || !session.user || !session.user.id) {
         return redirect("/");
     }
 
-        
+
     const quiz = await getQuizById(params.courseId, params.quizId, session.user.id);
 
     if (!quiz) {

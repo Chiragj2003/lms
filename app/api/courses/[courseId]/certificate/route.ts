@@ -2,10 +2,8 @@ import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 
-export async function POST (
-    req : Request,
-    { params } : { params : { courseId : string } }
-) {
+export async function POST(req : Request, props: { params : Promise<{ courseId : string }> }) {
+    const params = await props.params;
     try {
    
         const session = await auth();
@@ -39,5 +37,4 @@ export async function POST (
         console.error("CERTIFICATE POST API ERROR", error);
         return new NextResponse("Internal server error", {status: 500});
     }
-
 }

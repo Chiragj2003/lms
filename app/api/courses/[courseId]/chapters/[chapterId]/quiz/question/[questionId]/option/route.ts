@@ -4,10 +4,11 @@ import { OptionSchema } from "@/schemas/option.schema";
 import { NextResponse } from "next/server";
 
 
-export async function POST (
+export async function POST(
     req: Request,
-    { params } : { params : { courseId : string, chapterId: string, questionId: string } }
+    props: { params : Promise<{ courseId : string, chapterId: string, questionId: string }> }
 ) {
+    const params = await props.params;
     try {
 
         const session = await auth();
@@ -45,10 +46,11 @@ export async function POST (
 }
 
 
-export async function PATCH (
+export async function PATCH(
     req: Request,
-    { params } : { params : { courseId : string, chapterId: string, questionId: string } }
+    props: { params : Promise<{ courseId : string, chapterId: string, questionId: string }> }
 ) {
+    const params = await props.params;
     try {
 
         const session = await auth();
@@ -100,10 +102,11 @@ export async function PATCH (
 }
 
 
-export async function DELETE (
+export async function DELETE(
     req: Request,
-    { params } : { params : { courseId : string, chapterId: string, questionId: string } }
+    props: { params : Promise<{ courseId : string, chapterId: string, questionId: string }> }
 ) {
+    const params = await props.params;
     try {
 
         const session = await auth();

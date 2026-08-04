@@ -15,15 +15,14 @@ import { Reviews } from "@/components/courses/ui/reviews";
 
 
 interface CoursePageProps {
-    params : {courseId: string};
+    params : Promise<{courseId: string}>;
 }
 
-export async function generateMetadata(
-    { params } : CoursePageProps,
-) : Promise<Metadata> {
+export async function generateMetadata(props: CoursePageProps): Promise<Metadata> {
+    const params = await props.params;
 
     const data = await courseMetadata(params.courseId);
-    
+
     if ( !data ) {
         return {};
     }
@@ -44,10 +43,9 @@ export async function generateMetadata(
 }
 
 
-const CoursePage = async({
-    params
-}:CoursePageProps ) => {
-    
+const CoursePage = async (props:CoursePageProps) => {
+    const params = await props.params;
+
     const { course, avgRating } = await getCourseByPublicId(params.courseId);
     if (!course) {
         redirect("/");

@@ -42,7 +42,7 @@ export const PriceForm = ({
     const [isEditing, setEditing] = useState(false);
     const toggleEdit = ()=>setEditing((prev)=>!prev);
 
-    const form  = useForm<z.infer<typeof PriceSchema>>({
+    const form  = useForm<z.input<typeof PriceSchema>, any, z.infer<typeof PriceSchema>>({
         resolver : zodResolver(PriceSchema),
         defaultValues : {
             price : initialData.price || undefined
@@ -115,6 +115,7 @@ export const PriceForm = ({
                                                     step={0.01}
                                                     className="rounded-none h-14 border-zinc-400 border-2 outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-zinc-500"
                                                     {...field}
+                                                    value={field.value as number | undefined}
                                                     disabled = {isSubmitting}
                                                 />
                                             </FormControl>

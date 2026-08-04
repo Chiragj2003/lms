@@ -21,13 +21,12 @@ import { TranscriptForm } from "@/components/chapters/forms/transcript";
 
 
 interface ChapterPageProps {
-    params : { courseId: string, chapterId: string }
+    params : Promise<{ courseId: string, chapterId: string }>
 }
 
-const ChapterPage = async({
-    params
-} : ChapterPageProps) => {
-    
+const ChapterPage = async (props: ChapterPageProps) => {
+    const params = await props.params;
+
     const session = await auth();
     if (!session) {
         redirect("/");

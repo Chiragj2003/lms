@@ -1,63 +1,14 @@
-import NextAuth from "next-auth"
-import { Role } from "@prisma/client";
-import { PrismaAdapter } from "@auth/prisma-adapter";
+import { headers } from "next/headers";
 
-import { db } from "@/lib/db";
-import authConfig from "@/auth.config";
-import { getUserById } from "@/lib/user";
+import { auth as betterAuth } from "@/lib/auth";
 
-export const {
-    handlers,
-    signIn,
-    signOut,
-    auth
-} = NextAuth({
-    pages: {
-        signIn: "/login",
-        error: "/auth/error",
-    },
-    trustHost: true,
-    events: {
-        async linkAccount({ user }) {
-            await db.user.update({
-                where: { id: user.id },
-                data: { emailVerified: new Date() }
-            })
-        }
-    },
-    callbacks: {
-        async signIn({ user, account }){
-        if (account?.provider !== "credentials") return true;
-            return true;
-        },
-
-        async session({ token, session }) {
-            if (token.sub && session.user) {
-                session.user.id = token.sub;
-            }
-
-            if (token.role && session.user) {
-                session.user.role = token.role as Role;
-            } 
-
-            if (token.profile && session.user) {
-                session.user.profile = token.profile as boolean;
-            } 
-
-            return session;
-        },
-        async jwt({ token }) {
-        if (!token.sub) return token;
-            const existingUser = await getUserById(token.sub);
-            if (!existingUser) return token;
-            token.name = existingUser.name;
-            token.email = existingUser.email;
-            token.role = existingUser.role;
-            token.profile = !!existingUser.profile
-            return token;
-        }
-    },
-    adapter: PrismaAdapter(db),
-    session: { strategy: "jwt" },
-    ...authConfig,
-});
+/**
+ * Compatibility shim for the `await auth()` call the app already makes in 44
+ * server files. Better Auth returns { session, user } and those files read
+ * session.user.{id,role,profile}, so the shape lines up as-is.
+ */
+export const auth = async () => {
+    return betterAuth.api.getSession({
+        headers : await headers()
+    });
+};

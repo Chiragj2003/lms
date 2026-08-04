@@ -7,7 +7,7 @@ import {
 } from 'react';
 import Image from 'next/image';
 import { Ollama } from 'ollama/browser';
-import { useSession } from 'next-auth/react';
+import { useSession } from '@/lib/auth-client';
 import { toast } from 'sonner';
 import { useChat } from '@/hooks/use-chat';
 import { v4 as uuidv4 } from 'uuid';
@@ -46,8 +46,10 @@ export const AI = ({
     
     const session = useSession();
 
+    // Runs in the browser, so this host must be reachable from the user's
+    // machine. Hardcoding localhost only ever works for local dev.
     const ollama = new Ollama({
-        host: 'http://127.0.0.1:11434',
+        host: process.env.NEXT_PUBLIC_OLLAMA_HOST ?? 'http://127.0.0.1:11434',
     });
 
     const ref = useRef<HTMLDivElement>(null);

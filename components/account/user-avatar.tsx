@@ -1,6 +1,6 @@
 "use client";
 
-import { signOut, useSession } from "next-auth/react";
+import { signOut, useSession } from "@/lib/auth-client";
 
 import {
     DropdownMenu,
@@ -84,6 +84,8 @@ export const UserAvatar = () => {
                     className="rounded-none font-medium text-zinc-700 py-2"
                     onClick={async()=>{
                         await signOut();
+                        router.push("/");
+                        router.refresh();
                     }}
                 >
                     <LogOut className="mr-3 ml-1 h-4 w-4" />

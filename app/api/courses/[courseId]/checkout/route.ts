@@ -1,15 +1,13 @@
 import Stripe from "stripe";
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
-import { stripe } from "@/lib/stripe";
+import { getStripe } from "@/lib/stripe";
 import { NextResponse } from "next/server";
 
 import { v4 as uuidv4 } from "uuid";
 
-export async function POST (
-    req: Request,
-    { params } : { params : { courseId : string } }
-) {
+export async function POST(req: Request, props: { params : Promise<{ courseId : string }> }) {
+    const params = await props.params;
     try {
 
 
@@ -86,7 +84,7 @@ export async function POST (
 
         
         if (!stripeCustomer) {
-            const customer = await stripe.customers.create({
+            const customer = await getStripe().customers.create({
                 email : session.user.email||""
             });
             
@@ -99,7 +97,7 @@ export async function POST (
         }
         
 
-        const paymentSession = await stripe.checkout.sessions.create({
+        const paymentSession = await getStripe().checkout.sessions.create({
             customer : stripeCustomer.stripeCustomerId,
             line_items,
             mode : "payment",

@@ -6,16 +6,15 @@ import { getCoursesByCategoryId } from "@/server/course";
 import { categoryMetaData } from "@/server/metadata";
 
 interface CategoryPageProps {
-    params : { categoryId : string }
+    params : Promise<{ categoryId : string }>
 }
 
 
-export async function generateMetadata(
-    { params } : CategoryPageProps,
-) : Promise<Metadata> {
+export async function generateMetadata(props: CategoryPageProps): Promise<Metadata> {
+    const params = await props.params;
 
     const data = await categoryMetaData(params.categoryId);
-    
+
     if ( !data ) {
         return {};
     }
@@ -26,12 +25,11 @@ export async function generateMetadata(
 }
 
 
-const CategoryPage = async({
-    params
-} : CategoryPageProps ) => {
-    
+const CategoryPage = async (props: CategoryPageProps) => {
+    const params = await props.params;
+
     const courses = await getCoursesByCategoryId(params.categoryId);
-    
+
     return (
         <main className="w-full my-10 px-6">
             <div className="max-w-5xl w-full mx-auto">

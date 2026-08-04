@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { Excalidraw } from "@excalidraw/excalidraw";
 import { useCanvas } from "@/hooks/use-canvas";
-import { ExcalidrawElement } from "@excalidraw/excalidraw/types/element/types";
+import { ExcalidrawElement } from "@excalidraw/excalidraw/element/types";
 import "./style.css";
 
 interface CanvasProps {

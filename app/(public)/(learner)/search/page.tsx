@@ -4,14 +4,13 @@ import { CardWithRating } from "@/components/courses/ui/card-with-ratings";
 
 
 interface SearchPageProps {
-    searchParams : {
+    searchParams : Promise<{
         query : string
-    }
+    }>
 }
 
-const SearchPage = async({
-    searchParams
-} : SearchPageProps ) => {
+const SearchPage = async (props: SearchPageProps) => {
+    const searchParams = await props.searchParams;
 
     if (!searchParams.query){
         return (

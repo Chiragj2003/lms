@@ -23,12 +23,12 @@ export const ChatResponse = ({ response }: ChatResponseProps ) => {
 
     return (
         <div className='space-y-4'>
-            <ReactMarkdown 
-                className='text-zinc-700 text-[15px]'
+            <div className='text-zinc-700 text-[15px]'>
+            <ReactMarkdown
                 components={{
-                    code({ node, inline, className, children, ...props }) {
+                    code({ node, className, children, ...props }) {
                         const match = /language-(\w+)/.exec(className || '');
-                        return !inline && match ? (
+                        return match ? (
                             <CodeHighlighter
                                 language={match[1]}
                                 code={String(children).replace(/\n$/, '')}
@@ -45,6 +45,7 @@ export const ChatResponse = ({ response }: ChatResponseProps ) => {
             >
                 {response}
             </ReactMarkdown>
+            </div>
             <Button
                 variant="outline"
                 className='p-2 h-8'

@@ -1,10 +1,13 @@
 "use client";
 
-import { Session } from "next-auth";
 import { useRouter } from "next/navigation";
 
+import type { auth } from "@/lib/auth";
+
+type Session = Awaited<ReturnType<typeof auth.api.getSession>>;
+
 interface NavigateProviderProps {
-    session : Session|null
+    session : Session
 }
 
 export const NavigateProvider = ({

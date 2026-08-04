@@ -2,7 +2,7 @@
 
 import { IconType } from "react-icons";
 import { Button } from "@/components/ui/button";
-import { signIn } from "next-auth/react";
+import { signIn } from "@/lib/auth-client";
 
 interface OauthButtonProps {
     provider : "google"|"github";
@@ -21,9 +21,9 @@ export const OauthButton = ({
 
     const handleOauth = async () => {
         try {
-            await signIn(provider, {
-                redirect : true,
-                callbackUrl : redirect
+            await signIn.social({
+                provider,
+                callbackURL : redirect
             });
         } catch (error) {
             console.log(error);

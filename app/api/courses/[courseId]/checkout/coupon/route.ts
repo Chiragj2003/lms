@@ -1,11 +1,9 @@
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 
-export async function GET (
-    req: Request,
-    { params } : { params : { courseId : string } }
-) {
-    
+export async function GET(req: Request, props: { params : Promise<{ courseId : string }> }) {
+    const params = await props.params;
+
     try {
 
         const { searchParams } = new URL(req.url);
@@ -42,5 +40,4 @@ export async function GET (
         console.log("CHECKOUT COUPON GET API ERROR", error);
         return new NextResponse("Internal server error", {status: 500});
     }
-
 }

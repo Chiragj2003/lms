@@ -9,18 +9,17 @@ import { Options } from "@/components/chapters/ui/options";
 import { chapterMetadata } from "@/server/metadata";
 
 interface ChapterPageProps {
-    params : {
+    params : Promise<{
         chapterId: string;
         courseId: string;
-    }
+    }>
 }
 
-export async function generateMetadata(
-    { params } : ChapterPageProps,
-) : Promise<Metadata> {
+export async function generateMetadata(props: ChapterPageProps): Promise<Metadata> {
+    const params = await props.params;
 
     const data = await chapterMetadata(params.chapterId);
-    
+
     if ( !data ) {
         return {
             title : "Chapter"
@@ -41,10 +40,9 @@ export async function generateMetadata(
     }
 }
 
-const ChapterPage = async({
-    params
-} : ChapterPageProps ) => {
-    
+const ChapterPage = async (props: ChapterPageProps) => {
+    const params = await props.params;
+
     const session = await auth();
     if (!session) {
         redirect("/login");
@@ -57,7 +55,7 @@ const ChapterPage = async({
 
     const isLocked = !chapter.isFree && !purchase;
     const completeOnEnd = !!purchase && !userProgress?.isCompleted;
-    
+
     return (
         <div className="h-full">
             <div>

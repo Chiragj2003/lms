@@ -38,7 +38,7 @@ export const QuizOption = ({
 } : QuizOptionProps ) => {
 
     
-    const form = useForm<z.infer<typeof OptionSchema>>({
+    const form = useForm<z.input<typeof OptionSchema>, any, z.infer<typeof OptionSchema>>({
         resolver : zodResolver(OptionSchema),
         defaultValues : {
             isCorrect : option.isCorrect,
@@ -50,7 +50,7 @@ export const QuizOption = ({
     const { isValid } = form.formState;
     const w = form.watch();
 
-    const updateOption = async(value:z.infer<typeof OptionSchema>)=> {
+    const updateOption = async(value:z.input<typeof OptionSchema>)=> {
         try {
             await axios.patch(`/api/courses/${courseId}/chapters/${chapterId}/quiz/question/${option.questionId}/option?id=${option.id}`, value);
         } catch (error) {

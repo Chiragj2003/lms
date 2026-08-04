@@ -2,10 +2,11 @@ import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 
-export async function DELETE (
+export async function DELETE(
     req: Request,
-    { params } : { params : { courseId: string, couponId: string } }
+    props: { params : Promise<{ courseId: string, couponId: string }> }
 ) {
+    const params = await props.params;
     try {
         
         const session = await auth();

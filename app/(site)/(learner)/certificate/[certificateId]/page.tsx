@@ -10,7 +10,7 @@ export const metadata : Metadata = {
 }
 
 interface CertificatePageProps {
-    params : { certificateId: string }
+    params : Promise<{ certificateId: string }>
 }
 
 function splitString(str : string) {
@@ -28,10 +28,9 @@ function splitString(str : string) {
 }
 
 
-const CertificatePage = async({
-    params
-} : CertificatePageProps ) => {
-    
+const CertificatePage = async (props: CertificatePageProps) => {
+    const params = await props.params;
+
     const session = await auth();
     const certificate = await getCertificateById(params.certificateId);
 
@@ -85,7 +84,7 @@ const CertificatePage = async({
     `;
 
 
-    
+
     return (
         <main className="py-10 px-6" >
             <div className="w-full max-w-5xl mx-auto">

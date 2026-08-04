@@ -2,10 +2,11 @@ import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 
-export async function PUT (
+export async function PUT(
     req: Request,
-    { params } : { params : { chapterId : string, courseId: string } }
+    props: { params : Promise<{ chapterId : string, courseId: string }> }
 ) {
+    const params = await props.params;
     try {
 
         const session = await auth();

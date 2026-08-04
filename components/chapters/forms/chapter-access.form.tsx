@@ -45,7 +45,7 @@ export const ChapterAccessForm = ({
     const [isEditing, setEditing] = useState(false);
     const toggleEdit = ()=>setEditing((prev)=>!prev);
 
-    const form  = useForm<z.infer<typeof formSchema>>({
+    const form  = useForm<z.input<typeof formSchema>, any, z.infer<typeof formSchema>>({
         resolver : zodResolver(formSchema),
         defaultValues : {
             isFree : initialData.isFree

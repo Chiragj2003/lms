@@ -14,13 +14,15 @@ export const metadata : Metadata = ({
 });
 
 interface ViewLayoutPageProps {
-    params : { courseId : string }
+    params : Promise<{ courseId : string }>
     children : React.ReactNode;
 }
-const ViewLayoutPage = async({
-    params,
-    children
-} : ViewLayoutPageProps) => {
+const ViewLayoutPage = async (props: ViewLayoutPageProps) => {
+    const params = await props.params;
+
+    const {
+        children
+    } = props;
 
     const session = await auth();
     if (!session) {

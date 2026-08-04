@@ -19,17 +19,16 @@ import { CouponForm } from "@/components/courses/forms/coupon.form";
 
 
 interface CoursePageProps {
-    params : {
+    params : Promise<{
         courseId : string
-    }
+    }>
 }
 
 export const revalidate = 0;
 
-const CoursePage = async({
-    params
-} : CoursePageProps ) => {
-    
+const CoursePage = async (props: CoursePageProps) => {
+    const params = await props.params;
+
     const session = await auth();
 
     if (!session){
