@@ -10,6 +10,13 @@ export async function POST (req: Request) {
         if ( !session || !session.user || !session.user.id) {
             return new NextResponse("Unauthorized attempt", {status: 401});
         }
+
+        // The /tutor UI is role-guarded, but this endpoint was not: a learner
+        // could POST here directly and create a course.
+        if (session.user.role !== "TUTOR") {
+            return new NextResponse("Only tutors can create courses", {status: 403});
+        }
+
         const body = await req.json();
         const isValidatedData = await CourseSchema.safeParseAsync(body);
 

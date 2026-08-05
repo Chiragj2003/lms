@@ -15,7 +15,13 @@ const MyLearningPage = async() => {
     
     const session = await auth();
     if (!session || !session.user.id) {
-        return redirect("");
+        // Was redirect(""), which is not a valid destination.
+        return redirect("/login");
+    }
+
+    // Tutors never enrol, so this dashboard is always empty for them.
+    if (session.user.role === "TUTOR") {
+        return redirect("/tutor/analytics");
     }
     
     return (

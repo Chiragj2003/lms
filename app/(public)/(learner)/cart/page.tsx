@@ -1,14 +1,25 @@
 "use client";
 
 import Image from "next/image";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { CardWithRating } from "@/components/courses/ui/card-with-ratings";
 import { useCart } from "@/hooks/use-cart";
+import { useSession } from "@/lib/auth-client";
 
 
 const CartPage = () => {
-    
+
     const { items } = useCart();
-    
+    const session = useSession();
+    const router = useRouter();
+    const isTutor = session.data?.user.role === "TUTOR";
+
+    // Tutors have no cart; reaching this URL directly sends them back.
+    useEffect(()=>{
+        if (isTutor) router.replace("/tutor/courses");
+    }, [isTutor, router]);
+
     return (
         <main className="w-full my-10 px-6">
             <div className="max-w-5xl w-full mx-auto">
