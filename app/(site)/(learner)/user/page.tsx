@@ -33,7 +33,8 @@ const ProfilePage = async() => {
     }
 
     const courses = await getUserCourses(session.user.id);
-    
+    const isTutor = session.user.role === "TUTOR";
+
     return (
         <div className="">
             <section className="bg-neutral-800 p-6 md:py-10">
@@ -69,20 +70,25 @@ const ProfilePage = async() => {
                             </div>
                             <h3 className="font-medium text-zinc-700 text-center text-sm">Edit Profile</h3>
                         </Link>
-                        <Link 
-                            className="w-full flex flex-col justify-between aspect-square border p-6 border-zinc-300 rounded-md hover:-translate-y-2 hover:shadow-md duration-300 transition-all"
-                            href="/cart"
-                        >
-                            <div className="w-2/3 aspect-square mx-auto relative ">
-                                <Image
-                                    src="/assets/cart.png"
-                                    alt=""
-                                    fill
-                                    className="object-contain"
-                                />
-                            </div>
-                            <h3 className="font-medium text-zinc-700 text-center text-sm">Cart</h3>
-                        </Link>
+                        {
+                            // A tutor has nothing to buy, so no cart tile.
+                            !isTutor && (
+                                <Link
+                                    className="w-full flex flex-col justify-between aspect-square border p-6 border-zinc-300 rounded-md hover:-translate-y-2 hover:shadow-md duration-300 transition-all"
+                                    href="/cart"
+                                >
+                                    <div className="w-2/3 aspect-square mx-auto relative ">
+                                        <Image
+                                            src="/assets/cart.png"
+                                            alt=""
+                                            fill
+                                            className="object-contain"
+                                        />
+                                    </div>
+                                    <h3 className="font-medium text-zinc-700 text-center text-sm">Cart</h3>
+                                </Link>
+                            )
+                        }
                         <Link 
                             className="w-full flex flex-col justify-between aspect-square border p-6 border-zinc-300 rounded-md hover:-translate-y-2 hover:shadow-md duration-300 transition-all"
                             href="/user/certificates"
@@ -97,9 +103,9 @@ const ProfilePage = async() => {
                             </div>
                             <h3 className="font-medium text-zinc-700 text-center text-sm">My Certificates</h3>
                         </Link>
-                        <Link 
+                        <Link
                             className="w-full flex flex-col justify-between aspect-square border p-6 border-zinc-300 rounded-md hover:-translate-y-2 hover:shadow-md duration-300 transition-all"
-                            href="/user/my-learning"
+                            href={isTutor ? "/tutor/analytics" : "/user/my-learning"}
                         >
                             <div className="w-2/3 aspect-square mx-auto relative ">
                                 <Image
@@ -109,7 +115,9 @@ const ProfilePage = async() => {
                                     className="object-contain"
                                 />
                             </div>
-                            <h3 className="font-medium text-zinc-700 text-center text-sm">My Learning</h3>
+                            <h3 className="font-medium text-zinc-700 text-center text-sm">
+                                {isTutor ? "Analytics" : "My Learning"}
+                            </h3>
                         </Link>
                     </div>
                 </div>

@@ -72,10 +72,14 @@ export const Options = ({
 } : OptionsProps ) => {
 
     const { addNotes } = useNotes();
-    
+
+    // Re-sync whenever the chapter changes. With an empty dependency array the
+    // store kept whatever the previously opened chapter had put there (and the
+    // store is persisted to localStorage), so notes looked wrong or missing
+    // after navigating between chapters.
     useEffect(()=>{
         addNotes(chapter.notes);
-    }, []);
+    }, [chapter.id, chapter.notes, addNotes]);
 
 
     return (

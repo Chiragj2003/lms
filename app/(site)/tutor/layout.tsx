@@ -1,3 +1,6 @@
+import { redirect } from "next/navigation";
+
+import { auth } from "@/auth";
 import { TutorHeader } from "@/components/account/tutor-header";
 import { UserAvatar } from "@/components/account/user-avatar";
 import { Navigation } from "@/components/utils/navigation";
@@ -7,9 +10,23 @@ import { Sidebar } from "@/components/utils/sidebar";
 interface TutorLayoutProps {
     children : React.ReactNode;
 }
-const TutorLayout = ({
+const TutorLayout = async ({
     children
 } : TutorLayoutProps ) => {
+
+    // The whole /tutor area was previously unguarded: any signed-in learner
+    // could open it and start creating courses. One check here covers every
+    // page and nested route beneath it.
+    const session = await auth();
+
+    if (!session) {
+        return redirect("/login");
+    }
+
+    if (session.user.role !== "TUTOR") {
+        return redirect("/");
+    }
+
     return (
         <div className="h-full flex w-full">
             <aside className="hidden h-full bg-neutral-800 md:flex w-56 lg:w-60 flex-col inset-y-0 shrink-0">

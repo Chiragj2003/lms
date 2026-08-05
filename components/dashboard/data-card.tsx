@@ -4,22 +4,22 @@ import {
     Card,
     CardContent,
     CardHeader,
-    CardTitle,
-    CardDescription,
-    CardFooter
+    CardTitle
 } from "@/components/ui/card";
 import { formatPrice } from "@/lib/format";
 
 interface DataCardProps {
     value: number;
     label: string;
-    shouldFormat?: boolean
+    shouldFormat?: boolean;
+    hint?: string;
 }
 
 export const DataCard = ({
     label,
     value,
-    shouldFormat
+    shouldFormat,
+    hint
 } : DataCardProps ) => {
     return (
         <Card>
@@ -30,6 +30,9 @@ export const DataCard = ({
                 <div className="text-2xl text-zinc-800 font-bold">
                     {shouldFormat ? formatPrice(value) : value}
                 </div>
+                {hint && (
+                    <p className="text-xs text-zinc-500 mt-1">{hint}</p>
+                )}
             </CardContent>
         </Card>
     )

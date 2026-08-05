@@ -2,6 +2,7 @@
 
 import { useMemo } from "react";
 import dynamic from "next/dynamic";
+import { useRouter } from "next/navigation";
 import {
     Accordion,
     AccordionContent,
@@ -33,6 +34,7 @@ export const Chapters = ({
 } : ChaptersProps) => {
     
     const Preview = useMemo(()=>dynamic(()=>import("@/components/utils/preview"), {ssr:false}), []);
+    const router = useRouter();
 
     return (
         <div className="w-full mt-20">
@@ -58,8 +60,25 @@ export const Chapters = ({
                                             </div>
                                             <div className="flex items-center gap-x-3">
                                                 {
+                                                    // The badge used to be decoration only. Free chapters
+                                                    // are watchable, so clicking it opens that one chapter
+                                                    // (the chapter page still locks every paid chapter).
                                                     chapter.isFree && (
-                                                        <Badge>
+                                                        <Badge
+                                                            role="link"
+                                                            tabIndex={0}
+                                                            className="cursor-pointer hover:bg-primary/80"
+                                                            onClick={(e)=>{
+                                                                e.stopPropagation();
+                                                                router.push(`/course/${chapter.courseId}/view/chapter/${chapter.id}`);
+                                                            }}
+                                                            onKeyDown={(e)=>{
+                                                                if (e.key !== "Enter" && e.key !== " ") return;
+                                                                e.stopPropagation();
+                                                                e.preventDefault();
+                                                                router.push(`/course/${chapter.courseId}/view/chapter/${chapter.id}`);
+                                                            }}
+                                                        >
                                                             Preview
                                                         </Badge>
                                                     )

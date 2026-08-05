@@ -8,6 +8,7 @@ import { MdOutlineShoppingCart, MdOutlineRemoveShoppingCart } from "react-icons/
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/hooks/use-cart";
+import { useSession } from "@/lib/auth-client";
 import { toast } from "sonner";
 import { X } from "lucide-react";
 
@@ -26,7 +27,10 @@ export const Card = ({
 } : CardProps ) => {
 
     const { items, toggleItem } = useCart();
+    const session = useSession();
     const inCart = items.find(item=>item.id===course.id);
+    // Tutors browse the catalogue but never buy from it.
+    const isTutor = session.data?.user.role === "TUTOR";
 
     return (
         <div
@@ -70,7 +74,7 @@ export const Card = ({
                                 <X className="text-zinc-800 h-5 w-5" />
                             </Button>
                         </div>
-                    ) : (
+                    ) : isTutor ? null : (
                         <div className={cn(
                             // Fades in on hover, but stays reachable on keyboard focus.
                             "absolute right-4 bottom-4 z-10 transition-opacity duration-200",

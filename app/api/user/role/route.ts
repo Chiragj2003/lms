@@ -26,10 +26,13 @@ export async function PATCH (req: Request) {
             }
         });
 
-        await db.profile.create({
-            data : {
-                userId : session.user.id
-            }
+        // Upsert, not create: a retry (or a double-click) previously hit the
+        // unique constraint on userId and failed with a 500, leaving the user
+        // stuck on the role picker.
+        await db.profile.upsert({
+            where  : { userId : session.user.id },
+            update : {},
+            create : { userId : session.user.id }
         });
 
         return NextResponse.json({success: true});

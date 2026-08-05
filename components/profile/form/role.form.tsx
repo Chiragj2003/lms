@@ -20,11 +20,13 @@ export const RoleForm = () => {
         try {
             setIsLoading(true)
             await axios.patch("/api/user/role", {role});
-            router.refresh();
+            // Full reload rather than router.refresh(): role and profile live
+            // on the session, and the cached session kept sending the user
+            // straight back to this picker.
+            window.location.href = role === "TUTOR" ? "/tutor/courses" : "/user";
         } catch (error) {
             console.log(error);
             toast.error("Something went wrong");
-        } finally {
             setIsLoading(false);
         }
     }

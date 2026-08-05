@@ -16,6 +16,12 @@ export async function POST(req: Request, props: { params : Promise<{ courseId : 
             return new NextResponse("Unauthorized attempt", {status: 401});
         }
 
+        // Tutors sell courses, they do not buy them. Enforced here rather than
+        // only hiding the button, so the endpoint cannot be called directly.
+        if (session.user.role === "TUTOR") {
+            return new NextResponse("Tutors cannot purchase courses", {status: 403});
+        }
+
         const { coupon }  = await req.json();
 
         let discount = 0;
@@ -58,6 +64,15 @@ export async function POST(req: Request, props: { params : Promise<{ courseId : 
             if (verifyCoupon && verifyCoupon.expires > new Date() ) {
                 discount = verifyCoupon.discount
             }
+        }
+
+        const amount = Math.floor(course.price! - ((course.price! * discount) / 100));
+
+        // No Stripe keys configured (the usual case in this demo) - hand off to
+        // the built-in mock gateway instead of throwing.
+        if (!process.env.STRIPE_API_KEY) {
+            const url = `/checkout/${course.id}?amount=${amount}${coupon ? `&coupon=${encodeURIComponent(coupon)}` : ""}`;
+            return NextResponse.json({ url });
         }
 
         const line_items : Stripe.Checkout.SessionCreateParams.LineItem[] = [{
