@@ -20,11 +20,16 @@ import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 
 export const UserAvatar = () => {
-    
+
     const session = useSession();
     const router = useRouter();
     const pathname = usePathname();
-    
+
+    // Menu contents follow the role, not the current URL. Keying off the
+    // pathname meant a tutor still saw Cart and enrolled-courses links
+    // everywhere except /tutor/courses.
+    const isTutor = session.data?.user.role === "TUTOR";
+
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild className="md:cursor-pointer">
@@ -64,28 +69,31 @@ export const UserAvatar = () => {
                         "rounded-none font-medium text-zinc-700 py-2",
                         pathname.includes("/tutor/courses") && "hidden"
                     )}
-                    onClick={()=>router.push("/user/#courses")}
-                    
+                    onClick={()=>router.push(isTutor ? "/tutor/courses" : "/user/my-learning")}
                 >
                     <GraduationCap className="mr-3 h-5 w-5" />
                     <span>My Courses</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem
-                    className={cn(
-                        "rounded-none font-medium text-zinc-700 py-2",
-                        pathname.includes("/tutor/courses") && "hidden"
-                    )}
-                    onClick={()=>router.push("/orders")}
-                >
-                    <ShoppingBag className="mr-3 ml-1 h-4 w-4" />
-                    <span>Cart</span>
-                </DropdownMenuItem>
+                {
+                    // Tutors sell courses, they don't buy them.
+                    !isTutor && (
+                        <DropdownMenuItem
+                            className="rounded-none font-medium text-zinc-700 py-2"
+                            onClick={()=>router.push("/cart")}
+                        >
+                            <ShoppingBag className="mr-3 ml-1 h-4 w-4" />
+                            <span>Cart</span>
+                        </DropdownMenuItem>
+                    )
+                }
                 <DropdownMenuItem
                     className="rounded-none font-medium text-zinc-700 py-2"
                     onClick={async()=>{
                         await signOut();
-                        router.push("/");
-                        router.refresh();
+                        // Full reload, not router.push: server components hold
+                        // the old session until the document is re-requested,
+                        // which is why logout appeared not to take effect.
+                        window.location.href = "/";
                     }}
                 >
                     <LogOut className="mr-3 ml-1 h-4 w-4" />

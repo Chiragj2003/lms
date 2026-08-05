@@ -11,7 +11,10 @@ const nextConfig = {
         remotePatterns : [
             { protocol : "https", hostname : "res.cloudinary.com" },
             { protocol : "https", hostname : "lh3.googleusercontent.com" },
-            { protocol : "https", hostname : "files.edgestore.dev" }
+            { protocol : "https", hostname : "files.edgestore.dev" },
+            // Demo course artwork and placeholder reviewer avatars.
+            { protocol : "https", hostname : "picsum.photos" },
+            { protocol : "https", hostname : "i.pravatar.cc" }
         ]
     }
 };

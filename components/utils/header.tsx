@@ -56,22 +56,27 @@ export const Header = ({
                 </div>
             </div>
             <div className="flex items-center gap-x-6">
-                <div className="relative">
-                    <Button
-                        className={cn(
-                            "rounded-none",
-                            pathname === "/" && "bg-transparent text-white hover:text-white hover:bg-transparent text-lg"
-                        )}
-                        variant="ghost"
-                        size="icon"
-                        onClick={()=>router.push("/cart")}
-                    >
-                        <ShoppingCart className="h-6 w-6"/>   
-                    </Button>
-                    <Badge className="absolute -right-3 -top-2 select-none">
-                        {items.length}
-                    </Badge>
-                </div>
+                {
+                    // Tutors sell courses; a cart has no meaning for them.
+                    session.data?.user.role !== "TUTOR" && (
+                        <div className="relative">
+                            <Button
+                                className={cn(
+                                    "rounded-none",
+                                    pathname === "/" && "bg-transparent text-white hover:text-white hover:bg-transparent text-lg"
+                                )}
+                                variant="ghost"
+                                size="icon"
+                                onClick={()=>router.push("/cart")}
+                            >
+                                <ShoppingCart className="h-6 w-6"/>
+                            </Button>
+                            <Badge className="absolute -right-3 -top-2 select-none">
+                                {items.length}
+                            </Badge>
+                        </div>
+                    )
+                }
                 {
                     (!session.isPending && !session.data) ? (
                         <Button
