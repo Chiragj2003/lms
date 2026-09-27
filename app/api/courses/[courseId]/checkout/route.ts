@@ -1,23 +1,17 @@
-import Stripe from "stripe";
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
-import { getStripe } from "@/lib/stripe";
 import { NextResponse } from "next/server";
-
+import Razorpay from "razorpay";
 import { v4 as uuidv4 } from "uuid";
 
 export async function POST(req: Request, props: { params : Promise<{ courseId : string }> }) {
     const params = await props.params;
     try {
-
-
         const session = await auth();
         if ( !session || !session.user || !session.user.id) {
             return new NextResponse("Unauthorized attempt", {status: 401});
         }
 
-        // Tutors sell courses, they do not buy them. Enforced here rather than
-        // only hiding the button, so the endpoint cannot be called directly.
         if (session.user.role === "TUTOR") {
             return new NextResponse("Tutors cannot purchase courses", {status: 403});
         }
@@ -25,7 +19,6 @@ export async function POST(req: Request, props: { params : Promise<{ courseId : 
         const { coupon }  = await req.json();
 
         let discount = 0;
-
 
         const course =  await db.course.findUnique({
             where : {
@@ -68,67 +61,51 @@ export async function POST(req: Request, props: { params : Promise<{ courseId : 
 
         const amount = Math.floor(course.price! - ((course.price! * discount) / 100));
 
-        // No Stripe keys configured (the usual case in this demo) - hand off to
-        // the built-in mock gateway instead of throwing.
-        if (!process.env.STRIPE_API_KEY) {
-            const url = `/checkout/${course.id}?amount=${amount}${coupon ? `&coupon=${encodeURIComponent(coupon)}` : ""}`;
-            return NextResponse.json({ url });
-        }
-
-        const line_items : Stripe.Checkout.SessionCreateParams.LineItem[] = [{
-            quantity : 1,
-            price_data : {
-                currency : "INR",
-                product_data : {
-                    name : course.title,
-                    description: course.shortDescription!,
-                    images : [course.image!]
-                },
-                unit_amount : (Math.floor(course.price!-((course.price!*discount)/100)))*100,
-            },
-        }];
-
-        let stripeCustomer = await db.stripeCustomer.findUnique({
-            where : {
-                userId : session.user.id
-            },
-            select : {
-                stripeCustomerId: true
-            }
-        });
-
-        
-        if (!stripeCustomer) {
-            const customer = await getStripe().customers.create({
-                email : session.user.email||""
-            });
-            
-            stripeCustomer = await db.stripeCustomer.create({
-                data : {
-                    userId : session.user.id,
-                    stripeCustomerId : customer.id
+        // If the course is free or fully discounted, bypass payment
+        if (amount <= 0) {
+            await db.purchase.create({
+                data: {
+                    userId: session.user.id,
+                    courseId: course.id,
                 }
             });
+            return NextResponse.json({ url: `/course/${course.id}/view?paymentId=${uuidv4()}` });
         }
-        
 
-        const paymentSession = await getStripe().checkout.sessions.create({
-            customer : stripeCustomer.stripeCustomerId,
-            line_items,
-            mode : "payment",
-            success_url : `${process.env.NEXT_PUBLIC_APP_URL}/course/${course.id}/view?paymentId=${uuidv4()}`,
-            cancel_url : `${process.env.NEXT_PUBLIC_APP_URL}/course/${course.id}?cancel=1`,
-            billing_address_collection : "required",
-            metadata : {
-                courseId : course.id,
-                userId: session.user.id
-            },
-            currency : 'INR',
+        // Initialize Razorpay
+        if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET) {
+            console.warn("Razorpay keys missing. Mocking success URL.");
+            return NextResponse.json({ url: `/checkout/${course.id}?amount=${amount}${coupon ? `&coupon=${encodeURIComponent(coupon)}` : ""}` });
+        }
+
+        const razorpay = new Razorpay({
+            key_id: process.env.RAZORPAY_KEY_ID,
+            key_secret: process.env.RAZORPAY_KEY_SECRET,
         });
-    
-        return NextResponse.json({ url: paymentSession.url });
 
-        
+        const options = {
+            amount: amount * 100, // amount in smallest currency unit (paise)
+            currency: "INR",
+            receipt: `receipt_${uuidv4()}`.substring(0, 40),
+            notes: {
+                courseId: course.id,
+                userId: session.user.id,
+            }
+        };
+
+        const order = await razorpay.orders.create(options);
+
+        return NextResponse.json({
+            orderId: order.id,
+            amount: options.amount,
+            currency: options.currency,
+            courseName: course.title,
+            courseDescription: course.shortDescription || "Course Enrollment",
+            tutorName: session.user.name,
+            tutorEmail: session.user.email,
+            keyId: process.env.RAZORPAY_KEY_ID,
+        });
+
     } catch (error) {
         console.error("COURSE CHECKOUT API ERROR", error);
         return new NextResponse("Internal server error", {status: 500});
