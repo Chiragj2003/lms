@@ -9,22 +9,24 @@ export const Navigation = () => {
     const router = useRouter();
     
     return (
-        <div className="flex items-center gap-x-3">
+        <div className="flex items-center gap-x-2">
             <Button
-                className="rounded-full bg-neutral-100"
-                size="icon"
-                variant="outline"
-                onClick={()=>router.forward()}
-            >
-                <ChevronLeft />
-            </Button>
-            <Button
-                className="rounded-full bg-neutral-100"
+                className="rounded-full"
                 size="icon"
                 variant="outline"
                 onClick={()=>router.back()}
+                aria-label="Go back"
             >
-                <ChevronRight />
+                <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <Button
+                className="rounded-full"
+                size="icon"
+                variant="outline"
+                onClick={()=>router.forward()}
+                aria-label="Go forward"
+            >
+                <ChevronRight className="h-4 w-4" />
             </Button>
         </div>
     )

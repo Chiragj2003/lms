@@ -39,22 +39,25 @@ export const SidebarItem = ({
             onClick={onClick}
             type="button"
             className={cn(
-                "flex items-center gap-x-2 text-zinc-300 text-sm font-medium transition-all hover:text-zinc-200 hover:bg-neutral-700 focus:outline-none",
-                active && "text-zinc-100 hover:text-white bg-neutral-700 hover:bg-neutral-700",
-                isCompleted && "text-emerald-400 hover:text-emerald-500",
-                isCompleted && active && "bg-emerald-700/30"
+                "flex items-center gap-x-2 text-zinc-400 text-sm font-medium transition-all hover:text-zinc-200 hover:bg-zinc-800 focus:outline-none relative",
+                active && "text-white bg-zinc-800",
+                isCompleted && "text-emerald-400 hover:text-emerald-300",
+                isCompleted && active && "bg-emerald-950/30"
             )}
         >
             <div className="flex items-center gap-x-3 p-4 text-left">
                 <Icon
-                    className="h-5 w-5 shrink-0"
+                    className={cn(
+                        "h-5 w-5 shrink-0",
+                        active && !isCompleted && "text-highlight"
+                    )}
                 />
                 {label}
             </div>
             <div className={cn(
-                "ml-auto opacity-0 border-2 border-zinc-200 h-full transition-all",
+                "absolute right-0 opacity-0 w-1 h-full bg-highlight transition-all rounded-l-full",
                 active && "opacity-100",
-                isCompleted && "border-emerald-700"
+                isCompleted && active && "bg-emerald-500"
                 )}
             />
         </button>

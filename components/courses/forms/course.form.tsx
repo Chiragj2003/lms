@@ -47,8 +47,8 @@ export const CourseForm = () => {
     return (
         <div className="max-w-5xl mx-auto w-full flex md:justify-center md:items-center h-full py-10 md:py-6">
             <div>
-                <h1 className="text-xl md:text-2xl font-bold text-zinc-800" >Name your course</h1>
-                <p className="text-sm text-zinc-600">What would you like to name your course? Don&apos;t worry you can change it later*</p>
+                <h1 className="text-xl md:text-2xl font-bold text-foreground" >Name your course</h1>
+                <p className="text-sm text-muted-foreground">What would you like to name your course? Don&apos;t worry you can change it later*</p>
                 <Form {...form}>
                     <form
                         onSubmit={form.handleSubmit(onSubmit)}
@@ -64,7 +64,7 @@ export const CourseForm = () => {
                                         <FormControl>
                                             <Input
                                                 placeholder="e.g 'Advance Backend'"
-                                                className="rounded-none h-14 border-zinc-400 border-2 outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-zinc-500"
+                                                className="rounded-lg h-11 border-input outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-primary"
                                                 {...field}
                                                 disabled = {isSubmitting}
                                             />
@@ -80,7 +80,7 @@ export const CourseForm = () => {
                         <div className="w-full grid grid-cols-2 gap-4">
                             <Button
                                 variant="outline"
-                                className="rounded-none h-14 font-semibold"
+                                className="rounded-lg h-11 font-semibold"
                                 type="button"
                                 onClick={()=>router.push("/")}
                                 disabled = {isSubmitting}
@@ -88,7 +88,7 @@ export const CourseForm = () => {
                                 Cancel
                             </Button>
                             <Button
-                                className="rounded-none h-14 font-semibold"
+                                className="rounded-lg h-11 font-semibold"
                                 type="submit"
                                 disabled = {isSubmitting || !isValid}
                             >

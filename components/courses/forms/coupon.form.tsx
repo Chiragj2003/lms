@@ -81,8 +81,8 @@ export const CouponForm = ({
 
 
     return (
-        <div className="mt-6 border bg-zinc-100 p-4 transition-transform">
-            <div className="flex items-center justify-between font-medium text-zinc-800">
+        <div className="mt-6 bg-card border border-border rounded-2xl shadow-sm p-4 transition-transform">
+            <div className="flex items-center justify-between font-medium text-foreground">
                 <span className="font-semibold">Course Coupons</span>
                 <Button
                     variant="ghost"
@@ -116,7 +116,7 @@ export const CouponForm = ({
                                             <FormControl>
                                                 <Input
                                                     placeholder="Enter Coupon Code"
-                                                    className="rounded-none h-14 border-zinc-400 border-2 outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-zinc-500"
+                                                    className="rounded-lg h-11 border-input outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-primary"
                                                     {...field}
                                                     disabled = {isSubmitting}
                                                 />
@@ -134,7 +134,7 @@ export const CouponForm = ({
                                                 <Input
                                                     type="number"
                                                     placeholder="Enter discount percentage"
-                                                    className="rounded-none h-14 border-zinc-400 border-2 outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-zinc-500"
+                                                    className="rounded-lg h-11 border-input outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-primary"
                                                     value={field.value}
                                                     onChange={(e)=>field.onChange(Number.parseInt(e.target.value))}
                                                     disabled = {isSubmitting}
@@ -188,7 +188,7 @@ export const CouponForm = ({
                             <div className="w-full grid grid-cols-2 gap-4">
                                 <Button
                                     variant="outline"
-                                    className="rounded-none h-14 font-semibold"
+                                    className="rounded-lg h-11 font-semibold"
                                     type="button"
                                     onClick={toggleCreate}
                                     disabled = {isSubmitting}
@@ -196,7 +196,7 @@ export const CouponForm = ({
                                     Cancel
                                 </Button>
                                 <Button
-                                    className="rounded-none h-14 font-semibold"
+                                    className="rounded-lg h-11 font-semibold"
                                     type="submit"
                                     disabled = {isSubmitting}
                                 >
@@ -209,7 +209,7 @@ export const CouponForm = ({
                     <>
                         <div className={cn(
                             "text-sm mt-2 font-medium",
-                            !initialData.coupons.length && "text-zinc-600 italic"
+                            !initialData.coupons.length && "text-muted-foreground italic"
                         )}>
                             {
                                 !initialData.coupons.length && "No Coupons"

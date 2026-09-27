@@ -19,8 +19,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { ChevronRight } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Heading } from "@/components/utils/heading";
 import { Stars } from "@/components/rating/stars";
+import { PageContainer } from "@/components/ui/page-container";
 
 
 interface HeaderProps {
@@ -55,76 +55,102 @@ export const Header = ({
     const Preview = useMemo(()=>dynamic(()=>import("@/components/utils/preview"), {ssr:false}), []);
     
     return (
-        <header className="p-4">
-            <div className="w-full px-6 md:px-12 lg:px-24 py-8 bg-gradient-to-r from-neutral-800 to-neutral-900 rounded-lg md:rounded-xl shadow-xl">
-                <div className="max-w-6xl w-full mx-auto flex items-center">
-                    <div className="w-full md:w-1/2 space-y-6">
-                        <div className="flex items-center gap-x-2">
-                            <Link
-                                href={`/category/${subCategory?.categoryId}`}
-                                className="text-violet-400 font-semibold md:text-lg"
-                            >
-                                { subCategory?.category.name }
-                            </Link>
-                            <ChevronRight className="text-violet-400" />
-                            <Link
-                                href={`/category/${subCategory?.categoryId}/courses/${subCategory?.id}`}
-                                className="text-violet-400 font-semibold md:text-lg"
-                            >
-                                { subCategory?.name }
-                            </Link>
-                        </div>
-                        <div className="space-y-4 pb-4">
-                            <Heading className={`text-2xl md:text-5xl text-white font-bold`}>
+        <header className="bg-zinc-900 border-b border-border py-12 md:py-20 relative overflow-hidden">
+            {/* Background elements */}
+            <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/3 w-96 h-96 bg-primary/20 rounded-full blur-3xl opacity-50" />
+            <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/4 w-[500px] h-[500px] bg-highlight/10 rounded-full blur-3xl opacity-50" />
+            
+            <PageContainer className="relative z-10">
+                <div className="flex items-center gap-12">
+                    <div className="w-full lg:w-2/3 space-y-6">
+                        {/* Breadcrumbs */}
+                        {subCategory && (
+                            <div className="flex items-center gap-x-2 text-sm">
+                                <Link
+                                    href={`/category/${subCategory?.categoryId}`}
+                                    className="text-highlight font-semibold hover:text-highlight/80 transition-colors"
+                                >
+                                    { subCategory?.category.name }
+                                </Link>
+                                <ChevronRight className="h-4 w-4 text-zinc-500" />
+                                <Link
+                                    href={`/category/${subCategory?.categoryId}/courses/${subCategory?.id}`}
+                                    className="text-highlight font-semibold hover:text-highlight/80 transition-colors"
+                                >
+                                    { subCategory?.name }
+                                </Link>
+                            </div>
+                        )}
+                        
+                        {/* Title & Description */}
+                        <div className="space-y-4 max-w-3xl">
+                            <h1 className="text-3xl md:text-5xl lg:text-6xl text-white font-bold tracking-tight">
                                 {title}
-                            </Heading>
-                            <h2 className="text-zinc-200 md:text-lg">
+                            </h1>
+                            <p className="text-zinc-300 md:text-xl leading-relaxed">
                                 {shortDescription}
-                            </h2>
+                            </p>
                         </div>
-                        <div className="pb-4 flex items-center gap-x-3">
-                            <span className="text-zinc-300 font-[600]">{avgRating ? avgRating.toFixed(1): 0}</span>
-                            <Stars avgRating={`${avgRating}`} />
-                            <span className="text-zinc-300">({ratings} ratings) {purchases} Students</span>
+                        
+                        {/* Ratings & Metadata */}
+                        <div className="flex flex-wrap items-center gap-4 text-sm">
+                            <div className="flex items-center gap-x-2 bg-zinc-800/50 px-3 py-1.5 rounded-full border border-zinc-700">
+                                <span className="text-white font-bold">{avgRating ? avgRating.toFixed(1) : 0}</span>
+                                <Stars avgRating={`${avgRating}`} />
+                            </div>
+                            <span className="text-zinc-400 font-medium">({ratings} ratings)</span>
+                            <span className="text-zinc-600 font-medium hidden sm:block">•</span>
+                            <span className="text-zinc-400 font-medium">{purchases} Students enrolled</span>
                         </div>
-                        <HoverCard>
-                            <HoverCardTrigger className="text-zinc-100 cursor-default md:cursor-pointer">Created by <span className="text-violet-400">{tutorName}</span></HoverCardTrigger>
-                            <HoverCardContent className="w-72 md:w-96 p-4" align="start" >
-                                <div className="flex items-start gap-x-4 md:gap-x-8">
-                                    <Avatar>
-                                        <AvatarImage src={tutorImage||""} />
-                                        <AvatarFallback>{tutorName?.charAt(0)}</AvatarFallback>
-                                    </Avatar>
-                                    <div className="flex flex-col gap-y-4">
-                                        <h2 className="text-zinc-700 text-sm font-medium" >@{tutorName}</h2>
-                                        <div className="max-h-28 h-full overflow-hidden">
-                                            <Preview value={tutorProfile||""} />
+                        
+                        {/* Instructor */}
+                        <div className="pt-2">
+                            <HoverCard>
+                                <HoverCardTrigger className="inline-flex items-center gap-x-2 text-zinc-300 cursor-default md:cursor-pointer">
+                                    Created by <span className="text-highlight font-semibold underline underline-offset-4 decoration-highlight/30 hover:decoration-highlight transition-all">{tutorName}</span>
+                                </HoverCardTrigger>
+                                <HoverCardContent className="w-72 md:w-96 p-4 rounded-xl border-border shadow-xl" align="start" >
+                                    <div className="flex items-start gap-x-4">
+                                        <Avatar className="h-12 w-12 border-2 border-primary/20">
+                                            <AvatarImage src={tutorImage||""} />
+                                            <AvatarFallback className="bg-primary/10 text-primary font-semibold">{tutorName?.charAt(0)}</AvatarFallback>
+                                        </Avatar>
+                                        <div className="flex flex-col gap-y-2 flex-1">
+                                            <h2 className="text-foreground font-semibold" >{tutorName}</h2>
+                                            <div className="text-sm text-muted-foreground line-clamp-3">
+                                                <Preview value={tutorProfile||""} />
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </HoverCardContent>
-                        </HoverCard>
-                        <div className="flex items-center gap-x-2">
+                                </HoverCardContent>
+                            </HoverCard>
+                        </div>
+                        
+                        {/* Action */}
+                        <div className="pt-6">
                             <Button
-                                className='h-14 bg-green-600 hover:bg-green-700/90 rounded-none w-full md:w-auto font-medium'
+                                size="lg"
+                                className="h-14 px-8 rounded-xl text-base w-full sm:w-auto"
                                 onClick={()=>router.push(`/course/${id}/view`)}
                             >
-                                View Course
+                                Start Learning
                             </Button>
                         </div>
                     </div>
-                    <div className="h-full w-1/2 hidden md:flex items-center justify-end">
-                        <div className="max-w-md w-full relative aspect-square">
+                    
+                    {/* Decorative Right Side */}
+                    <div className="w-1/3 hidden lg:flex items-center justify-end">
+                        <div className="max-w-[400px] w-full relative aspect-square opacity-90 drop-shadow-2xl hover:scale-105 transition-transform duration-500">
                             <Image
                                 src="/assets/13923473_04_13_21_05.svg"
                                 fill
-                                alt=""
-                                className="object-contain"
+                                alt="Course illustration"
+                                className="object-contain drop-shadow-xl"
                             />
                         </div>
                     </div>
                 </div>
-            </div>
+            </PageContainer>
         </header>
     )
 }

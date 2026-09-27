@@ -1,71 +1,73 @@
-import { Abril_Fatface } from "next/font/google";
 import Image from "next/image";
-import { Heading } from "./heading";
-
-const font =  Abril_Fatface({
-    subsets : ["latin"],
-    weight : ["400"]
-})
+import { PageContainer } from "../ui/page-container";
+import { SectionHeader } from "../ui/section-header";
 
 const features = [
     {
         icon : "/assets/ai.png",
         title : "AI-Powered Learning",
-        body : "AI-Powered Chatbot: Instantly resolve course-related doubts through an intuitive and user-friendly interface, enabling seamless learning support."
+        body : "Instantly resolve course-related doubts through an intuitive AI assistant."
     },
     {
         icon : "/assets/notes.png",
-        title : "Personalized Note Editor",
-        body : "Empower students with an advanced note editor that allows them to add to-dos, embed screenshots, and much more for enhanced organization and productivity."
+        title : "Smart Note Editor",
+        body : "Take timestamped notes and embed screenshots while watching lessons."
     },
     {
         icon : "/assets/exam.png",
-        title : "Proctored exams",
-        body : "Students can take quiz-based exams to assess their learning, identify areas for improvement, and enhance their knowledge in a competitive environment."
+        title : "Interactive Quizzes",
+        body : "Test your knowledge with chapter quizzes to ensure you've mastered the material."
     },
     {
         icon : "/assets/certificate.png",
         title : "Digital Certificates",
-        body : "Upon course completion, students can generate verifiable certificates to showcase their achievements and skills."
+        body : "Earn verifiable certificates to showcase your achievements to employers."
     },
     {
         icon : "/assets/graph.png",
-        title : "Real-Time Progress Tracking",
-        body : "Students can track their learning milestones, course completion, and assessments in real-time, allowing for continuous feedback and improvement."
+        title : "Real-Time Tracking",
+        body : "Monitor your learning milestones and course completion in real-time."
+    },
+    {
+        icon : "/assets/courses.png",
+        title : "Premium Content",
+        body : "Learn from industry experts with high-quality video and resources."
     }
 ];
 
 export const Features = () => {
     return (
-        <div className="mt-20 md:pb-20">
-            <div className={font.className}>
-                <Heading className="text-xl md:text-3xl lg:text-5xl font-[600] text-zinc-700">
-                    Goals are the compass, <span className="mark-highlight">learning is the journey.</span>
-                </Heading>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 w-full mt-10 gap-6">
-                {features.map((feature)=>(
-                    <div
-                        key={feature.title}
-                        className="py-4 h-full md:py-10 px-6 rounded-lg md:rounded-xl border-2 border-zinc-200 border-l-4 border-l-highlight-500 shadow-sm cursor-default transition-shadow hover:shadow-md"
-                    >
-                        <div className="flex items-center gap-x-4">
-                            <div className="h-14 w-14 md:h-20 md:w-20 shrink-0 relative">
-                                <Image
-                                    src={feature.icon}
-                                    alt=""
-                                    className="object-cover"
-                                    fill
-                                />
+        <section className="py-20 md:py-32 bg-secondary/30">
+            <PageContainer>
+                <div className="mb-12">
+                    <SectionHeader 
+                        title="Everything you need to succeed"
+                        subtitle="We provide the best tools to make your learning journey effective and enjoyable."
+                    />
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                    {features.map((feature)=>(
+                        <div
+                            key={feature.title}
+                            className="bg-card p-8 rounded-2xl border border-border shadow-sm hover:shadow-md transition-shadow group"
+                        >
+                            <div className="h-14 w-14 mb-6 rounded-xl bg-primary/10 flex items-center justify-center p-3 group-hover:scale-110 transition-transform duration-300">
+                                <div className="relative h-full w-full">
+                                    <Image
+                                        src={feature.icon}
+                                        alt={feature.title}
+                                        className="object-contain"
+                                        fill
+                                    />
+                                </div>
                             </div>
-                            <div className="space-y-2">
-                                <h3 className="text-zinc-800 font-semibold text-lg">{feature.title}</h3>
-                                <p className="text-sm text-zinc-600 text-pretty">{feature.body}</p>
-                            </div>
+                            <h3 className="text-xl font-semibold text-foreground mb-3">{feature.title}</h3>
+                            <p className="text-muted-foreground leading-relaxed">{feature.body}</p>
                         </div>
-                    </div>
-                ))}
-            </div>
-        </div>
+                    ))}
+                </div>
+            </PageContainer>
+        </section>
     )
 }

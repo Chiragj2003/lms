@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 import { usePathname } from "next/navigation";
-import { BarChart, LibraryBig, Plus } from "lucide-react";
+import { BarChart, LayoutDashboard, LibraryBig, Plus } from "lucide-react";
 import { SidebarItem } from "./sidebar-item";
 
 export const SidebarRoutes = () => {
@@ -32,7 +32,7 @@ export const SidebarRoutes = () => {
     ], [pathname]);
     
     return (
-        <ul className="flex flex-col w-full list-none">
+        <ul className="flex flex-col w-full list-none space-y-1">
             {
                 routes.map((route)=>(
                     <SidebarItem

@@ -4,9 +4,6 @@ import dynamic from "next/dynamic";
 import { useMemo, useState } from "react";
 
 import { cn } from "@/lib/utils";
-import { Heading } from "@/components/utils/heading";
-
-
 interface DescriptionProps {
     description : string;
 }
@@ -23,12 +20,12 @@ export const Description = ({
     return (
         <section className="mt-20 w-full">
             <div className="max-w-3xl mx-auto">
-                <Heading className="text-2xl md:text-3xl font-bold text-zinc-700">
+                <h2 className="text-2xl md:text-3xl font-bold text-foreground">
                     Course Description
-                </Heading>
+                </h2>
                 <div 
                     className={cn(
-                        "text-zinc-700 relative h-72 overflow-hidden mt-6",
+                        "text-muted-foreground prose prose-zinc max-w-none relative h-72 overflow-hidden mt-6",
                         fullContent && "h-auto"
                     )}
                 >

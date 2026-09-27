@@ -7,7 +7,8 @@ import { useSWRQuery } from "@/hooks/useSWRQuery";
 import { Course, Rate } from "@prisma/client";
 import { CardSkeleton } from "./card-skeleton";
 import { Card } from "@/components/rating/card";
-
+import { PageContainer } from "@/components/ui/page-container";
+import { SectionHeader } from "@/components/ui/section-header";
 
 interface Response {
     data : (Course & {
@@ -31,42 +32,47 @@ export const UserCourses = () => {
     }
 
     return (
-        <section className="py-16 px-6">
-            <div className="max-w-5xl w-full mx-auto">
-                <h1 className="text-xl md:text-2xl font-bold text-zinc-800">Enrolled Courses</h1>
-                <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 mt-10">
+        <section className="py-12">
+            <PageContainer>
+                <div className="mb-10">
+                    <SectionHeader 
+                        title="Enrolled Courses"
+                        subtitle="Pick up where you left off or start a new chapter."
+                    />
+                </div>
+                
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     {
                         isLoading ? (
                             <>
-                                <CardSkeleton className="w-full md:w-full"/>
-                                <CardSkeleton className="w-full md:w-full"/>
-                                <CardSkeleton className="w-full md:w-full"/>
+                                <CardSkeleton className="w-full" />
+                                <CardSkeleton className="w-full" />
+                                <CardSkeleton className="w-full" />
+                                <CardSkeleton className="w-full" />
                             </>
                         ) : (
                             <>
                                 {data.length === 0 && (
-                                    <div className="sm:col-span-2 md:col-span-3 w-full">
-                                        <div className="flex flex-col items-center justify-center">
-                                            <div className="relative h-60 aspect-square">
-                                                <Image
-                                                    src="/assets/empty.jpg"
-                                                    fill
-                                                    alt=""
-                                                    className="object-contain"
-                                                />
-                                            </div>
+                                    <div className="sm:col-span-2 lg:col-span-3 xl:col-span-4 w-full py-16 flex flex-col items-center justify-center bg-card border border-border rounded-2xl">
+                                        <div className="relative h-40 aspect-square opacity-60 mb-6">
+                                            <Image
+                                                src="/assets/empty.jpg"
+                                                fill
+                                                alt="No courses"
+                                                className="object-contain"
+                                            />
                                         </div>
-                                        <p className="text-sm text-zinc-600 font-medium text-center">
+                                        <h3 className="text-xl font-semibold text-foreground mb-2">No courses yet</h3>
+                                        <p className="text-muted-foreground text-center max-w-md">
                                             You haven&apos;t enrolled in any courses yet. Check out our wide range of courses and enroll today!
                                         </p>
                                     </div>
-                                )  } 
+                                )} 
                                 {
                                     data.map(course=>(
                                         <Card
                                             course={course}
                                             key={course.id}
-                                            className="w-full md:w-full hover:scale-105 transition-all duration-300"
                                             mutate={mutate}
                                         />
                                     ))
@@ -75,7 +81,7 @@ export const UserCourses = () => {
                         )
                     }
                 </div>
-            </div>
+            </PageContainer>
         </section>
     )
 }

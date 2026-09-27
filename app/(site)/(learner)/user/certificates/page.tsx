@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { auth } from "@/auth"
 import { getUserCertificates } from "@/server/certificate";
 import { CertificateCard } from "@/components/utils/certificate-card";
+import { PageContainer } from "@/components/ui/page-container";
 
 export const metadata : Metadata = {
     title : "Your certificates"
@@ -20,38 +21,38 @@ const CertificatesPage = async() => {
     const certificates = await getUserCertificates(session.user.id);
 
     return (
-        <main className="w-full my-10 px-6">
-            <div className="max-w-5xl w-full mx-auto">
-                <h1 className="text-3xl font-bold text-zinc-700" >Your Certificates</h1>
-                { certificates.length === 0 && (
-                    <div className="mt-20 space-y-6">
-                        <div className="w-60 aspect-square mx-auto relative">
-                            <Image
-                                src="/assets/empty.jpg"
-                                fill
-                                alt=""
-                                className="object-contain"
-                            />
-                        </div>
-                        <p className="text-sm text-zinc-600 font-medium text-center">
-                        Your certificate wallet is empty. 📚 Start exploring our courses and earn your first certificate today!
-                        </p>
+        <PageContainer className="py-12 md:py-20">
+            <h1 className="text-3xl font-bold text-foreground mb-10" >Your Certificates</h1>
+            
+            { certificates.length === 0 && (
+                <div className="mt-20 space-y-6">
+                    <div className="w-60 aspect-square mx-auto relative opacity-80">
+                        <Image
+                            src="/assets/empty.jpg"
+                            fill
+                            alt=""
+                            className="object-contain mix-blend-multiply"
+                        />
                     </div>
-                ) }
-                <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
-                    {
-                        certificates.map((certificate)=>(
-                            <CertificateCard
-                                key={certificate.id}
-                                certificateId={certificate.id}
-                                image={certificate.course.image!}
-                                title={certificate.course.title}
-                            />
-                        ))
-                    }
-                </section>
-            </div>
-        </main>
+                    <p className="text-base text-muted-foreground font-medium text-center max-w-md mx-auto">
+                    Your certificate wallet is empty. 📚 Start exploring our courses and earn your first certificate today!
+                    </p>
+                </div>
+            ) }
+            
+            <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {
+                    certificates.map((certificate)=>(
+                        <CertificateCard
+                            key={certificate.id}
+                            certificateId={certificate.id}
+                            image={certificate.course.image!}
+                            title={certificate.course.title}
+                        />
+                    ))
+                }
+            </section>
+        </PageContainer>
     )
 }
 

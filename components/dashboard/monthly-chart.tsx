@@ -31,14 +31,14 @@ export const MonthlyChart = ({
     const empty = !data.some((d) => d.total > 0);
 
     return (
-        <Card>
+        <Card className="rounded-2xl">
             <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium">Revenue, last 6 months</CardTitle>
             </CardHeader>
             <CardContent>
                 {
                     empty ? (
-                        <div className="h-[300px] flex items-center justify-center text-sm text-zinc-500">
+                        <div className="h-[300px] flex items-center justify-center text-sm text-muted-foreground">
                             No sales in this period yet.
                         </div>
                     ) : (
@@ -46,8 +46,8 @@ export const MonthlyChart = ({
                             <AreaChart data={data} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
                                 <defs>
                                     <linearGradient id="revenueFill" x1="0" y1="0" x2="0" y2="1">
-                                        <stop offset="0%" stopColor="hsl(var(--highlight))" stopOpacity={0.45} />
-                                        <stop offset="100%" stopColor="hsl(var(--highlight))" stopOpacity={0} />
+                                        <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity={0.25} />
+                                        <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity={0} />
                                     </linearGradient>
                                 </defs>
                                 <XAxis
@@ -73,8 +73,8 @@ export const MonthlyChart = ({
                                 <Area
                                     type="monotone"
                                     dataKey="total"
-                                    stroke="hsl(var(--highlight))"
-                                    strokeWidth={2}
+                                    stroke="hsl(var(--primary))"
+                                    strokeWidth={3}
                                     fill="url(#revenueFill)"
                                 />
                             </AreaChart>

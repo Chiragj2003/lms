@@ -12,6 +12,7 @@ import { courseMetadata } from "@/server/metadata";
 import "./style.css"
 import { InstructorDescription } from "@/components/courses/ui/instructor-description";
 import { Reviews } from "@/components/courses/ui/reviews";
+import { PageContainer } from "@/components/ui/page-container";
 
 
 interface CoursePageProps {
@@ -52,45 +53,48 @@ const CoursePage = async (props:CoursePageProps) => {
     }
 
     return (
-        <main className="h-full overflow-y-auto">
+        <div className="flex flex-col min-h-screen">
             <Header variant="default" />
-            <CourseHeader
-                id={course.id}
-                title={course.title}
-                shortDescription={course.shortDescription!}
-                lastUpdated={course.updatedAt}
-                subCategory={course.subCategory}
-                tutorImage={course.tutor.image}
-                tutorName={course.tutor.name!}
-                tutorProfile={course.tutor.profile?.description}
-                avgRating={avgRating._avg.star!}
-                purchases={course._count.purchases}
-                ratings={course._count.ratings}
-            />
-            <div className="w-full mt-20">
-                <div className="max-w-6xl w-full flex flex-col-reverse md:flex-row mx-auto px-6 gap-10 relative">
-                    <div className="w-full">
-                        <div className="gap-y-4 px-6 py-10 border border-zinc-300 rounded-xl shadow-md">
-                            <h1 className="text-zinc-600 font-semibold">Top companies offer this course to their employees</h1>
-                            <div className="grid grid-cols-4 items-center justify-items-center ">
-
-                            </div>
+            
+            <main className="flex-1 pb-24">
+                <CourseHeader
+                    id={course.id}
+                    title={course.title}
+                    shortDescription={course.shortDescription!}
+                    lastUpdated={course.updatedAt}
+                    subCategory={course.subCategory}
+                    tutorImage={course.tutor.image}
+                    tutorName={course.tutor.name!}
+                    tutorProfile={course.tutor.profile?.description}
+                    avgRating={avgRating._avg.star!}
+                    purchases={course._count.purchases}
+                    ratings={course._count.ratings}
+                />
+                
+                <PageContainer className="mt-12 md:mt-16">
+                    <div className="flex flex-col-reverse lg:flex-row gap-12 lg:gap-16 relative items-start">
+                        {/* Main Content Column */}
+                        <div className="w-full lg:w-2/3 space-y-12">
+                            <Chapters chapters={course.chapters} />
+                            <Description description={course.description!} />
+                            <InstructorDescription tutor={course.tutor} />
+                            <Reviews reviews={course.ratings} courseId={course.id}  />
                         </div>
-                        <Chapters chapters={course.chapters} />
-                        <Description description={course.description!} />
-                        <InstructorDescription tutor={course.tutor} />
-                        <Reviews reviews={course.ratings} courseId={course.id}  />
+                        
+                        {/* Sidebar Column */}
+                        <div className="w-full lg:w-1/3 static lg:sticky lg:top-24 z-10">
+                            <SubscriptionCard
+                                courseId={params.courseId}
+                                title={course.title}
+                                poster={course.image!}
+                                price={course.price!}
+                                course={course}
+                            />
+                        </div>
                     </div>
-                    <SubscriptionCard
-                        courseId={params.courseId}
-                        title={course.title}
-                        poster={course.image!}
-                        price={course.price!}
-                        course={course}
-                    />
-                </div>
-            </div>
-        </main>
+                </PageContainer>
+            </main>
+        </div>
     )
 }
 

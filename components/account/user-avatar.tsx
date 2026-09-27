@@ -38,7 +38,7 @@ export const UserAvatar = () => {
                     <AvatarFallback>{session.data?.user.name?.charAt(0)}</AvatarFallback>
                 </Avatar>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-60 md:w-72 rounded-none border border-zinc-400 pb-4" align="end" >
+            <DropdownMenuContent className="w-60 md:w-72 rounded-lg border border-zinc-400 pb-4" align="end" >
                 <div className="p-3 flex items-center gap-x-3">
                     <Avatar className="h-12 w-12">
                         <AvatarImage src={session.data?.user.image||""} />
@@ -51,14 +51,14 @@ export const UserAvatar = () => {
                 </div>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
-                    className="rounded-none font-medium text-zinc-700 py-2"
+                    className="rounded-lg font-medium text-zinc-700 py-2"
                     onClick={()=>router.push("/user")}
                 >
                     <User className="mr-3 h-5 w-5" />
                     <span>Profile</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem
-                    className="rounded-none font-medium text-zinc-700 py-2"
+                    className="rounded-lg font-medium text-zinc-700 py-2"
                     onClick={()=>router.push("/user/edit-profile")}
                 >
                     <TbUserEdit className="mr-3 h-5 w-5" />
@@ -66,7 +66,7 @@ export const UserAvatar = () => {
                 </DropdownMenuItem>
                 <DropdownMenuItem
                     className={cn(
-                        "rounded-none font-medium text-zinc-700 py-2",
+                        "rounded-lg font-medium text-zinc-700 py-2",
                         pathname.includes("/tutor/courses") && "hidden"
                     )}
                     onClick={()=>router.push(isTutor ? "/tutor/courses" : "/user/my-learning")}
@@ -78,7 +78,7 @@ export const UserAvatar = () => {
                     // Tutors sell courses, they don't buy them.
                     !isTutor && (
                         <DropdownMenuItem
-                            className="rounded-none font-medium text-zinc-700 py-2"
+                            className="rounded-lg font-medium text-zinc-700 py-2"
                             onClick={()=>router.push("/cart")}
                         >
                             <ShoppingBag className="mr-3 ml-1 h-4 w-4" />
@@ -87,7 +87,7 @@ export const UserAvatar = () => {
                     )
                 }
                 <DropdownMenuItem
-                    className="rounded-none font-medium text-zinc-700 py-2"
+                    className="rounded-lg font-medium text-zinc-700 py-2"
                     onClick={async()=>{
                         await signOut();
                         // Full reload, not router.push: server components hold

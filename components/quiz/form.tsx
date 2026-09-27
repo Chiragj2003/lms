@@ -128,7 +128,7 @@ export const QuizForm = ({
     
     return (
         <div className="w-full relative space-y-10">
-            <div className="max-w-sm w-full z-10 bg-white px-6 py-4 shadow-md border border-zinc-300 rounded-md mx-auto sticky top-4">
+            <div className="max-w-sm w-full z-10 bg-card px-6 py-4 shadow-elevated border border-border rounded-2xl mx-auto sticky top-4">
                 <div className="flex items-center justify-center text-zinc-700 gap-x-6">
                     <Button
                         onClick={addQuestion}

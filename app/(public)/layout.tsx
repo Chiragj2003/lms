@@ -1,3 +1,5 @@
+import { Footer } from "@/components/utils/footer";
+
 interface PublicLayoutProps {
     children : React.ReactNode;
 }
@@ -6,8 +8,9 @@ const PublicLayout = ({
     children
 } : PublicLayoutProps ) => {
     return (
-        <main className="h-full overflow-y-auto relative">
+        <main className="min-h-full">
             {children}
+            <Footer />
         </main>
     )
 }

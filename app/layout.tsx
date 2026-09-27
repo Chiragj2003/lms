@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { auth } from "@/auth";
 import { Toaster } from "sonner";
@@ -9,12 +9,11 @@ import { ConfettiProvider } from "@/providers/confetti.provider";
 import { ModalProvider } from "@/providers/modal.provider";
 import { QueryProvider } from "@/providers/query.provider";
 
-// Only the weights the UI actually uses (400/500/600/700). Loading all nine
-// shipped five families nobody rendered.
-const poppins = Poppins({
+const inter = Inter({
     subsets: ["latin"],
     weight : ["400", "500", "600", "700"],
-    display : "swap"
+    display : "swap",
+    variable: "--font-inter",
 });
 
 
@@ -36,7 +35,7 @@ export default async function RootLayout({
 
     return (
         <html lang="en">
-            <body className={poppins.className}>
+            <body className={inter.className}>
                 {/* Better Auth's useSession fetches its own state, so no
                     session provider wrapper is needed. */}
                 <QueryProvider>

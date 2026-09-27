@@ -35,46 +35,44 @@ export const SubscriptionCard = ({
     const isTutor = session.data?.user.role === "TUTOR";
 
     return (
-        <div className="w-full md:w-96 h-fit shrink-0 md:sticky md:top-10 pb-8 border border-zinc-200 shadow-xl">
-            <div className="aspect-video w-full relative">
+        <div className="w-full h-fit shrink-0 bg-card border border-border rounded-2xl shadow-lg overflow-hidden">
+            <div className="aspect-video w-full relative bg-muted">
                 <Image
                     src={poster}
-                    alt=""
+                    alt={title}
                     fill
                     className="object-cover"
                 />
             </div>
-            <div className="mt-6 px-6 w-full">
+            <div className="p-6 md:p-8 w-full">
                 <div className="space-y-6">
-                    <div className="space-y-3">
-                        <h3 className="text-xl md:text-2xl text-zinc-700 font-bold" >{formatPrice(appliedPrice)}</h3>
+                    <div className="space-y-4">
+                        <h3 className="text-3xl text-foreground font-bold" >{formatPrice(appliedPrice)}</h3>
                         {
                             !isTutor && (
                                 <Button
-                                    className="w-full h-12 border-2 border-zinc-600 rounded-none font-semibold text-zinc-800"
-                                    variant="outline"
+                                    className="w-full h-12 text-base font-semibold"
+                                    variant={items.find(item=>item.id===courseId) ? "secondary" : "default"}
+                                    size="lg"
                                     // onClick={()=>toggleItem(course)}
                                 >
                                     {
-                                        items.find(item=>item.id===courseId)  ? "Remove from cart" : "Add to cart"
+                                        items.find(item=>item.id===courseId) ? "Remove from cart" : "Add to cart"
                                     }
                                 </Button>
                             )
                         }
                     </div>
                     {
-                        // Tutors can browse and review the catalogue, but the
-                        // purchase path is closed to them.
                         isTutor ? (
-                            <p className="text-sm text-zinc-600 border border-zinc-200 bg-zinc-50 p-3">
-                                You&apos;re signed in as a tutor. Tutor accounts can browse and review
-                                courses, but cannot enrol in them.
-                            </p>
+                            <div className="p-4 rounded-xl bg-muted border border-border text-sm text-muted-foreground">
+                                You&apos;re signed in as a tutor. Tutor accounts can browse and review courses, but cannot enrol in them.
+                            </div>
                         ) : (
                             <>
-                                <div className="relative flex items-center justify-center">
-                                    <div className="absolute h-0.5 w-full bg-zinc-300" />
-                                    <span className="text-xs z-10 bg-white font-medium text-zinc-700 px-2">OR</span>
+                                <div className="relative flex items-center justify-center my-6">
+                                    <div className="absolute h-px w-full bg-border" />
+                                    <span className="text-xs z-10 bg-card px-2 font-medium text-muted-foreground uppercase tracking-wider">OR</span>
                                 </div>
                                 <CouponCheckoutForm
                                     courseId={courseId}

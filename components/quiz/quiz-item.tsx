@@ -98,7 +98,7 @@ export const QuizItem = ({
 
 
     return (
-        <div className="w-full bg-white border border-zinc-300 rounded-md shadow-md border-l-8 border-l-violet-600 group">
+        <div className="w-full bg-card border border-border rounded-2xl shadow-sm border-l-8 border-l-primary group">
             <div className="flex items-center justify-center h-6">
                 <GripHorizontal className="h-6 w-6 text-zinc-400 hidden group-hover:block"/>
             </div>
@@ -108,7 +108,7 @@ export const QuizItem = ({
                     disabled={disabled}
                     placeholder="Question"
                     onChange={(e)=>setQuestion(e.target.value)}
-                    className="rounded-none h-12 border-0 border-b-2 border-zinc-400 outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-violet-400 focus:bg-zinc-50 font-medium text-zinc-800"
+                    className="rounded-none h-12 border-0 border-b-2 border-border outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-primary focus:bg-muted font-medium text-foreground"
                 />
                 <div className="flex flex-col gap-y-2 w-full">
                     {options.map((option, index)=>(

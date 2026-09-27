@@ -11,6 +11,7 @@ import { useCart } from "@/hooks/use-cart";
 import { useSession } from "@/lib/auth-client";
 import { toast } from "sonner";
 import { X } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 interface CardProps {
     course : (Course );
@@ -29,85 +30,89 @@ export const Card = ({
     const { items, toggleItem } = useCart();
     const session = useSession();
     const inCart = items.find(item=>item.id===course.id);
-    // Tutors browse the catalogue but never buy from it.
     const isTutor = session.data?.user.role === "TUTOR";
 
     return (
         <div
             className={cn(
-                // The card is a link region: the title carries the real anchor and
-                // stretches over the card, so it stays keyboard-reachable.
-                "group relative w-72 md:w-80 space-y-6 p-3 pb-6 bg-card border rounded-xl shadow-sm",
-                "transition-shadow duration-200 hover:shadow-lg",
-                "focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2",
+                "group relative w-full flex flex-col bg-card border border-border rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 hover:border-primary/50",
                 className
             )}
         >
-            <div className="w-full aspect-video rounded-lg overflow-hidden relative bg-zinc-100">
+            <div className="w-full aspect-video relative bg-muted overflow-hidden">
                 <Image
                     src={course.image!}
-                    alt=""
+                    alt={course.title}
                     fill
                     sizes="(min-width: 768px) 20rem, 18rem"
-                    className="object-cover transition-transform duration-300 group-hover:scale-105"
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
+                <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+                
                 {
                     isBestSeller && (
-                        <span className="absolute left-3 top-3 z-10 px-2 py-1 bg-highlight-500 text-highlight-foreground text-xs font-semibold rounded-full shadow-sm">
-                            Bestseller
-                        </span>
+                        <div className="absolute top-3 left-3 z-10">
+                            <Badge variant="highlight" className="shadow-sm">
+                                Bestseller
+                            </Badge>
+                        </div>
                     )
                 }
                 {
                     remove ? (
                         <div className="absolute right-3 top-3 z-10">
                             <Button
-                                variant="ghost"
+                                variant="secondary"
                                 size="icon"
-                                className="rounded-full bg-white hover:bg-white"
+                                className="h-8 w-8 rounded-full shadow-sm hover:bg-destructive hover:text-destructive-foreground transition-colors"
                                 aria-label={`Remove ${course.title} from cart`}
-                                onClick={()=>{
+                                onClick={(e)=>{
+                                    e.preventDefault();
                                     // toggleItem(course);
-                                    toast.info("Course is removed from cart");
+                                    toast.info("Course removed from cart");
                                 }}
                             >
-                                <X className="text-zinc-800 h-5 w-5" />
+                                <X className="h-4 w-4" />
                             </Button>
                         </div>
-                    ) : isTutor ? null : (
-                        <div className={cn(
-                            // Fades in on hover, but stays reachable on keyboard focus.
-                            "absolute right-4 bottom-4 z-10 transition-opacity duration-200",
-                            "opacity-0 group-hover:opacity-100 focus-within:opacity-100"
-                        )}>
+                    ) : !isTutor && (
+                        <div className="absolute right-3 bottom-3 z-10 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 focus-within:translate-y-0 focus-within:opacity-100 transition-all duration-300">
                             <Button
-                                variant="ghost"
+                                variant="secondary"
                                 size="icon"
-                                className="rounded-full bg-white hover:bg-white"
+                                className={cn(
+                                    "h-10 w-10 rounded-full shadow-md transition-colors",
+                                    inCart ? "bg-primary text-primary-foreground hover:bg-primary/90" : "bg-white text-zinc-900 hover:bg-zinc-100"
+                                )}
                                 aria-label={inCart ? `Remove ${course.title} from cart` : `Add ${course.title} to cart`}
-                                onClick={()=>{
-                                    toast.info(inCart ? "Course is removed from cart" : "Course is added to cart")
+                                onClick={(e)=>{
+                                    e.preventDefault();
+                                    toast.info(inCart ? "Course removed from cart" : "Course added to cart")
                                     // toggleItem(course);
                                 }}
                             >
-                                { inCart ? (<MdOutlineRemoveShoppingCart className="text-zinc-800 h-6 w-6"/>): (<MdOutlineShoppingCart className="text-zinc-800 h-6 w-6"/>)}
+                                { inCart ? <MdOutlineRemoveShoppingCart className="h-5 w-5"/> : <MdOutlineShoppingCart className="h-5 w-5"/> }
                             </Button>
                         </div>
                     )
                 }
             </div>
-            <div className="w-full space-y-3 px-3">
-                <h2 className="font-semibold text-zinc-800 line-clamp-2 text-base">
-                    <Link
-                        href={`/course/${course.id}`}
-                        className="outline-none after:absolute after:inset-0 after:rounded-xl"
-                    >
+            
+            <div className="flex flex-col flex-1 p-4 md:p-5">
+                <Link
+                    href={`/course/${course.id}`}
+                    className="outline-none after:absolute after:inset-0"
+                >
+                    <h3 className="font-semibold text-foreground line-clamp-2 text-base group-hover:text-primary transition-colors">
                         {course.title}
-                    </Link>
-                </h2>
-                <p className="font-semibold text-zinc-900">
-                    {formatPrice(course.price!)}
-                </p>
+                    </h3>
+                </Link>
+                
+                <div className="mt-auto pt-4 flex items-center justify-between">
+                    <span className="font-bold text-lg text-primary">
+                        {formatPrice(course.price!)}
+                    </span>
+                </div>
             </div>
         </div>
     )

@@ -1,7 +1,6 @@
 "use client";
 
 import { Rate } from "@prisma/client";
-import { Heading } from "@/components/utils/heading";
 import { ReviewCard } from "./review-card";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
@@ -26,9 +25,9 @@ export const Reviews = ({
         <>
             <section className="my-20 w-full">
                 <div className="max-w-3xl mx-auto space-y-6">
-                    <Heading className="text-2xl md:text-3xl font-bold text-zinc-700">
+                    <h2 className="text-2xl md:text-3xl font-bold text-foreground">
                         Course Reviews
-                    </Heading> 
+                    </h2> 
                     <div className="flex flex-col space-y-4">
                         {
                             reviews.map((review)=>(
@@ -38,7 +37,7 @@ export const Reviews = ({
                     </div>
                     <Button
                         variant="outline"
-                        className="w-full border-zinc-500 border-2 h-12 rounded-none text-sm font-semibold text-zinc-700"
+                        className="w-full h-12 rounded-xl text-sm font-semibold text-foreground border-border hover:bg-muted/50"
                         onClick={()=>setOpen(true)}
                     >
                         See All Reviews

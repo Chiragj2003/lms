@@ -4,7 +4,6 @@ import Image from "next/image";
 import dynamic from "next/dynamic";
 import { useMemo } from "react";
 
-import { Heading } from "@/components/utils/heading";
 import { SlBadge } from "react-icons/sl";
 import { UsersRound } from "lucide-react";
 import { FaCirclePlay } from "react-icons/fa6";
@@ -42,16 +41,16 @@ export const InstructorDescription = ({
     return (
         <section className="w-full mt-20" >
             <div className="max-w-3xl mx-auto space-y-6">
-                <Heading className="text-2xl md:text-3xl font-bold text-zinc-700">
+                <h2 className="text-2xl md:text-3xl font-bold text-foreground">
                     Instructor
-                </Heading>
-                <div className="space-y-4">
-                    <div className="space-y-0">
-                        <Heading className="text-xl md:text-2xl font-semibold text-violet-700" >{tutor.name}</Heading>
-                        <p className="text-zinc-700 text-base font-medium">{tutor.profile?.headline}</p>
+                </h2>
+                <div className="bg-card border border-border rounded-2xl p-6 space-y-6 shadow-sm">
+                    <div className="space-y-1">
+                        <h3 className="text-xl md:text-2xl font-semibold text-primary">{tutor.name}</h3>
+                        <p className="text-muted-foreground text-base font-medium">{tutor.profile?.headline}</p>
                     </div>
-                    <div className="flex items-start gap-x-8">
-                        <div className="relative size-28 md:size-36 rounded-full overflow-hidden bg-neutral-700 flex items-center justify-center">
+                    <div className="flex flex-col md:flex-row md:items-center gap-6">
+                        <div className="relative size-28 md:size-36 rounded-full overflow-hidden bg-muted flex items-center justify-center shrink-0">
                             {
                                 tutor.image ? (
                                     <Image
@@ -61,33 +60,33 @@ export const InstructorDescription = ({
                                         className="object-cover"
                                     />
                                 ) : (
-                                    <Heading>
+                                    <span className="text-4xl font-bold text-muted-foreground">
                                         {tutor.name?.charAt(0)??"I"}
-                                    </Heading>
+                                    </span>
                                 )
                             }
                         </div>
-                        <div className="flex flex-col gap-y-2 py-4">
-                            <div className="flex items-center gap-x-4 text-zinc-800 font-medium">
+                        <div className="flex flex-col gap-y-3">
+                            <div className="flex items-center gap-x-4 text-foreground font-medium">
                                 <SlBadge className="size-5" fill="#27272a" />
                                 <span className="text-sm">{tutor.courses.reduce((prev, curr)=>{
                                     return prev+curr._count.ratings
                                 }, 0).toLocaleString()} Reviews</span>
                             </div>
-                            <div className="flex items-center gap-x-4 text-zinc-800 font-medium">
+                            <div className="flex items-center gap-x-4 text-foreground font-medium">
                                 <UsersRound className="size-5" fill="#27272a" />
                                 <span className="text-sm">{tutor.courses.reduce((prev, curr)=>{
                                     return prev+curr._count.purchases
                                 }, 0).toLocaleString()} Students</span>
                             </div>
-                            <div className="flex items-center gap-x-4 text-zinc-800 font-medium">
+                            <div className="flex items-center gap-x-4 text-foreground font-medium">
                                 <FaCirclePlay className="size-5" fill="#27272a" />
                                 <span className="text-sm">{tutor._count.courses} Courses</span>
                             </div>
                         </div>
                     </div>
                     <div 
-                        className="text-zinc-700 relative h-auto mt-6"
+                        className="text-muted-foreground prose prose-zinc max-w-none relative h-auto mt-6"
                     >
                         <Preview value={tutor.profile?.description??""}/>
                     </div>

@@ -66,8 +66,8 @@ export const CategoryForm = ({
     const selectedOption = options.find((option)=>option.value===initialData.subCategoryId)?.label;
 
     return (
-        <div className="mt-6 border bg-zinc-100 p-4 transition-transform">
-            <div className="flex items-center justify-between font-medium text-zinc-800">
+        <div className="mt-6 bg-card border border-border rounded-2xl shadow-sm p-4 transition-transform">
+            <div className="flex items-center justify-between font-medium text-foreground">
                 <span className="font-semibold">Course Category</span>
                 <Button
                     variant="ghost"
@@ -93,7 +93,7 @@ export const CategoryForm = ({
             {
                 !isEditing ? (
                     <p className={cn(
-                        "text-sm text-zinc-700 mt-2 font-medium",
+                        "text-sm text-foreground mt-2 font-medium",
                         !initialData.subCategoryId && "italic"
                     )}>
                         {
@@ -127,7 +127,7 @@ export const CategoryForm = ({
                             <div className="w-full grid grid-cols-2 gap-4">
                                 <Button
                                     variant="outline"
-                                    className="rounded-none h-14 font-semibold"
+                                    className="rounded-lg h-11 font-semibold"
                                     type="button"
                                     onClick={toggleEdit}
                                     disabled = {isSubmitting}
@@ -135,7 +135,7 @@ export const CategoryForm = ({
                                     Cancel
                                 </Button>
                                 <Button
-                                    className="rounded-none h-14 font-semibold"
+                                    className="rounded-lg h-11 font-semibold"
                                     type="submit"
                                     disabled = {isSubmitting || !isValid}
                                 >

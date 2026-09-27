@@ -53,15 +53,15 @@ const ViewLayoutPage = async (props: ViewLayoutPageProps) => {
                 progressCount={progressCount}
                 purchase={purchase}
             />
-            <div className="h-full w-full flex">
-                <div className="hidden md:flex h-full w-80 flex-col shrink-0">
+            <div className="h-full w-full flex overflow-hidden">
+                <div className="hidden md:flex h-full w-80 flex-col shrink-0 border-r border-border bg-card shadow-sm z-10 relative">
                     <SideBar
                         course={course}
                         progressCount={progressCount}
                         purchase={purchase}
                     />
                 </div>
-                <main className="h-full overflow-y-auto w-full lg:w-[clac(100%-20rem)]">
+                <main className="h-full overflow-y-auto w-full md:w-[calc(100%-20rem)] flex-1 bg-background relative">
                     { children }
                 </main>
             </div>

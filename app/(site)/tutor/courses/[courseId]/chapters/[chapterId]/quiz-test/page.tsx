@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { getQuiz } from "@/server/chapter";
 import { QuizForm } from "@/components/quiz/form";
 import { Actions } from "@/components/quiz/actions";
+import { PageContainer } from "@/components/ui/page-container";
 
 
 interface QuizPageProps {
@@ -26,41 +27,40 @@ const QuizPage = async (props: QuizPageProps) => {
     }
 
     return (
-        <>
-            <main className="p-6 md:px-8 space-y-12">
-                <div className="flex items-center justify-between">
-                    <div className="w-full">
-                        <Link
-                            href={`/tutor/courses/${params.chapterId}`}
-                            className="flex items-center text-sm hover:opacity-75 transition mb-6 font-medium"
-                        >
-                            <ArrowLeft className="h-4 w-4 mr-2" />
-                            Back to chapter
-                        </Link>
-                        <div className="flex items-center justify-between w-full">
-                            <div className="flex flex-col gap-y-2">
-                                <h1 className="text-xl md:text-2xl font-bold text-zinc-800">
-                                    Create Quiz
-                                </h1>
-                            </div>
-                            <Actions
-                                chapterId={params.chapterId}
-                                courseId={params.courseId}
-                                disabled={quiz.questions.length===0}
-                                isPublished={quiz.isPublished}
-                            />
+        <PageContainer className="py-10 space-y-12">
+            <div className="flex items-center justify-between">
+                <div className="w-full">
+                    <Link
+                        href={`/tutor/courses/${params.courseId}/chapters/${params.chapterId}`}
+                        className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition mb-6 font-medium group"
+                    >
+                        <ArrowLeft className="h-4 w-4 mr-2 group-hover:-translate-x-1 transition-transform" />
+                        Back to chapter setup
+                    </Link>
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 w-full">
+                        <div className="flex flex-col gap-y-2">
+                            <h1 className="text-3xl font-bold text-foreground">
+                                Quiz Builder
+                            </h1>
+                            <p className="text-sm text-muted-foreground font-medium">Add questions and answers to test learners.</p>
                         </div>
+                        <Actions
+                            chapterId={params.chapterId}
+                            courseId={params.courseId}
+                            disabled={quiz.questions.length===0}
+                            isPublished={quiz.isPublished}
+                        />
                     </div>
                 </div>
-                <div className="max-w-2xl w-full mx-auto">
-                    <QuizForm
-                        chapterId={params.chapterId}
-                        courseId={params.courseId}
-                        quiz={quiz}
-                    />
-                </div>
-            </main>
-        </>
+            </div>
+            <div className="max-w-2xl w-full">
+                <QuizForm
+                    chapterId={params.chapterId}
+                    courseId={params.courseId}
+                    quiz={quiz}
+                />
+            </div>
+        </PageContainer>
     )
 }
 

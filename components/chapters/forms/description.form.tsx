@@ -67,8 +67,8 @@ export const DescriptionForm = ({
     }
 
     return (
-        <div className="mt-6 border bg-zinc-100 p-4 transition-transform">
-            <div className="flex items-center justify-between font-medium text-zinc-800">
+        <div className="mt-6 bg-card border border-border rounded-2xl shadow-sm p-4 transition-transform">
+            <div className="flex items-center justify-between font-medium text-foreground">
                 <span className="font-semibold">Chapter Description</span>
                 <Button
                     variant="ghost"
@@ -90,7 +90,7 @@ export const DescriptionForm = ({
             {
                 !isEditing ? (
                     <div className={cn(
-                        "text-sm text-zinc-700 mt-2 font-medium",
+                        "text-sm text-foreground mt-2 font-medium",
                         !initialData.description && "italic"
                     )}>
                         {
@@ -123,7 +123,7 @@ export const DescriptionForm = ({
                             <div className="w-full grid grid-cols-2 gap-4">
                                 <Button
                                     variant="outline"
-                                    className="rounded-none h-14 font-semibold"
+                                    className="rounded-lg h-11 font-semibold"
                                     type="button"
                                     onClick={toggleEdit}
                                     disabled = {isSubmitting}
@@ -131,7 +131,7 @@ export const DescriptionForm = ({
                                     Cancel
                                 </Button>
                                 <Button
-                                    className="rounded-none h-14 font-semibold"
+                                    className="rounded-lg h-11 font-semibold"
                                     type="submit"
                                     disabled = {isSubmitting || !isValid}
                                 >

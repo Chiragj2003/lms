@@ -8,8 +8,7 @@ body,
   height: 100%;
 }
 
-
-@media screen  and (min-width: 720px) {
+@media screen and (min-width: 720px) {
   .chapter-scroll::-webkit-scrollbar {
     background: #00000000;
   }
@@ -18,89 +17,106 @@ body,
   }
 }
 
-
-
-
 @layer base {
   :root {
-    /* Ink & Highlight: ink carries the identity, amber is the one accent. */
-    --background: 0 0% 100%;
-    --foreground: 219 27% 19%;
+    /* ─── LearnIt — Teal & Coral ───
+       Primary: deep teal for CTAs, links, trust.
+       Accent/highlight: warm coral for badges, emphasis.
+       Surfaces: warm cream background, white cards. */
+
+    --background: 40 20% 98%;
+    --foreground: 220 25% 14%;
 
     --card: 0 0% 100%;
-    --card-foreground: 219 27% 19%;
+    --card-foreground: 220 25% 14%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 219 27% 19%;
+    --popover-foreground: 220 25% 14%;
 
-    --primary: 219 27% 19%;
-    --primary-foreground: 210 40% 98%;
+    /* Deep teal — primary brand */
+    --primary: 168 80% 28%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 220 30% 96%;
-    --secondary-foreground: 219 27% 19%;
+    /* Light warm gray — subtle surfaces */
+    --secondary: 40 15% 96%;
+    --secondary-foreground: 220 25% 14%;
 
-    --muted: 220 30% 96%;
-    --muted-foreground: 219 15% 45%;
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 12% 46%;
 
-    --accent: 220 30% 96%;
-    --accent-foreground: 219 27% 19%;
+    /* Very light teal tint — hover/focus backgrounds */
+    --accent: 168 40% 96%;
+    --accent-foreground: 168 80% 22%;
 
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 220 22% 90%;
-    --input: 220 22% 90%;
-    /* Amber focus ring: on-brand and clearly visible against ink. */
-    --ring: 38 92% 50%;
+    --success: 152 60% 38%;
+    --success-foreground: 0 0% 100%;
 
-    --highlight: 38 92% 50%;
-    --highlight-foreground: 220 32% 13%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 30 80% 12%;
 
-    --radius: 0.5rem;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
-    --chart-6: 280 95% 56%;
+    --border: 220 15% 91%;
+    --input: 220 15% 91%;
+    --ring: 168 80% 28%;
+
+    /* Warm coral highlight */
+    --highlight: 24 95% 56%;
+    --highlight-foreground: 0 0% 100%;
+
+    /* Tutor accent — restrained purple */
+    --tutor: 262 60% 55%;
+    --tutor-foreground: 0 0% 100%;
+
+    --radius: 0.625rem;
+
+    /* Chart palette */
+    --chart-1: 168 80% 28%;
+    --chart-2: 24 95% 56%;
+    --chart-3: 152 60% 38%;
+    --chart-4: 38 92% 50%;
+    --chart-5: 262 60% 55%;
+    --chart-6: 340 75% 55%;
   }
 
   .dark {
-    --background: 220 32% 10%;
+    --background: 220 25% 8%;
     --foreground: 210 40% 98%;
 
-    --card: 220 30% 13%;
+    --card: 220 25% 11%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 220 30% 13%;
+    --popover: 220 25% 11%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 219 27% 19%;
+    --primary: 168 70% 42%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 220 25% 18%;
+    --secondary: 220 20% 16%;
     --secondary-foreground: 210 40% 98%;
 
-    --muted: 220 25% 18%;
+    --muted: 220 20% 16%;
     --muted-foreground: 220 15% 65%;
 
-    --accent: 220 25% 18%;
+    --accent: 220 20% 16%;
     --accent-foreground: 210 40% 98%;
 
-    --destructive: 0 62.8% 40%;
+    --destructive: 0 62% 40%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 220 25% 20%;
-    --input: 220 25% 20%;
-    --ring: 38 92% 50%;
+    --border: 220 20% 18%;
+    --input: 220 20% 18%;
+    --ring: 168 70% 42%;
 
-    --highlight: 38 92% 55%;
-    --highlight-foreground: 220 32% 13%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    --highlight: 24 95% 60%;
+    --highlight-foreground: 0 0% 100%;
+
+    --chart-1: 168 70% 42%;
+    --chart-2: 24 95% 60%;
+    --chart-3: 152 55% 50%;
+    --chart-4: 38 90% 55%;
+    --chart-5: 262 55% 60%;
   }
 }
 
@@ -114,26 +130,24 @@ body,
 }
 
 @layer components {
-  /* Signature: the highlighter swipe. The one mark a learner makes when
-     something matters. Use once per view, on the phrase that carries it. */
+  /* Coral highlight swipe — use on one key phrase per section. */
   .mark-highlight {
     background-image: linear-gradient(
       to bottom,
       transparent 58%,
-      hsl(var(--highlight) / 0.55) 58%,
-      hsl(var(--highlight) / 0.55) 92%,
+      hsl(var(--highlight) / 0.45) 58%,
+      hsl(var(--highlight) / 0.45) 92%,
       transparent 92%
     );
     background-repeat: no-repeat;
     background-size: 100% 100%;
-    /* Slight skew so it reads as a hand-drawn stroke, not a CSS rectangle. */
     padding-inline: 0.12em;
     box-decoration-break: clone;
     -webkit-box-decoration-break: clone;
   }
 }
 
-/* Quality floor: don't animate for people who asked us not to. */
+/* Respect user motion preferences. */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

@@ -12,6 +12,9 @@ import {
     CarouselPrevious
 } from '@/components/ui/carousel';
 import { Skeleton } from "@/components/ui/skeleton";
+import { PageContainer } from "../ui/page-container";
+import { SectionHeader } from "../ui/section-header";
+import { GraduationCap } from "lucide-react";
 
 
 interface Response {
@@ -29,111 +32,65 @@ export const Categories = () => {
 
     const categories = Array.isArray(data) ? data : [];
     const shouldRenderSkeleton = isLoading || (!isLoading && !Array.isArray(data));
-
     
     if ( error ) {
         return null;
     }
 
     return (
-        <ul className="w-full pt-6 relative px-4" >
-            <Carousel
-                className="w-full space-y-3"
-                opts = {{
-                    align : "start",
-                    slidesToScroll : "auto"
-                }}
-            >
-                <div className="absolute left-4 bottom-1/2 -translate-y-1/2 z-10">
-                    <CarouselPrevious className="z-10 h-12 w-12 bg-neutral-300 hover:bg-neutral-200 shadow-lg" variant="secondary"/>
+        <section className="py-20 bg-background">
+            <PageContainer>
+                <div className="mb-10">
+                    <SectionHeader 
+                        title="Top Categories"
+                        subtitle="Explore our wide range of professional courses."
+                    />
                 </div>
-                <CarouselContent className="space-x-2">
-                    { shouldRenderSkeleton ? (
-                        <>
-                            <CarouselItem className="basis-auto" >
-                                <div className="p-4 md:p-5 md:px-6 rounded-full bg-neutral-800 hover:bg-neutral-900/80 transition-all space-y-3">
-                                    <Skeleton className="h-4 w-32 bg-neutral-700"/>
-                                    <Skeleton className="h-4 w-16 bg-neutral-700"/>
-                                </div>
-                            </CarouselItem>
-                            <CarouselItem className="basis-auto" >
-                                <div className="p-4 md:p-5 md:px-6 rounded-full bg-neutral-800 hover:bg-neutral-900/80 transition-all space-y-3">
-                                    <Skeleton className="h-4 w-32 bg-neutral-700"/>
-                                    <Skeleton className="h-4 w-16 bg-neutral-700"/>
-                                </div>
-                            </CarouselItem>
-                            <CarouselItem className="basis-auto" >
-                                <div className="p-4 md:p-5 md:px-6 rounded-full bg-neutral-800 hover:bg-neutral-900/80 transition-all space-y-3">
-                                    <Skeleton className="h-4 w-32 bg-neutral-700"/>
-                                    <Skeleton className="h-4 w-16 bg-neutral-700"/>
-                                </div>
-                            </CarouselItem>
-                            <CarouselItem className="basis-auto" >
-                                <div className="p-4 md:p-5 md:px-6 rounded-full bg-neutral-800 hover:bg-neutral-900/80 transition-all space-y-3">
-                                    <Skeleton className="h-4 w-32 bg-neutral-700"/>
-                                    <Skeleton className="h-4 w-16 bg-neutral-700"/>
-                                </div>
-                            </CarouselItem>
-                            <CarouselItem className="basis-auto" >
-                                <div className="p-4 md:p-5 md:px-6 rounded-full bg-neutral-800 hover:bg-neutral-900/80 transition-all space-y-3">
-                                    <Skeleton className="h-4 w-32 bg-neutral-700"/>
-                                    <Skeleton className="h-4 w-16 bg-neutral-700"/>
-                                </div>
-                            </CarouselItem>
-                            <CarouselItem className="basis-auto" >
-                                <div className="p-4 md:p-5 md:px-6 rounded-full bg-neutral-800 hover:bg-neutral-900/80 transition-all space-y-3">
-                                    <Skeleton className="h-4 w-32 bg-neutral-700"/>
-                                    <Skeleton className="h-4 w-16 bg-neutral-700"/>
-                                </div>
-                            </CarouselItem>
-                            <CarouselItem className="basis-auto" >
-                                <div className="p-4 md:p-5 md:px-6 rounded-full bg-neutral-800 hover:bg-neutral-900/80 transition-all space-y-3">
-                                    <Skeleton className="h-4 w-32 bg-neutral-700"/>
-                                    <Skeleton className="h-4 w-16 bg-neutral-700"/>
-                                </div>
-                            </CarouselItem>
-                            <CarouselItem className="basis-auto" >
-                                <div className="p-4 md:p-5 md:px-6 rounded-full bg-neutral-800 hover:bg-neutral-900/80 transition-all space-y-3">
-                                    <Skeleton className="h-4 w-32 bg-neutral-700"/>
-                                    <Skeleton className="h-4 w-16 bg-neutral-700"/>
-                                </div>
-                            </CarouselItem>
-                            <CarouselItem className="basis-auto" >
-                                <div className="p-4 md:p-5 md:px-6 rounded-full bg-neutral-800 hover:bg-neutral-900/80 transition-all space-y-3">
-                                    <Skeleton className="h-4 w-32 bg-neutral-700"/>
-                                    <Skeleton className="h-4 w-16 bg-neutral-700"/>
-                                </div>
-                            </CarouselItem>
-                            <CarouselItem className="basis-auto" >
-                                <div className="p-4 md:p-5 md:px-6 rounded-full bg-neutral-800 hover:bg-neutral-900/80 transition-all space-y-3">
-                                    <Skeleton className="h-4 w-32 bg-neutral-700"/>
-                                    <Skeleton className="h-4 w-16 bg-neutral-700"/>
-                                </div>
-                            </CarouselItem>
-                            <CarouselItem className="basis-auto" >
-                                <div className="p-4 md:p-5 md:px-6 rounded-full bg-neutral-800 hover:bg-neutral-900/80 transition-all space-y-3">
-                                    <Skeleton className="h-4 w-32 bg-neutral-700"/>
-                                    <Skeleton className="h-4 w-16 bg-neutral-700"/>
-                                </div>
-                            </CarouselItem>
-                            
-                        </>
-                        ) : categories.map((category) => (
-                            <CarouselItem key={category.id} className="basis-auto cursor-pointer" >
-                                <div 
-                                    className="p-4 md:p-5 md:px-6 rounded-full bg-neutral-800 hover:bg-neutral-900/80 transition-all"
-                                    onClick={()=>router.push(`/category/${category.id}`)}
-                                >
-                                    <h2 className="text-zinc-100 font-semibold text-[15px]">{category.name}</h2>
-                                    <span className="text-xs text-zinc-400">{category._count.courses} Courses</span>
-                                </div>
-                            </CarouselItem>
-                    )) }
-                </CarouselContent>
-                <div className="absolute right-4 bottom-1/2 -translate-y-1/2 z-10">
-                    <CarouselNext className="z-10 h-12 w-12 bg-neutral-300 hover:bg-neutral-200 shadow-lg" variant="secondary"/>
+                <div className="relative">
+                    <Carousel
+                        className="w-full"
+                        opts = {{
+                            align : "start",
+                            slidesToScroll : "auto"
+                        }}
+                    >
+                        <CarouselContent className="-ml-4">
+                            { shouldRenderSkeleton ? (
+                                Array.from({ length: 6 }).map((_, i) => (
+                                    <CarouselItem key={i} className="pl-4 basis-auto" >
+                                        <div className="flex items-center gap-4 p-4 pr-8 rounded-2xl border border-border bg-card">
+                                            <Skeleton className="h-12 w-12 rounded-xl" />
+                                            <div className="space-y-2">
+                                                <Skeleton className="h-4 w-24" />
+                                                <Skeleton className="h-3 w-16" />
+                                            </div>
+                                        </div>
+                                    </CarouselItem>
+                                ))
+                                ) : categories.map((category) => (
+                                    <CarouselItem key={category.id} className="pl-4 basis-auto cursor-pointer" >
+                                        <div 
+                                            className="group flex items-center gap-4 p-4 pr-10 rounded-2xl border border-border bg-card hover:border-primary/50 hover:shadow-sm transition-all"
+                                            onClick={()=>router.push(`/category/${category.id}`)}
+                                        >
+                                            <div className="h-12 w-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors">
+                                                <GraduationCap className="h-6 w-6" />
+                                            </div>
+                                            <div>
+                                                <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">{category.name}</h3>
+                                                <p className="text-sm text-muted-foreground">{category._count.courses} Courses</p>
+                                            </div>
+                                        </div>
+                                    </CarouselItem>
+                            )) }
+                        </CarouselContent>
+                        <div className="hidden md:block">
+                            <CarouselPrevious className="-left-4 shadow-md bg-white hover:bg-zinc-50 border-border" />
+                            <CarouselNext className="-right-4 shadow-md bg-white hover:bg-zinc-50 border-border" />
+                        </div>
+                    </Carousel>
                 </div>
-            </Carousel>
-        </ul>
+            </PageContainer>
+        </section>
     )
 }

@@ -1,20 +1,12 @@
-
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Abril_Fatface } from "next/font/google";
 
 import { auth } from "@/auth"
 import { RoleForm } from "@/components/profile/form/role.form";
 import { getUserCourses } from "@/server/course";
 import { UserCourses } from "@/components/courses/ui/user-courses";
-import { Heading } from "@/components/utils/heading";
-
-
-const font =  Abril_Fatface({
-    subsets : ["latin"],
-    weight : ["400"]
-});
+import { PageContainer } from "@/components/ui/page-container";
 
 
 const ProfilePage = async() => {
@@ -26,7 +18,7 @@ const ProfilePage = async() => {
 
     if (!session.user.profile) {
         return (
-            <div className="flex flex-col items-center justify-center">
+            <div className="flex flex-col items-center justify-center min-h-[60vh]">
                 <RoleForm/>
             </div>
         )
@@ -36,93 +28,107 @@ const ProfilePage = async() => {
     const isTutor = session.user.role === "TUTOR";
 
     return (
-        <div className="">
-            <section className="bg-neutral-800 p-6 md:py-10">
-                <div className="max-w-5xl w-full mx-auto flex items-center gap-x-6 md:gap-x-12">
-                    <div className="h-20 md:h-28 aspect-square relative rounded-full overflow-hidden">
-                        <Image
-                            src={session.user?.image || ""}
-                            alt="Image"
-                            fill
-                            className="object-contain"
-                        />
+        <div className="min-h-screen pb-20">
+            {/* Profile Header */}
+            <section className="bg-zinc-900 pt-16 pb-24 relative overflow-hidden">
+                <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/3 w-96 h-96 bg-primary/20 rounded-full blur-3xl opacity-50" />
+                <PageContainer className="relative z-10">
+                    <div className="flex items-center gap-x-6 md:gap-x-10">
+                        <div className="h-24 md:h-32 aspect-square relative rounded-full overflow-hidden border-4 border-zinc-800 shadow-xl">
+                            <Image
+                                src={session.user?.image || ""}
+                                alt={session.user.name || "Profile Image"}
+                                fill
+                                className="object-cover"
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <h1 className="text-3xl md:text-5xl font-bold text-white tracking-tight">
+                                Welcome back, {session.user.name?.split(" ")[0]}!
+                            </h1>
+                            <p className="text-zinc-400 font-medium md:text-lg">
+                                {isTutor ? "Tutor Dashboard" : "Learner Dashboard"}
+                            </p>
+                        </div>
                     </div>
-                    <Heading className={`text-2xl md:text-5xl font-[600] text-zinc-100`}>
-                        {session.user.name}
-                    </Heading>
-                </div>
+                </PageContainer>
             </section>
-            <section className="pt-16 px-6" id="courses" >
-                <div className="max-w-5xl w-full mx-auto">
-                    <h1 className="text-xl md:text-2xl font-bold text-zinc-800">Overview</h1>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-10">
+
+            {/* Quick Actions Grid */}
+            <section className="-mt-10 px-4 md:px-0 relative z-20">
+                <PageContainer>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
                         <Link 
-                            className="w-full flex flex-col justify-between aspect-square border p-6 border-zinc-300 rounded-md hover:-translate-y-2 hover:shadow-md duration-300 transition-all"
+                            className="group flex flex-col items-center justify-center p-6 bg-card border border-border rounded-2xl shadow-sm hover:shadow-md hover:border-primary/50 transition-all duration-300 bg-white"
                             href="/user/edit-profile"
                         >
-                            <div className="w-2/3 aspect-square mx-auto relative ">
+                            <div className="w-16 h-16 md:w-20 md:h-20 relative mb-4 opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300">
                                 <Image
                                     src="/assets/profile.png"
-                                    alt=""
+                                    alt="Edit Profile"
                                     fill
                                     className="object-contain"
                                 />
                             </div>
-                            <h3 className="font-medium text-zinc-700 text-center text-sm">Edit Profile</h3>
+                            <h3 className="font-semibold text-foreground text-sm md:text-base">Edit Profile</h3>
                         </Link>
-                        {
-                            // A tutor has nothing to buy, so no cart tile.
-                            !isTutor && (
-                                <Link
-                                    className="w-full flex flex-col justify-between aspect-square border p-6 border-zinc-300 rounded-md hover:-translate-y-2 hover:shadow-md duration-300 transition-all"
-                                    href="/cart"
-                                >
-                                    <div className="w-2/3 aspect-square mx-auto relative ">
-                                        <Image
-                                            src="/assets/cart.png"
-                                            alt=""
-                                            fill
-                                            className="object-contain"
-                                        />
-                                    </div>
-                                    <h3 className="font-medium text-zinc-700 text-center text-sm">Cart</h3>
-                                </Link>
-                            )
-                        }
+                        
+                        {!isTutor && (
+                            <Link
+                                className="group flex flex-col items-center justify-center p-6 bg-card border border-border rounded-2xl shadow-sm hover:shadow-md hover:border-primary/50 transition-all duration-300 bg-white"
+                                href="/cart"
+                            >
+                                <div className="w-16 h-16 md:w-20 md:h-20 relative mb-4 opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300">
+                                    <Image
+                                        src="/assets/cart.png"
+                                        alt="Cart"
+                                        fill
+                                        className="object-contain"
+                                    />
+                                </div>
+                                <h3 className="font-semibold text-foreground text-sm md:text-base">Cart</h3>
+                            </Link>
+                        )}
+                        
                         <Link 
-                            className="w-full flex flex-col justify-between aspect-square border p-6 border-zinc-300 rounded-md hover:-translate-y-2 hover:shadow-md duration-300 transition-all"
+                            className="group flex flex-col items-center justify-center p-6 bg-card border border-border rounded-2xl shadow-sm hover:shadow-md hover:border-primary/50 transition-all duration-300 bg-white"
                             href="/user/certificates"
                         >
-                            <div className="w-2/3 aspect-square mx-auto relative ">
+                            <div className="w-16 h-16 md:w-20 md:h-20 relative mb-4 opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300">
                                 <Image
                                     src="/assets/color-certificate.png"
-                                    alt=""
+                                    alt="Certificates"
                                     fill
                                     className="object-contain"
                                 />
                             </div>
-                            <h3 className="font-medium text-zinc-700 text-center text-sm">My Certificates</h3>
+                            <h3 className="font-semibold text-foreground text-sm md:text-base">My Certificates</h3>
                         </Link>
+                        
                         <Link
-                            className="w-full flex flex-col justify-between aspect-square border p-6 border-zinc-300 rounded-md hover:-translate-y-2 hover:shadow-md duration-300 transition-all"
+                            className="group flex flex-col items-center justify-center p-6 bg-card border border-border rounded-2xl shadow-sm hover:shadow-md hover:border-primary/50 transition-all duration-300 bg-white"
                             href={isTutor ? "/tutor/analytics" : "/user/my-learning"}
                         >
-                            <div className="w-2/3 aspect-square mx-auto relative ">
+                            <div className="w-16 h-16 md:w-20 md:h-20 relative mb-4 opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300">
                                 <Image
                                     src="/assets/analyse.png"
-                                    alt=""
+                                    alt="Analytics"
                                     fill
                                     className="object-contain"
                                 />
                             </div>
-                            <h3 className="font-medium text-zinc-700 text-center text-sm">
+                            <h3 className="font-semibold text-foreground text-sm md:text-base">
                                 {isTutor ? "Analytics" : "My Learning"}
                             </h3>
                         </Link>
                     </div>
-                </div>
+                </PageContainer>
             </section>
-            <UserCourses />
+
+            {/* User Courses Section */}
+            <div className="mt-16">
+                <UserCourses />
+            </div>
         </div>
     )
 }

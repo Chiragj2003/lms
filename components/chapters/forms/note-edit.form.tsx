@@ -96,7 +96,7 @@ export const NoteEditForm = ({
                 <div className="flex items-center justify-end gap-x-4">
                     <Button
                         variant="ghost"
-                        className="text-zinc-800 font-medium"
+                        className="text-foreground font-medium"
                         disabled={isLoading}
                         type="button"
                         onClick={onCancel}

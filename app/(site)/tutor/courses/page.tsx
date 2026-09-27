@@ -2,6 +2,12 @@ import { auth } from "@/auth";
 import { CourseTutorCard } from "@/components/courses/ui/course-tutor-card";
 import { getCoursesByTutorId } from "@/server/course";
 import { redirect } from "next/navigation";
+import { PageContainer } from "@/components/ui/page-container";
+import { SectionHeader } from "@/components/ui/section-header";
+import { EmptyState } from "@/components/ui/empty-state";
+import { BookOpen } from "lucide-react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 const CoursesPage = async() => {
 
@@ -12,28 +18,45 @@ const CoursesPage = async() => {
     }
 
     const courses = await getCoursesByTutorId(session.user.id!);
-    if ( courses.length === 0 ) {
-        <div className="flex items-center justify-center text-sm text-muted-foreground">
-            There are no courses
-        </div>
-    }
 
     return (
-        <div className="p-6 md:px-8 space-y-10">
-            <h1 className="text-xl md:text-2xl font-bold text-zinc-800">
-                Your Courses
-            </h1>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-                {
-                    courses.map((course)=>(
-                        <CourseTutorCard
-                            course={course}
-                            key={course.id}
-                        />
-                    ))
-                }
+        <PageContainer className="py-10">
+            <div className="mb-10">
+                <SectionHeader 
+                    title="Your Courses"
+                    subtitle="Manage and edit your published and draft courses."
+                    action={
+                        <Link href="/tutor/create">
+                            <Button variant="brand">Create New Course</Button>
+                        </Link>
+                    }
+                />
             </div>
-        </div>
+
+            {courses.length === 0 ? (
+                <EmptyState
+                    icon={<BookOpen className="h-10 w-10" />}
+                    title="No courses yet"
+                    description="You haven't created any courses. Start building your first course today!"
+                    action={
+                        <Link href="/tutor/create">
+                            <Button variant="brand">Create Course</Button>
+                        </Link>
+                    }
+                />
+            ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    {
+                        courses.map((course)=>(
+                            <CourseTutorCard
+                                course={course}
+                                key={course.id}
+                            />
+                        ))
+                    }
+                </div>
+            )}
+        </PageContainer>
     )
 }
 

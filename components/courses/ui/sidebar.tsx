@@ -17,12 +17,12 @@ export const SideBar = async({
 }: SideBarProps) => {
     
     return (
-        <div className="h-full w-full bg-neutral-800 flex flex-col overflow-y-auto chapter-scroll">
-            <div className="p-8 flex flex-col border-b">
-                <h1 className="text-white font-semibold">{course.title}</h1>
+        <div className="h-full w-full bg-zinc-900 flex flex-col overflow-y-auto chapter-scroll shadow-xl">
+            <div className="p-6 md:p-8 flex flex-col border-b border-zinc-800 bg-zinc-900/50 backdrop-blur-md sticky top-0 z-10">
+                <h1 className="text-white font-bold leading-tight">{course.title}</h1>
                 {
                     purchase && (
-                        <div className="mt-10">
+                        <div className="mt-6">
                             <CourseProgress
                                 variant="success"
                                 value={progressCount}
@@ -31,7 +31,7 @@ export const SideBar = async({
                     )
                 }
             </div>
-            <div className="flex flex-col w-full">
+            <div className="flex flex-col w-full py-4">
                 {
                     course.chapters.map((chapter)=>(
                         <SidebarItem
