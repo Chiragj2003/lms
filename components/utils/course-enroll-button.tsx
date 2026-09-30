@@ -7,6 +7,7 @@ import { useSession } from '@/lib/auth-client';
 import axios from 'axios';
 import { toast } from 'sonner';
 import { formatPrice } from '@/lib/format';
+import { payWithRazorpay } from '@/lib/razorpay-client';
 import { Button } from '../ui/button';
 
 interface CourseEnrollButtonProps {
@@ -27,16 +28,6 @@ export const CourseEnrollButton = ({
     const session = useSession();
     const [loading, setLoading] = useState(false);
 
-    const loadRazorpayScript = () => {
-        return new Promise((resolve) => {
-            const script = document.createElement("script");
-            script.src = "https://checkout.razorpay.com/v1/checkout.js";
-            script.onload = () => resolve(true);
-            script.onerror = () => resolve(false);
-            document.body.appendChild(script);
-        });
-    };
-
     const onClick = async()=>{
 
         if (!session.isPending && !session.data) {
@@ -54,58 +45,21 @@ export const CourseEnrollButton = ({
                 return;
             }
 
-            const isScriptLoaded = await loadRazorpayScript();
-            if (!isScriptLoaded) {
-                toast.error("Razorpay SDK failed to load. Are you online?");
-                return;
+            // Loads Razorpay's script once per page, rather than appending a
+            // new <script> tag on every click, and keeps the button disabled
+            // until the popup is paid or dismissed.
+            const next = await payWithRazorpay(response.data, `/api/courses/${courseId}/verify`);
+            if (next) {
+                toast.success("Payment successful!");
+                window.location.assign(next);
             }
-
-            const { orderId, amount, currency, courseName, courseDescription, tutorName, tutorEmail, keyId } = response.data;
-
-            const options = {
-                key: keyId,
-                amount: amount,
-                currency: currency,
-                name: courseName,
-                description: courseDescription,
-                order_id: orderId,
-                handler: async function (response: any) {
-                    try {
-                        const verifyResponse = await axios.post(`/api/courses/${courseId}/verify`, {
-                            razorpay_payment_id: response.razorpay_payment_id,
-                            razorpay_order_id: response.razorpay_order_id,
-                            razorpay_signature: response.razorpay_signature,
-                        });
-                        
-                        if (verifyResponse.data.url) {
-                            window.location.assign(verifyResponse.data.url);
-                        } else {
-                            toast.success("Payment successful!");
-                            router.refresh();
-                        }
-                    } catch (error) {
-                        console.log(error);
-                        toast.error("Payment verification failed");
-                    }
-                },
-                prefill: {
-                    name: tutorName || "",
-                    email: tutorEmail || "",
-                },
-                theme: {
-                    color: "#0f172a",
-                },
-            };
-
-            const paymentObject = new (window as any).Razorpay(options);
-            paymentObject.open();
 
         } catch (error) {
             // The server's reason ("Already purchased", "Tutors cannot purchase
             // courses", …) is more useful than a generic failure.
             toast.error(axios.isAxiosError(error) && typeof error.response?.data === "string"
                 ? error.response.data
-                : "Something went wrong");
+                : error instanceof Error ? error.message : "Something went wrong");
         } finally {
             setLoading(false)
         }
