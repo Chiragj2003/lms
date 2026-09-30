@@ -1,26 +1,42 @@
 import Image from "next/image";
+import Link from "next/link";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+
 import { searchCourses } from "@/server/course";
 import { CardWithRating } from "@/components/courses/ui/card-with-ratings";
 import { PageContainer } from "@/components/ui/page-container";
 import { SearchForm } from "@/components/courses/forms/search.form";
+import { Button } from "@/components/ui/button";
 
+const PAGE_SIZE = 12;
 
 interface SearchPageProps {
     searchParams : Promise<{
-        query : string
+        query? : string;
+        page? : string;
     }>
 }
 
 const SearchPage = async (props: SearchPageProps) => {
     const searchParams = await props.searchParams;
-    const query = searchParams.query || "";
+    const query = typeof searchParams.query === "string" ? searchParams.query : "";
+    const requestedPage = Number.parseInt(searchParams.page ?? "1", 10);
+    const page = Number.isFinite(requestedPage) && requestedPage > 0 ? requestedPage : 1;
 
-    // An empty query still matches every published course (title ILIKE '%%'),
-    // so this is the catalog view rather than a dead end that needs typing
-    // something first.
-    const courses = await searchCourses(query);
+    // An empty query still matches every published course, so this is the
+    // catalog view rather than a dead end that needs typing something first.
+    const { courses, total } = await searchCourses(query, page, PAGE_SIZE);
+    const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
 
-    if (courses.length === 0) {
+    const pageHref = (target: number) => {
+        const params = new URLSearchParams();
+        if (query) params.set("query", query);
+        if (target > 1) params.set("page", String(target));
+        const qs = params.toString();
+        return qs ? `/search?${qs}` : "/search";
+    };
+
+    if (total === 0) {
         return (
             <PageContainer className="py-20 md:py-32">
                 <div className="max-w-xl mx-auto space-y-8">
@@ -48,6 +64,8 @@ const SearchPage = async (props: SearchPageProps) => {
         )
     }
 
+    const courseLabel = total === 1 ? "course" : "courses";
+
     return (
         <div className="min-h-screen bg-muted/20 pb-20">
             {/* Search Header Banner */}
@@ -64,8 +82,8 @@ const SearchPage = async (props: SearchPageProps) => {
                     </h1>
                     <p className="text-muted text-lg max-w-xl mx-auto">
                         {query
-                            ? `Showing ${courses.length} highly rated ${courses.length === 1 ? 'course' : 'courses'} for "${query}"`
-                            : `${courses.length} ${courses.length === 1 ? 'course' : 'courses'} available right now`}
+                            ? `${total} ${courseLabel} found for "${query}"`
+                            : `${total} ${courseLabel} available right now`}
                     </p>
                     <div className="w-full max-w-2xl mx-auto mt-6">
                         <SearchForm />
@@ -76,24 +94,64 @@ const SearchPage = async (props: SearchPageProps) => {
             <PageContainer className="py-12">
                 <div className="flex items-center justify-between mb-8 border-b border-border pb-4">
                     <h2 className="text-xl font-bold text-foreground">
-                        All {query ? "Results" : "Courses"} ({courses.length})
+                        All {query ? "Results" : "Courses"} ({total})
                     </h2>
-                    {/* Placeholder for future sorting/filtering */}
-                    <div className="text-sm font-medium text-muted-foreground bg-card border border-border px-4 py-2 rounded-lg">
-                        Most Relevant
+                    <span className="text-sm font-medium text-muted-foreground">
+                        Most popular first
+                    </span>
+                </div>
+
+                {courses.length === 0 ? (
+                    <p className="text-center text-muted-foreground py-10">
+                        There&apos;s nothing on this page.{" "}
+                        <Link href={pageHref(1)} className="text-primary underline underline-offset-4">Back to the first page</Link>
+                    </p>
+                ) : (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                        {
+                            courses.map((course)=>(
+                                <CardWithRating
+                                    key={course.id}
+                                    course={course}
+                                />
+                            ))
+                        }
                     </div>
-                </div>
-                
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                    {
-                        courses.map((course)=>(
-                            <CardWithRating
-                                key={course.id}
-                                course={course}
-                            />
-                        ))
-                    }
-                </div>
+                )}
+
+                {totalPages > 1 && (
+                    <nav className="flex items-center justify-center gap-4 mt-12" aria-label="Pagination">
+                        {page > 1 ? (
+                            <Button asChild variant="outline">
+                                <Link href={pageHref(page - 1)} rel="prev">
+                                    <ChevronLeft className="h-4 w-4 mr-1" />
+                                    Previous
+                                </Link>
+                            </Button>
+                        ) : (
+                            <Button variant="outline" disabled>
+                                <ChevronLeft className="h-4 w-4 mr-1" />
+                                Previous
+                            </Button>
+                        )}
+                        <span className="text-sm text-muted-foreground">
+                            Page {Math.min(page, totalPages)} of {totalPages}
+                        </span>
+                        {page < totalPages ? (
+                            <Button asChild variant="outline">
+                                <Link href={pageHref(page + 1)} rel="next">
+                                    Next
+                                    <ChevronRight className="h-4 w-4 ml-1" />
+                                </Link>
+                            </Button>
+                        ) : (
+                            <Button variant="outline" disabled>
+                                Next
+                                <ChevronRight className="h-4 w-4 ml-1" />
+                            </Button>
+                        )}
+                    </nav>
+                )}
             </PageContainer>
         </div>
     )
