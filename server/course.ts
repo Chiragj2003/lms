@@ -244,7 +244,9 @@ export const getCoursesByCategoryId = async (categoryId: string) => {
                 id : categoryId
             },
             include : {
-                courses : true,
+                courses : {
+                    where : { isPublished : true }
+                },
                 category : true
             }
         });

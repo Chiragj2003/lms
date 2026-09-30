@@ -28,7 +28,7 @@ interface HeaderProps {
 
 const NAV_LINKS = [
     { label: "Courses", href: "/search", icon: BookOpen },
-    { label: "Categories", href: "/search", icon: GraduationCap },
+    { label: "Categories", href: "/categories", icon: GraduationCap },
 ];
 
 export const Header = ({ variant }: HeaderProps) => {
@@ -222,7 +222,7 @@ export const Header = ({ variant }: HeaderProps) => {
                                     Browse Courses
                                 </Link>
                                 <Link
-                                    href="/search"
+                                    href="/categories"
                                     className="flex items-center gap-x-3 px-3 py-2.5 rounded-lg text-sm font-medium text-zinc-700 hover:bg-accent"
                                     onClick={() => setMobileOpen(false)}
                                 >
