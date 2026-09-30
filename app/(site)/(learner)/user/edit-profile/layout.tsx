@@ -1,4 +1,5 @@
 import { EditItems } from "@/components/account/edit-items";
+import { PageContainer } from "@/components/ui/page-container";
 
 
 interface EditLayoutPageProps {
@@ -10,20 +11,19 @@ const EditLayoutPage = ({
 } : EditLayoutPageProps ) => {
 
     return (
-        <main className='py-10 md:py-20 px-6 w-full'>
-            <div className='max-w-5xl w-full h-full mx-auto'>
-                <div className='w-full h-full bg-neutral-800 flex flex-col md:flex-row'>
-                    <aside className="w-full md:w-72 bg-neutral-800 h-full shrink-0">
-                        <EditItems/>
-                    </aside>
-                    <section className="w-full bg-white flex-1 border-2 border-zinc-400 border-l-0">
-                        {
-                            children
-                        }
-                    </section>
-                </div>
+        <PageContainer className="py-10 md:py-16">
+            <h1 className="text-3xl font-bold tracking-tight text-foreground mb-8">Edit profile</h1>
+            <div className="w-full bg-card border border-border rounded-2xl shadow-sm overflow-hidden flex flex-col md:flex-row">
+                <aside className="w-full md:w-64 shrink-0 border-b md:border-b-0 md:border-r border-border p-3">
+                    <EditItems/>
+                </aside>
+                <section className="flex-1 min-w-0">
+                    {
+                        children
+                    }
+                </section>
             </div>
-        </main>
+        </PageContainer>
     )
 }
 

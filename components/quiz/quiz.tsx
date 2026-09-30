@@ -62,7 +62,7 @@ export const Quiz = ({
             >
                 <Button
                     size="lg"
-                    className="rounded-none bg-neutral-800 hover:bg-neutral-800/80"
+                    className="font-semibold"
                     type="submit"
                     onClick={onSubmit}
                     disabled={isLoading}

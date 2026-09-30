@@ -19,10 +19,11 @@ const EditProfilePage = async() => {
     
     return (
         <div className="w-full h-full">
-            <div className="h-20 w-full bg-neutral-200 flex items-center px-6 md:px-10 font-bold text-zinc-800">
-                Public Profile
+            <div className="px-6 md:px-10 pt-6 md:pt-8 pb-2 space-y-1">
+                <h2 className="text-lg font-semibold text-foreground">Public profile</h2>
+                <p className="text-sm text-muted-foreground">This is what learners see on your courses and in reviews.</p>
             </div>
-            <div className="p-6 py-10 md:px-10 ">
+            <div className="p-6 md:px-10 md:pb-10">
                 <ProfileForm
                     name={profile.name!}
                     description={profile.profile?.description||undefined}

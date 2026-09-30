@@ -89,7 +89,7 @@ export const ProfileForm = ({
                                 <FormControl>
                                     <Input
                                         placeholder="Name"
-                                        className="rounded-none h-14 border-zinc-400 border-2 outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-zinc-500"
+                                        className="h-11"
                                         {...field}
                                         disabled = {isSubmitting}
                                     />
@@ -105,7 +105,7 @@ export const ProfileForm = ({
                                 <FormControl>
                                     <Input
                                         placeholder="Headline"
-                                        className="rounded-none h-14 border-zinc-400 border-2 outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-zinc-500"
+                                        className="h-11"
                                         {...field}
                                         disabled = {isSubmitting}
                                     />
@@ -120,7 +120,7 @@ export const ProfileForm = ({
                             <FormItem>
                                 <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isSubmitting} >
                                     <FormControl>
-                                        <SelectTrigger className="rounded-none h-14 border-zinc-400 border-2 outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-zinc-500">
+                                        <SelectTrigger className="h-11">
                                             <SelectValue placeholder="Select your gender" />
                                         </SelectTrigger>
                                     </FormControl>
@@ -153,7 +153,7 @@ export const ProfileForm = ({
                 </div>
                 <div className="flex items-center justify-end">
                     <Button 
-                        className="bg-neutral-800 rounded-none"
+                        className="font-semibold"
                         type="submit"
                         disabled={isSubmitting || !isValid}
                         size="lg"

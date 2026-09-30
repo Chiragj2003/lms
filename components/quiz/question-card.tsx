@@ -18,9 +18,9 @@ export const QuestionCard= ({
 
     return (
         <div className={cn(
-            "w-full p-6 rounded-2xl bg-violet-100 border border-violet-200",
+            "w-full p-6 rounded-2xl bg-card border border-border shadow-sm",
         )}>
-            <h3 className="font-medium text-zinc-700 text-base" >{question.question}</h3>
+            <h3 className="font-medium text-foreground text-base" >{question.question}</h3>
             <div className="mt-6 flex flex-col space-y-2">
                 {
                     question.options.map((option)=> (
