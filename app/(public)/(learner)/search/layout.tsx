@@ -1,6 +1,9 @@
-import SearchPageForm from "@/components/courses/forms/search-page.form";
+import { Metadata } from "next";
 import { Header } from "@/components/utils/header";
 
+export const metadata: Metadata = {
+    title : "Courses"
+}
 
 interface LayoutPageProps {
     children : React.ReactNode;
@@ -10,14 +13,9 @@ const LayoutPage = ({
     children
 } : LayoutPageProps ) => {
     return (
-        <div className="h-full overflow-y-auto">
+        <div>
             <Header variant="default" />
-            <section className="mt-10 max-w-5xl w-full mx-auto px-6">
-                <SearchPageForm/>
-                <div className="py-10 w-full">
-                    {children}
-                </div>  
-            </section>
+            {children}
         </div>
     )
 }
