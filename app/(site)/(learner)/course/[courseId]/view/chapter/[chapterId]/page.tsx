@@ -7,6 +7,8 @@ import { Banner } from "@/components/utils/banner";
 import { getChapter } from "@/server/chapter";
 import { Options } from "@/components/chapters/ui/options";
 import { chapterMetadata } from "@/server/metadata";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 interface ChapterPageProps {
     params : Promise<{
@@ -44,13 +46,17 @@ const ChapterPage = async (props: ChapterPageProps) => {
     const params = await props.params;
 
     const session = await auth();
-    if (!session) {
-        redirect("/login");
-    }
+    const userId = session?.user?.id;
 
-    const { chapter, course, nextChapter, purchase, userProgress, certificate } = await getChapter({chapterId : params.chapterId, courseId: params.courseId, userId: session.user.id!});
+    const { chapter, course, nextChapter, purchase, userProgress, certificate } = await getChapter({chapterId : params.chapterId, courseId: params.courseId, userId: userId ?? ""});
     if (!chapter || !course) {
         redirect("/");
+    }
+
+    // Free preview chapters are open to everyone; anything else needs an
+    // account before it's worth showing (and buying) at all.
+    if (!userId && !chapter.isFree) {
+        redirect("/login");
     }
 
     const isLocked = !chapter.isFree && !purchase;
@@ -86,20 +92,47 @@ const ChapterPage = async (props: ChapterPageProps) => {
                         completeOnEnd = {completeOnEnd}
                         thumbnail={course.image!}
                         certificate={!!certificate}
+                        canEarnCertificate={!!purchase}
                     />
                 </div>
             </div>
-            <Options
-                chapter={chapter}
-                course={course}
-                courseId={params.courseId}
-                isPurchased={!!purchase}
-                nextChapterId={nextChapter?.id}
-                userProgress={userProgress}
-                certificate={certificate}
-                quizId={chapter?.quiz?.id}
-                quizResultId={chapter?.quiz?.result[0]?.id}
-            />
+            {
+                // Notes, Q&A, AI and progress all belong to an account, so a
+                // signed-out preview gets an invitation instead of tools that
+                // would fail on use.
+                userId ? (
+                    <Options
+                        chapter={chapter}
+                        course={course}
+                        courseId={params.courseId}
+                        isPurchased={!!purchase}
+                        nextChapterId={nextChapter?.id}
+                        userProgress={userProgress}
+                        certificate={certificate}
+                        quizId={chapter?.quiz?.id}
+                        quizResultId={chapter?.quiz?.result[0]?.id}
+                    />
+                ) : (
+                    <div className="border-t border-border mt-4 p-6 md:p-10">
+                        <div className="max-w-xl mx-auto text-center space-y-4 p-8 rounded-2xl bg-muted border border-border">
+                            <h2 className="text-xl font-semibold text-foreground">
+                                You&apos;re watching a free preview of {chapter.title}
+                            </h2>
+                            <p className="text-sm text-muted-foreground">
+                                Create a free account to track your progress, take notes and ask questions — then enroll to unlock every chapter.
+                            </p>
+                            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                                <Button asChild>
+                                    <Link href="/register">Sign up free</Link>
+                                </Button>
+                                <Button asChild variant="outline">
+                                    <Link href={`/course/${params.courseId}`}>View course details</Link>
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                )
+            }
         </div>
     )
 }
