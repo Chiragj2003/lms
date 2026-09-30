@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 
 import { formatPrice } from "@/lib/format";
@@ -22,6 +23,7 @@ interface SubscriptionCardProps {
     totalRatings: number;
     totalPurchases: number;
     tutorName: string;
+    isPurchased: boolean;
 }
 
 export const SubscriptionCard = ({
@@ -34,7 +36,8 @@ export const SubscriptionCard = ({
     avgRating,
     totalRatings,
     totalPurchases,
-    tutorName
+    tutorName,
+    isPurchased
 }: SubscriptionCardProps ) => {
 
     const [appliedPrice, setAppliedPrice] = useState(price);
@@ -64,6 +67,17 @@ export const SubscriptionCard = ({
                 />
             </div>
             <div className="p-6 md:p-8 w-full">
+                {
+                    isPurchased ? (
+                        <div className="space-y-4">
+                            <p className="text-sm font-medium text-foreground">
+                                You own this course — you have lifetime access.
+                            </p>
+                            <Button asChild size="lg" className="w-full h-12 text-base font-semibold">
+                                <Link href={`/course/${courseId}/view`}>Go to course</Link>
+                            </Button>
+                        </div>
+                    ) : (
                 <div className="space-y-6">
                     <div className="space-y-4">
                         <h3 className="text-3xl text-foreground font-bold" >{formatPrice(appliedPrice)}</h3>
@@ -104,6 +118,8 @@ export const SubscriptionCard = ({
                         )
                     }
                 </div>
+                    )
+                }
             </div>
         </div>
     )
