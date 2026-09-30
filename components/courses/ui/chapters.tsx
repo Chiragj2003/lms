@@ -1,7 +1,7 @@
 "use client";
 
-import { useMemo } from "react";
-import dynamic from "next/dynamic";
+import { RichText as Preview } from "@/components/utils/rich-text";
+
 import { useRouter } from "next/navigation";
 import {
     Accordion,
@@ -31,8 +31,6 @@ function parseDuration ( duration: number|null ) {
 export const Chapters = ({
     chapters
 } : ChaptersProps) => {
-    
-    const Preview = useMemo(()=>dynamic(()=>import("@/components/utils/preview"), {ssr:false}), []);
     const router = useRouter();
 
     return (
@@ -52,8 +50,8 @@ export const Chapters = ({
                                     <AccordionTrigger className="hover:no-underline">
                                         <div className="flex items-center justify-between w-full pr-3 gap-x-3">
                                             <div className="flex items-center gap-x-3">
-                                                <span className="px-3 py-2 rounded-full bg-green-100">
-                                                    <VideoIcon className="h-4 w-4 text-green-700" />
+                                                <span className="px-3 py-2 rounded-full bg-primary/10">
+                                                    <VideoIcon className="h-4 w-4 text-primary" />
                                                 </span>
                                                 <h2 className="text-zinc-700 font-semibold text-sm text-left">{chapter.title}</h2>
                                             </div>

@@ -145,6 +145,12 @@ body,
     box-decoration-break: clone;
     -webkit-box-decoration-break: clone;
   }
+
+  /* Read-only rich text (descriptions, notes, answers): drop the editor's
+     gutter so text lines up with the surrounding page content. */
+  .bn-readonly .bn-editor {
+    padding-inline: 0;
+  }
 }
 
 /* Respect user motion preferences. */

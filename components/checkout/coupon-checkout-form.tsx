@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { CouponSchema } from "@/schemas/coupon-checkout.scheama";
-import { X } from "lucide-react";
+import { Share2, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { CourseEnrollButton } from "@/components/utils/course-enroll-button";
 
@@ -72,28 +72,37 @@ export const CouponCheckoutForm = ({
     }
 
     const onShare = async()=>{
-        await navigator.share({
-            title,
-            url : `${window.location.href}`
-        })
+        const url = window.location.href;
+        // Most desktop browsers have no Web Share API; copy the link instead.
+        if (navigator.share) {
+            try {
+                await navigator.share({ title, url });
+            } catch {
+                // The user closed the share sheet.
+            }
+            return;
+        }
+        try {
+            await navigator.clipboard.writeText(url);
+            toast.success("Link copied to clipboard");
+        } catch {
+            toast.error("Couldn't copy the link");
+        }
     }
 
 
     return (
         <div className="space-y-4">
             <div className="flex flex-col gap-y-6">
-                <div className="space-y-1 text-xs">
-                    <p className="text-center">Full Lifetime Access</p>
-                </div>
                 {
                     appliedCoupon && (
-                        <div className="w-full py-2 px-3 border-2 border-zinc-400 border-dashed">
+                        <div className="w-full py-2 px-3 rounded-lg border border-dashed border-primary/50 bg-accent">
                             <div className="flex items-center justify-between">
                                 <div className="flex flex-col">
-                                    <pre className="font-semibold text-zinc-600">
+                                    <span className="font-mono font-semibold text-foreground">
                                         {appliedCoupon}
-                                    </pre>
-                                    <span className="text-xs text-zinc-500">
+                                    </span>
+                                    <span className="text-xs text-muted-foreground">
                                         is applied
                                     </span>
                                 </div>
@@ -101,13 +110,14 @@ export const CouponCheckoutForm = ({
                                     className="h-8 w-8"
                                     variant="ghost"
                                     size="icon"
+                                    aria-label="Remove coupon"
                                     onClick={()=>{
                                         setPrice(currentPrice);
                                         setAppliedCoupon(undefined);
                                         form.reset();
                                     }}
                                 >
-                                    <X className="text-zinc-600" />
+                                    <X className="h-4 w-4 text-muted-foreground" />
                                 </Button>
                             </div>
                         </div>
@@ -115,18 +125,19 @@ export const CouponCheckoutForm = ({
                 }
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)}>
-                        <div className="flex items-center w-full">
+                        <div className="flex items-center gap-2 w-full">
                             <FormField
                                 control={form.control}
                                 name="coupon"
                                 render={({field})=>(
-                                    <FormItem className="w-full flex-1">
+                                    <FormItem className="w-full flex-1 space-y-0">
                                         <FormControl>
                                             <Input
                                                 {...field}
-                                                className="h-10 w-full border-2 border-r-0 border-zinc-400 rounded-none outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                                                className="h-10"
                                                 disabled = { isLoading || !!appliedCoupon }
-                                                placeholder="Enter Coupon"
+                                                placeholder="Coupon code"
+                                                aria-label="Coupon code"
                                             />
                                         </FormControl>
                                     </FormItem>
@@ -134,7 +145,8 @@ export const CouponCheckoutForm = ({
                             />
                             <Button
                                 type="submit"
-                                className="h-10 bg-neutral-800 hover:bg-neutral-800/80 font-semibold rounded-none"
+                                variant="outline"
+                                className="h-10 font-semibold"
                                 disabled = { isLoading || !!appliedCoupon || !isValid }
                             >
                                 Apply
@@ -148,13 +160,17 @@ export const CouponCheckoutForm = ({
                     disabled={isLoading}
                     coupon={appliedCoupon}
                 />
+                <p className="text-xs text-center text-muted-foreground">Full lifetime access</p>
             </div>
-            <div 
-                className="text-sm font-semibold cursor-default md:cursor-pointer"
+            <Button
+                type="button"
+                variant="ghost"
+                className="w-full text-muted-foreground"
                 onClick={onShare}
             >
-                Share
-            </div>
+                <Share2 className="h-4 w-4 mr-2" />
+                Share this course
+            </Button>
         </div>
     )
 }

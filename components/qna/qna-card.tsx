@@ -1,7 +1,7 @@
 "use client";
 
-import { useMemo } from "react";
-import dynamic from "next/dynamic";
+import { RichText as Preview } from "@/components/utils/rich-text";
+
 import { format } from "date-fns";
 
 import { QNAResponse } from "@/types";
@@ -18,8 +18,6 @@ interface QNACardProps {
 export const QNACard = ({
     data
 }: QNACardProps ) => {
-    
-    const Preview = useMemo(()=>dynamic(()=>import("@/components/utils/preview"), {ssr:false}), []);
     
     return (
         <div className="max-w-2xl w-full mx-auto border border-zinc-200 p-4 rounded-md">
