@@ -1,43 +1,42 @@
 "use client";
 
 import Link from "next/link";
-import { Abril_Fatface } from "next/font/google";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa6";
 import { OauthButton } from "@/components/auth/oauth-btn";
 
-const font =  Abril_Fatface({
-    subsets : ["latin"],
-    weight : ["400"]
-})
-
 
 const RegisterPage = () => {
     return (
-        <div className="w-full space-y-10 md:space-y-16">
-            <h2 className={`${font.className} text-2xl md:text-4xl text-zinc-800`}>
-                Sign up and start learning
-            </h2>
+        <div className="space-y-8">
+            <div className="space-y-2">
+                <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">
+                    Create your account
+                </h1>
+                <p className="text-sm text-muted-foreground">
+                    Sign up free and start learning — or teaching — today.
+                </p>
+            </div>
             <div className="flex flex-col gap-3">
                 <OauthButton
-                    title="Google"
+                    title="Sign up with Google"
                     provider="google"
                     Icon={FcGoogle}
-                    redirect="/profile"
+                    redirect="/user"
                 />
                 <OauthButton
-                    title="Github"
+                    title="Sign up with GitHub"
                     provider="github"
                     Icon={FaGithub}
-                    redirect="/profile"
+                    redirect="/user"
                 />
             </div>
-            <Link
-                href="/login"
-                className="text-zinc-700 font-semibold block"
-            >
-                Already have an account? <span className="text-blue-600 font-bold">Log in</span>
-            </Link>
+            <p className="text-sm text-muted-foreground">
+                Already have an account?{" "}
+                <Link href="/login" className="font-semibold text-primary hover:underline underline-offset-4">
+                    Log in
+                </Link>
+            </p>
         </div>
     )
 }

@@ -32,7 +32,7 @@ export const OauthButton = ({
 
     return (
         <Button
-            className="h-14 border-zinc-400 border-2 rounded-none text-lg font-semibold text-zinc-600 hover:text-zinc-600"
+            className="w-full h-12 text-base font-semibold"
             variant="outline"
             size="lg"
             onClick={handleOauth}
