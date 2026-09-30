@@ -1,7 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import dynamic from "next/dynamic";
+import { RichText as Preview } from "@/components/utils/rich-text";
+
+import { useState } from "react";
 
 import { format } from "date-fns";
 import { Badge } from "@/components/ui/badge";
@@ -31,8 +32,6 @@ const NoteCard = ({
     courseId,
     note
 } : NoteCardProps ) => {
-
-    const Preview = useMemo(()=>dynamic(()=>import("@/components/utils/preview"), {ssr: false}), []);
     
     const [editing, setEditing] = useState(false);
     const [isLoading, setIsLoading] = useState(false);

@@ -1,9 +1,9 @@
 "use client";
 
+import { RichText as Preview } from "@/components/utils/rich-text";
+
 import Link from "next/link";
 import Image from "next/image";
-import { useMemo } from "react";
-import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 
 
@@ -56,7 +56,6 @@ export const Header = ({
 } : HeaderProps) => {
     
     const router = useRouter();
-    const Preview = useMemo(()=>dynamic(()=>import("@/components/utils/preview"), {ssr:false}), []);
     
     return (
         <header className="bg-zinc-900 border-b border-border py-12 md:py-20 relative overflow-hidden">

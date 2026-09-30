@@ -1,5 +1,7 @@
 "use client";
 
+import { RichText as Preview } from "@/components/utils/rich-text";
+
 import dynamic from "next/dynamic";
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -38,7 +40,6 @@ export const DescriptionForm = ({
 
 
     const Editor = useMemo(()=>dynamic(()=>import("@/components/utils/editor"), {ssr:false}), []);
-    const Preview = useMemo(()=>dynamic(()=>import("@/components/utils/preview"), {ssr:false}), []);
     const router = useRouter();
     const [isEditing, setEditing] = useState(false);
     const toggleEdit = ()=>setEditing((prev)=>!prev);

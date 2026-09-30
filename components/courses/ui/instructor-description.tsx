@@ -1,8 +1,8 @@
 "use client";
 
+import { RichText as Preview } from "@/components/utils/rich-text";
+
 import Image from "next/image";
-import dynamic from "next/dynamic";
-import { useMemo } from "react";
 
 import { SlBadge } from "react-icons/sl";
 import { UsersRound } from "lucide-react";
@@ -35,8 +35,6 @@ interface InstructorDescriptionProps {
 export const InstructorDescription = ({
     tutor
 }: InstructorDescriptionProps ) => {
-
-    const Preview = useMemo(()=>dynamic(()=>import("@/components/utils/preview"), {ssr:false}), []);
     
     return (
         <section className="w-full mt-20" >
