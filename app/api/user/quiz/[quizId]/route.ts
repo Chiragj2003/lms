@@ -21,6 +21,49 @@ export async function POST(req : Request, props: { params : Promise<{ quizId: st
 
         const data = validatedData.data;
 
+        const quiz = await db.quiz.findFirst({
+            where : {
+                id : params.quizId,
+                isPublished : true,
+                chapter : { isPublished : true }
+            },
+            select : { chapter : { select : { courseId : true } } }
+        });
+
+        if (!quiz) {
+            return new NextResponse("Quiz not found", {status: 404});
+        }
+
+        // Only learners who bought the course can submit its quiz.
+        const purchase = await db.purchase.findUnique({
+            where : {
+                userId_courseId : {
+                    userId : session.user.id,
+                    courseId : quiz.chapter.courseId
+                }
+            }
+        });
+
+        if (!purchase) {
+            return new NextResponse("Course is not purchased", {status: 403});
+        }
+
+        // One attempt per learner (QuizResult is unique per user and quiz); a
+        // second submit used to crash on that constraint with a 500.
+        const existing = await db.quizResult.findUnique({
+            where : {
+                userId_quizId : {
+                    userId : session.user.id,
+                    quizId : params.quizId
+                }
+            },
+            select : { id : true }
+        });
+
+        if (existing) {
+            return new NextResponse("You've already submitted this quiz", {status: 409});
+        }
+
         const quizQuestions = await db.quizQuestion.findMany({
             where : {
                 quizId : params.quizId
