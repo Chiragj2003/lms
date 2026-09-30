@@ -18,6 +18,7 @@ import { GraduationCap, LogOut, ShoppingBag, User, } from "lucide-react";
 import { TbUserEdit } from "react-icons/tb";
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { useCart } from "@/hooks/use-cart";
 
 export const UserAvatar = () => {
 
@@ -89,6 +90,9 @@ export const UserAvatar = () => {
                 <DropdownMenuItem
                     className="rounded-lg font-medium text-zinc-700 py-2"
                     onClick={async()=>{
+                        // The cart lives on the server once signed in; the
+                        // browser copy mustn't carry over to the next user.
+                        useCart.getState().clear();
                         await signOut();
                         // Full reload, not router.push: server components hold
                         // the old session until the document is re-requested,

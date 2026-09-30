@@ -106,7 +106,11 @@ const CheckoutPage = async ({ params, searchParams } : CheckoutPageProps) => {
             <section className="px-6 py-10 md:px-12 md:py-16">
                 <div className="max-w-md mr-auto w-full space-y-6">
                     <h1 className="text-xl font-semibold text-zinc-900">Pay with card</h1>
-                    <MockPaymentForm courseId={course.id} amount={amount} />
+                    <MockPaymentForm
+                        amount={amount}
+                        confirmUrl={`/api/courses/${course.id}/checkout/confirm`}
+                        successUrl={`/course/${course.id}/view`}
+                    />
                 </div>
             </section>
         </main>

@@ -2,7 +2,7 @@ import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import crypto from "crypto";
 
-import { db } from "@/lib/db";
+import { courseIdsFromNotes, purchaseCourses } from "@/lib/cart";
 
 export async function POST(req: Request) {
     try {
@@ -25,33 +25,19 @@ export async function POST(req: Request) {
         const event = JSON.parse(body);
 
         if (event.event === "order.paid") {
-            const payment = event.payload.payment.entity;
             const order = event.payload.order.entity;
-            
-            const userId = order.notes?.userId;
-            const courseId = order.notes?.courseId;
 
-            if (!userId || !courseId) {
+            const userId = order.notes?.userId;
+            // Single-course orders carry courseId; cart orders carry c0..cN.
+            const courseIds: string[] = order.notes?.type === "cart"
+                ? courseIdsFromNotes(order.notes)
+                : [order.notes?.courseId].filter(Boolean);
+
+            if (!userId || courseIds.length === 0) {
                 return new NextResponse("Webhook error: Missing metadata", { status: 400 });
             }
 
-            const existingPurchase = await db.purchase.findUnique({
-                where: {
-                    userId_courseId: {
-                        userId,
-                        courseId
-                    }
-                }
-            });
-
-            if (!existingPurchase) {
-                await db.purchase.create({
-                    data: {
-                        courseId,
-                        userId
-                    }
-                });
-            }
+            await purchaseCourses(userId, courseIds);
         }
 
         return new NextResponse(null, { status: 200 });
