@@ -17,9 +17,17 @@ export const getQuizById = async(courseId: string, quizId: string, userId: strin
             return null;
         }
 
-        const quiz = await db.quiz.findUnique({
+        // Scoped to the course the purchase was checked against: an unscoped
+        // lookup let an owner of one course open any other course's quiz by
+        // putting its id in the URL. Drafts stay hidden.
+        const quiz = await db.quiz.findFirst({
             where : {
-                id: quizId
+                id: quizId,
+                isPublished : true,
+                chapter : {
+                    courseId,
+                    isPublished : true
+                }
             },
             include : {
                 questions : {

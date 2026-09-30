@@ -35,8 +35,9 @@ export const Quiz = ({
             });
             router.push(`/course/${courseId}/quiz/${quiz.id}/result`)
         } catch (error) {
-            console.log(error);
-            toast.error("Someting went wrong")
+            toast.error(axios.isAxiosError(error) && typeof error.response?.data === "string"
+                ? error.response.data
+                : "Something went wrong");
         } finally {
             setIsLoading(false);
         }
