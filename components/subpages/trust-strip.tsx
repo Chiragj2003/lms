@@ -1,30 +1,43 @@
 import { PageContainer } from "@/components/ui/page-container";
 import { Users, BookOpen, Award, Star } from "lucide-react";
+import { db } from "@/lib/db";
 
-const stats = [
-    {
-        label: "Active Learners",
-        value: "50,000+",
-        icon: Users,
-    },
-    {
-        label: "Premium Courses",
-        value: "2,000+",
-        icon: BookOpen,
-    },
-    {
-        label: "Certifications",
-        value: "15,000+",
-        icon: Award,
-    },
-    {
-        label: "Average Rating",
-        value: "4.8/5.0",
-        icon: Star,
-    }
-];
+// Real platform figures, not marketing placeholders: the strip used to claim
+// 50,000+ learners and 2,000+ courses regardless of what was in the database.
+export const TrustStrip = async () => {
 
-export const TrustStrip = () => {
+    const [learners, courses, certificates, rating] = await Promise.all([
+        db.user.count({ where : { role : "LEARNER" } }),
+        db.course.count({ where : { isPublished : true } }),
+        db.cerificate.count(),
+        db.rate.aggregate({ _avg : { star : true } }),
+    ]);
+
+    const average = rating._avg.star;
+
+    const stats = [
+        {
+            label : learners === 1 ? "Learner" : "Learners",
+            value : learners.toLocaleString("en-IN"),
+            icon : Users,
+        },
+        {
+            label : courses === 1 ? "Course" : "Courses",
+            value : courses.toLocaleString("en-IN"),
+            icon : BookOpen,
+        },
+        {
+            label : certificates === 1 ? "Certificate earned" : "Certificates earned",
+            value : certificates.toLocaleString("en-IN"),
+            icon : Award,
+        },
+        {
+            label : "Average Rating",
+            value : average ? `${average.toFixed(1)}/5.0` : "—",
+            icon : Star,
+        }
+    ];
+
     return (
         <div className="bg-primary py-12 md:py-16">
             <PageContainer>

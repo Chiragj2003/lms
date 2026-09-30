@@ -21,8 +21,8 @@ export const CTASection = () => {
                         Ready to level up your skills?
                     </h2>
                     <p className="text-lg text-zinc-400">
-                        Join thousands of learners who are already advancing their careers. 
-                        Get unlimited access to premium courses, AI-powered assistance, and verifiable certificates.
+                        Pick a course, learn at your own pace with an AI assistant on hand,
+                        and earn a certificate when you finish.
                     </p>
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
                         <Button 
