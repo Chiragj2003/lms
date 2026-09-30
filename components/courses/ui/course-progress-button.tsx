@@ -42,8 +42,16 @@ export const CourseProgressButton = ({
             if (!isCompleted && !nextChapterId) {
                 confetti.onOpen();
                 if ( !certificate ) {
-                    const response = await axios.post(`/api/courses/${courseId}/certificate`);
-                    certificateId = response.data.id;
+                    try {
+                        const response = await axios.post(`/api/courses/${courseId}/certificate`);
+                        certificateId = response.data.id;
+                    } catch (error) {
+                        if (axios.isAxiosError(error) && error.response?.status === 403) {
+                            toast.info("Finish the remaining chapters to earn your certificate");
+                        } else {
+                            throw error;
+                        }
+                    }
                 }
             }
 
@@ -75,7 +83,7 @@ export const CourseProgressButton = ({
             onClick={onClick}
             disabled={isLoading}
         >
-            {isCompleted ? "Not compeletd": "Mark as complete"}
+            {isCompleted ? "Mark as not completed": "Mark as complete"}
             <Icon className="h-4 w-4 ml-2" />
         </Button>
     )
