@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSWRQuery } from "@/hooks/useSWRQuery";
 import { Category } from "@prisma/client";
@@ -41,9 +42,14 @@ export const Categories = () => {
         <section className="py-20 md:py-32 bg-background">
             <PageContainer>
                 <div className="mb-10">
-                    <SectionHeader 
+                    <SectionHeader
                         title="Top Categories"
                         subtitle="Explore our wide range of professional courses."
+                        action={
+                            <Link href="/categories" className="text-sm font-semibold text-primary hover:underline underline-offset-4">
+                                View all categories
+                            </Link>
+                        }
                     />
                 </div>
                 <div className="relative">
@@ -78,7 +84,9 @@ export const Categories = () => {
                                             </div>
                                             <div>
                                                 <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">{category.name}</h3>
-                                                <p className="text-sm text-muted-foreground">{category._count.courses} Courses</p>
+                                                <p className="text-sm text-muted-foreground">
+                                                    {category._count.courses} {category._count.courses === 1 ? "course" : "courses"}
+                                                </p>
                                             </div>
                                         </div>
                                     </CarouselItem>
