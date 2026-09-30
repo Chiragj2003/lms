@@ -80,6 +80,8 @@ const CoursePage = async (props:CoursePageProps) => {
                     avgRating={avgRating._avg.star!}
                     purchases={course._count.purchases}
                     ratings={course._count.ratings}
+                    isPurchased={isPurchased}
+                    previewChapterId={course.chapters.find((chapter)=>chapter.isFree)?.id}
                 />
                 
                 <PageContainer className="mt-12 md:mt-16">

@@ -34,7 +34,9 @@ interface HeaderProps {
     lastUpdated: Date;
     ratings: number;
     purchases: number;
-    avgRating: number; 
+    avgRating: number;
+    isPurchased: boolean;
+    previewChapterId?: string;
 }
 
 export const Header = ({
@@ -48,7 +50,9 @@ export const Header = ({
     tutorProfile,
     avgRating,
     purchases,
-    ratings
+    ratings,
+    isPurchased,
+    previewChapterId
 } : HeaderProps) => {
     
     const router = useRouter();
@@ -126,16 +130,21 @@ export const Header = ({
                             </HoverCard>
                         </div>
                         
-                        {/* Action */}
-                        <div className="pt-6">
-                            <Button
-                                size="lg"
-                                className="h-14 px-8 rounded-xl text-base w-full sm:w-auto"
-                                onClick={()=>router.push(`/course/${id}/view`)}
-                            >
-                                Start Learning
-                            </Button>
-                        </div>
+                        {/* Action: owners continue; everyone else can only
+                            try the free chapter, if the course has one. */}
+                        {(isPurchased || previewChapterId) && (
+                            <div className="pt-6">
+                                <Button
+                                    size="lg"
+                                    className="h-14 px-8 rounded-xl text-base w-full sm:w-auto"
+                                    onClick={()=>router.push(isPurchased
+                                        ? `/course/${id}/view`
+                                        : `/course/${id}/view/chapter/${previewChapterId}`)}
+                                >
+                                    {isPurchased ? "Continue learning" : "Preview for free"}
+                                </Button>
+                            </div>
+                        )}
                     </div>
                     
                     {/* Decorative Right Side */}
