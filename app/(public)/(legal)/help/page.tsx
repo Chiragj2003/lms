@@ -20,7 +20,7 @@ const TOPICS = [
         faqs: [
             {
                 q: "How do I create an account?",
-                a: "Click Sign In or Get Started and continue with Google or GitHub. New accounts start as learners; you can switch to a tutor account from your profile once you're signed in."
+                a: "Click Sign In or Get Started and continue with Google or GitHub. The first time you sign in, you'll choose whether this is a learner or a tutor account."
             },
             {
                 q: "How do I sign out?",
@@ -54,7 +54,7 @@ const TOPICS = [
             },
             {
                 q: "Do you offer refunds?",
-                a: "Yes, within a reasonable window of purchase if a course isn't what you expected. Reach out using the contact details below."
+                a: "If a course isn't what you expected, reach out using the contact details below and we'll review your request. You can also watch a course's free preview chapter before buying."
             },
             {
                 q: "How do coupon codes work?",
@@ -67,7 +67,7 @@ const TOPICS = [
         faqs: [
             {
                 q: "How do I get my certificate?",
-                a: "Complete every chapter in a course (and pass its quiz, if it has one) and a certificate is generated automatically. Find it anytime under My Certificates."
+                a: "Complete every chapter in a course and a certificate is issued automatically. Find it anytime under My Certificates, where you can also download it."
             },
         ],
     },
@@ -76,7 +76,7 @@ const TOPICS = [
         faqs: [
             {
                 q: "How do I start teaching on LearnIt?",
-                a: "Switch your account to a tutor role from your profile, then use the tutor dashboard to create a course, add chapters and videos, and publish it."
+                a: "Choose the Tutor role when you first set up your account, then use the tutor dashboard to create a course, add chapters and videos, and publish it."
             },
             {
                 q: "Can I see how my courses are performing?",
