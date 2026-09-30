@@ -110,7 +110,8 @@ export const CourseEnrollButton = ({
     
     return (
         <Button
-            className='h-14 bg-green-600 hover:bg-green-600/90 rounded-none font-semibold'
+            className='w-full h-12 text-base font-semibold'
+            size="lg"
             onClick={onClick}
             disabled = {loading || disabled}
         >

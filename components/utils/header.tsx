@@ -92,12 +92,7 @@ export const Header = ({ variant }: HeaderProps) => {
                     <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
                         <GraduationCap className="h-5 w-5 text-white" />
                     </div>
-                    <span
-                        className={cn(
-                            "text-lg font-bold tracking-tight",
-                            showSolid ? "text-foreground" : "text-white"
-                        )}
-                    >
+                    <span className="text-lg font-bold tracking-tight text-foreground">
                         LearnIt
                     </span>
                 </Link>
@@ -108,12 +103,7 @@ export const Header = ({ variant }: HeaderProps) => {
                         <Link
                             key={link.label}
                             href={link.href}
-                            className={cn(
-                                "px-3 py-2 rounded-lg text-sm font-medium transition-colors",
-                                showSolid
-                                    ? "text-zinc-600 hover:text-foreground hover:bg-accent"
-                                    : "text-white/80 hover:text-white hover:bg-white/10"
-                            )}
+                            className="px-3 py-2 rounded-lg text-sm font-medium transition-colors text-zinc-600 hover:text-foreground hover:bg-accent"
                         >
                             {link.label}
                         </Link>
@@ -121,12 +111,7 @@ export const Header = ({ variant }: HeaderProps) => {
                     {!isTutor && !session.isPending && session.data && (
                         <Link
                             href="/user/my-learning"
-                            className={cn(
-                                "px-3 py-2 rounded-lg text-sm font-medium transition-colors",
-                                showSolid
-                                    ? "text-zinc-600 hover:text-foreground hover:bg-accent"
-                                    : "text-white/80 hover:text-white hover:bg-white/10"
-                            )}
+                            className="px-3 py-2 rounded-lg text-sm font-medium transition-colors text-zinc-600 hover:text-foreground hover:bg-accent"
                         >
                             My Learning
                         </Link>
@@ -140,10 +125,7 @@ export const Header = ({ variant }: HeaderProps) => {
                 <Button
                     variant="ghost"
                     size="icon"
-                    className={cn(
-                        "hidden md:inline-flex rounded-lg",
-                        !showSolid && "text-white hover:bg-white/10 hover:text-white"
-                    )}
+                    className="hidden md:inline-flex rounded-lg"
                     onClick={() => router.push("/search")}
                     aria-label="Search courses"
                 >
@@ -156,10 +138,7 @@ export const Header = ({ variant }: HeaderProps) => {
                         <Button
                             variant="ghost"
                             size="icon"
-                            className={cn(
-                                "rounded-lg",
-                                !showSolid && "text-white hover:bg-white/10 hover:text-white"
-                            )}
+                            className="rounded-lg"
                             onClick={() => router.push("/cart")}
                             aria-label="Shopping cart"
                         >
@@ -177,12 +156,9 @@ export const Header = ({ variant }: HeaderProps) => {
                 {isTutor && (
                     <Button
                         onClick={() => router.push("/tutor/courses")}
-                        variant={showSolid ? "outline" : "ghost"}
+                        variant="outline"
                         size="sm"
-                        className={cn(
-                            "hidden md:inline-flex rounded-lg font-medium",
-                            !showSolid && "text-white border-white/30 hover:bg-white/10 hover:text-white"
-                        )}
+                        className="hidden md:inline-flex rounded-lg font-medium"
                     >
                         Dashboard
                     </Button>
@@ -193,12 +169,9 @@ export const Header = ({ variant }: HeaderProps) => {
                     <div className="flex items-center gap-x-2">
                         <Button
                             onClick={() => router.push("/login")}
-                            variant={showSolid ? "ghost" : "ghost"}
+                            variant="ghost"
                             size="sm"
-                            className={cn(
-                                "hidden md:inline-flex rounded-lg font-medium",
-                                !showSolid && "text-white hover:bg-white/10 hover:text-white"
-                            )}
+                            className="hidden md:inline-flex rounded-lg font-medium"
                         >
                             Sign In
                         </Button>
@@ -220,10 +193,7 @@ export const Header = ({ variant }: HeaderProps) => {
                         <Button
                             variant="ghost"
                             size="icon"
-                            className={cn(
-                                "md:hidden rounded-lg",
-                                !showSolid && "text-white hover:bg-white/10 hover:text-white"
-                            )}
+                            className="md:hidden rounded-lg"
                             aria-label="Open menu"
                         >
                             <Menu className="h-5 w-5" />

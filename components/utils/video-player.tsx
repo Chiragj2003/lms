@@ -41,7 +41,11 @@ export const VideoPlayer = ({
     const confetti = useConfettiStore();
     const { onOpen } = useCertificate();
 
-    const [isReady, setIsReady] = useState(false);
+    // Shows a spinner while the video has nothing to play yet — on initial
+    // load and whenever playback stalls to rebuffer. Previously tracked as
+    // `isReady`, initialized to false and never set true anywhere, so the
+    // overlay could never appear and a stalled video gave no feedback at all.
+    const [isBuffering, setIsBuffering] = useState(true);
     const { setSeek, setTimeStamp } = usePlayer();
     const videoRef = useRef<HTMLVideoElement|null>(null);
     const identityRef = useRef<HTMLDivElement|null>(null);
@@ -129,8 +133,8 @@ export const VideoPlayer = ({
     return (
         <div className="relative w-full aspect-video md:aspect-[5/2] overflow-hidden bg-neutral-900">
             {
-                isReady && !isLocked && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-neutral-800">
+                isBuffering && !isLocked && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-neutral-800 pointer-events-none">
                         <Loader2 className="h-8 w-8 animate-spin text-secondary" />
                     </div>
                 )
@@ -153,10 +157,13 @@ export const VideoPlayer = ({
                         src={videoUrl}
                         id={chapterId}
                         controls
-                        controlsList="nodownload" 
+                        controlsList="nodownload"
                         onContextMenu={()=>{return false}}
                         ref={videoRef}
                         onEnded={onEnd}
+                        onWaiting={()=>setIsBuffering(true)}
+                        onCanPlay={()=>setIsBuffering(false)}
+                        onPlaying={()=>setIsBuffering(false)}
                     ></video>
                 )
             }

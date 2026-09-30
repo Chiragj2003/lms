@@ -32,6 +32,20 @@ export const Card = ({
     const inCart = items.find(item=>item.id===course.id);
     const isTutor = session.data?.user.role === "TUTOR";
 
+    // This card only ever sees a bare Course row (no rating/purchase
+    // aggregates attached), so the cart entry is built with safe defaults for
+    // the fields the cart card displays.
+    const toggleCartItem = () => toggleItem({
+        id : course.id,
+        title : course.title,
+        price : course.price ?? 0,
+        image : course.image ?? "",
+        total_purchases : 0,
+        total_ratings : 0,
+        average_rating : "0",
+        tutor_name : ""
+    });
+
     return (
         <div
             className={cn(
@@ -68,7 +82,7 @@ export const Card = ({
                                 aria-label={`Remove ${course.title} from cart`}
                                 onClick={(e)=>{
                                     e.preventDefault();
-                                    // toggleItem(course);
+                                    toggleCartItem();
                                     toast.info("Course removed from cart");
                                 }}
                             >
@@ -88,7 +102,7 @@ export const Card = ({
                                 onClick={(e)=>{
                                     e.preventDefault();
                                     toast.info(inCart ? "Course removed from cart" : "Course added to cart")
-                                    // toggleItem(course);
+                                    toggleCartItem();
                                 }}
                             >
                                 { inCart ? <MdOutlineRemoveShoppingCart className="h-5 w-5"/> : <MdOutlineShoppingCart className="h-5 w-5"/> }

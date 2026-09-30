@@ -1,19 +1,41 @@
 /**
- * Gives each course its own artwork and a realistic spread of reviews.
+ * Gives each course topic-relevant artwork and a realistic spread of reviews.
  *
  *   node scripts/seed-reviews.mjs
  *
  * Every course previously shared one image, which made the catalogue look
- * broken. Reviews need distinct users (Rate is unique per user+course), so
- * this creates a small pool of demo reviewers.
+ * broken; the random-per-course image that replaced it fixed "identical" but
+ * was still unrelated to the course's actual subject. Reviews need distinct
+ * users (Rate is unique per user+course), so this creates a small pool of
+ * demo reviewers, and each reviewer is also given a matching Purchase —
+ * without one, a course could show real ratings next to "0 students
+ * enrolled", since a rating was never required to come from a buyer.
  *
- * Idempotent: images are matched by course, reviewers by email, reviews upserted.
+ * Idempotent: images are matched by course, reviewers by email, reviews and
+ * purchases upserted.
  */
 import { PrismaClient } from "@prisma/client";
 
 const db = new PrismaClient();
 
-const slug = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").slice(0, 40);
+// Ordered most-specific first: the first matching keyword wins.
+const TOPIC_IMAGES = [
+    [["next.js", "react", "app router", "server component"], "https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=800&q=80"],
+    [["python", "bootcamp"], "https://images.unsplash.com/photo-1526379095098-d400fd0bf935?auto=format&fit=crop&w=800&q=80"],
+    [["typescript", "node", "javascript"], "https://images.unsplash.com/photo-1550439062-609e1531270e?auto=format&fit=crop&w=800&q=80"],
+    [["postgres", "sql", "database"], "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=800&q=80"],
+    [["design", "interface", "ui", "ux"], "https://images.unsplash.com/photo-1559028006-448665bd7c7f?auto=format&fit=crop&w=800&q=80"],
+    [["seo", "marketing", "product team"], "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80"],
+    [["financ", "accounting", "modelling"], "https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=800&q=80"],
+    [["razorpay", "payment"], "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=800&q=80"],
+];
+const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=800&q=80";
+
+const imageForCourse = (title) => {
+    const lower = title.toLowerCase();
+    const match = TOPIC_IMAGES.find(([keywords]) => keywords.some((kw) => lower.includes(kw)));
+    return match ? match[1] : FALLBACK_IMAGE;
+};
 
 const REVIEWERS = [
     "Aditya Rao", "Meera Nair", "Rohan Gupta", "Sana Kapoor",
@@ -32,14 +54,13 @@ const COMMENTS = [
 ];
 
 const run = async () => {
-    // 1. Distinct artwork per course.
+    // 1. Topic-relevant artwork per course.
     const courses = await db.course.findMany({ select : { id : true, title : true } });
 
     for (const course of courses) {
         await db.course.update({
             where : { id : course.id },
-            // Seeded URL => stable image per course, but different from its peers.
-            data  : { image : `https://picsum.photos/seed/${slug(course.title)}/800/450` }
+            data  : { image : imageForCourse(course.title) }
         });
     }
     console.log(`course artwork updated: ${courses.length}`);
@@ -64,6 +85,8 @@ const run = async () => {
     console.log(`demo reviewers ready: ${reviewers.length}`);
 
     // 3. Reviews spread across courses, varying count so ratings differ.
+    // Each reviewer also gets a Purchase of the course they're rating, so the
+    // enrollment count shown next to the rating is never zero.
     let reviews = 0;
     for (const [ci, course] of courses.entries()) {
         const howMany = 4 + (ci % 4); // 4-7 reviews per course
@@ -71,6 +94,12 @@ const run = async () => {
         for (let r = 0; r < howMany; r++) {
             const reviewer = reviewers[(ci + r) % reviewers.length];
             const [star, comment] = COMMENTS[(ci + r) % COMMENTS.length];
+
+            await db.purchase.upsert({
+                where  : { userId_courseId : { userId : reviewer.id, courseId : course.id } },
+                update : {},
+                create : { userId : reviewer.id, courseId : course.id }
+            });
 
             await db.rate.upsert({
                 where  : { userId_courseId : { userId : reviewer.id, courseId : course.id } },

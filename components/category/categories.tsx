@@ -38,7 +38,7 @@ export const Categories = () => {
     }
 
     return (
-        <section className="py-20 bg-background">
+        <section className="py-20 md:py-32 bg-background">
             <PageContainer>
                 <div className="mb-10">
                     <SectionHeader 

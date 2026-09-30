@@ -13,9 +13,9 @@ const footerLinks = {
         { label: "Cart", href: "/cart" },
     ],
     support: [
-        { label: "Help Center", href: "#" },
-        { label: "Privacy Policy", href: "#" },
-        { label: "Terms of Service", href: "#" },
+        { label: "Help Center", href: "/help" },
+        { label: "Privacy Policy", href: "/privacy" },
+        { label: "Terms of Service", href: "/terms" },
     ],
 };
 

@@ -89,6 +89,10 @@ const CoursePage = async (props:CoursePageProps) => {
                                 poster={course.image!}
                                 price={course.price!}
                                 course={course}
+                                avgRating={avgRating._avg.star ?? 0}
+                                totalRatings={course._count.ratings}
+                                totalPurchases={course._count.purchases}
+                                tutorName={course.tutor.name ?? ""}
                             />
                         </div>
                     </div>

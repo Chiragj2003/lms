@@ -22,7 +22,7 @@ export const CoursesProgress = async({
                     src="/assets/clock.png"
                 />
                 <InfoCard
-                    label="Completd"
+                    label="Completed"
                     numberOfItems={completedCourses.length}
                     src="/assets/checked.png"
                 />

@@ -14,7 +14,8 @@ const nextConfig = {
             { protocol : "https", hostname : "files.edgestore.dev" },
             // Demo course artwork and placeholder reviewer avatars.
             { protocol : "https", hostname : "picsum.photos" },
-            { protocol : "https", hostname : "i.pravatar.cc" }
+            { protocol : "https", hostname : "i.pravatar.cc" },
+            { protocol : "https", hostname : "images.unsplash.com" }
         ]
     }
 };
