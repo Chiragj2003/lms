@@ -4,7 +4,7 @@ import { GraduationCap } from "lucide-react";
 const footerLinks = {
     platform: [
         { label: "Browse Courses", href: "/search" },
-        { label: "Categories", href: "/search" },
+        { label: "Categories", href: "/categories" },
         { label: "Become a Tutor", href: "/register" },
     ],
     learners: [

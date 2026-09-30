@@ -71,14 +71,14 @@ export const Header = ({
                         {subCategory && (
                             <div className="flex items-center gap-x-2 text-sm">
                                 <Link
-                                    href={`/category/${subCategory?.categoryId}`}
+                                    href={`/categories#${subCategory?.categoryId}`}
                                     className="text-highlight font-semibold hover:text-highlight/80 transition-colors"
                                 >
                                     { subCategory?.category.name }
                                 </Link>
                                 <ChevronRight className="h-4 w-4 text-zinc-500" />
                                 <Link
-                                    href={`/category/${subCategory?.categoryId}/courses/${subCategory?.id}`}
+                                    href={`/category/${subCategory?.id}`}
                                     className="text-highlight font-semibold hover:text-highlight/80 transition-colors"
                                 >
                                     { subCategory?.name }
