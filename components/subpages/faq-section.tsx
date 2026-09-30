@@ -10,7 +10,7 @@ import {
 const faqs = [
     {
         question: "How do I get my certificate after completing a course?",
-        answer: "Once you complete all the video lessons and pass the required quizzes, a 'Generate Certificate' button will unlock on the course overview page. You can download it immediately and share it on LinkedIn."
+        answer: "Your certificate is issued automatically as soon as you've completed every chapter of the course. You'll find it under My Certificates, where you can view and download it."
     },
     {
         question: "Can I learn at my own pace?",
@@ -22,11 +22,11 @@ const faqs = [
     },
     {
         question: "Do you offer refunds?",
-        answer: "Yes, we offer a 30-day money-back guarantee for all courses. If you are not satisfied with the content, simply request a refund from your dashboard."
+        answer: "If a course isn't what you expected, email support@learnit.app and we'll review your refund request. You can also watch a course's free preview chapter before buying."
     },
     {
         question: "Can I become a tutor and sell my own courses?",
-        answer: "Absolutely. You can switch your account role to 'Tutor' in your profile settings. From there, you will gain access to the creator dashboard where you can upload videos, create quizzes, and set your own prices."
+        answer: "Yes. When you first set up your account, choose the Tutor role. Tutor accounts get a creator dashboard where you can upload videos, create quizzes, and set your own prices."
     }
 ];
 

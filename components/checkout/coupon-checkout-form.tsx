@@ -83,8 +83,7 @@ export const CouponCheckoutForm = ({
         <div className="space-y-4">
             <div className="flex flex-col gap-y-6">
                 <div className="space-y-1 text-xs">
-                    <h3 className="text-center">30-Day Money-Back Guarantee</h3>
-                    <h2 className="text-center">Full Lifetime Access</h2>
+                    <p className="text-center">Full Lifetime Access</p>
                 </div>
                 {
                     appliedCoupon && (
