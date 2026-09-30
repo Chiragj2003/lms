@@ -101,8 +101,11 @@ export const CourseEnrollButton = ({
             paymentObject.open();
 
         } catch (error) {
-            console.log(error);
-            toast.error("Something went wrong")
+            // The server's reason ("Already purchased", "Tutors cannot purchase
+            // courses", …) is more useful than a generic failure.
+            toast.error(axios.isAxiosError(error) && typeof error.response?.data === "string"
+                ? error.response.data
+                : "Something went wrong");
         } finally {
             setLoading(false)
         }

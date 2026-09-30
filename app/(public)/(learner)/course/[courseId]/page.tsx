@@ -13,6 +13,8 @@ import "./style.css"
 import { InstructorDescription } from "@/components/courses/ui/instructor-description";
 import { Reviews } from "@/components/courses/ui/reviews";
 import { PageContainer } from "@/components/ui/page-container";
+import { auth } from "@/auth";
+import { db } from "@/lib/db";
 
 
 interface CoursePageProps {
@@ -51,6 +53,15 @@ const CoursePage = async (props:CoursePageProps) => {
     if (!course) {
         redirect("/");
     }
+
+    const session = await auth();
+    const purchase = session?.user?.id
+        ? await db.purchase.findUnique({
+            where : { userId_courseId : { userId : session.user.id, courseId : course.id } },
+            select : { id : true }
+        })
+        : null;
+    const isPurchased = !!purchase;
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -93,6 +104,7 @@ const CoursePage = async (props:CoursePageProps) => {
                                 totalRatings={course._count.ratings}
                                 totalPurchases={course._count.purchases}
                                 tutorName={course.tutor.name ?? ""}
+                                isPurchased={isPurchased}
                             />
                         </div>
                     </div>
