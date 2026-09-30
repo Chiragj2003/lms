@@ -106,8 +106,18 @@ export const VideoPlayer = ({
             let certificateId : string|null = null;
 
             if ( !certificate && !nextChapterId) {
-                const response = await axios.post(`/api/courses/${courseId}/certificate`);
-                certificateId = response.data.id;
+                try {
+                    const response = await axios.post(`/api/courses/${courseId}/certificate`);
+                    certificateId = response.data.id;
+                } catch (error) {
+                    // Reaching the last chapter with earlier ones unfinished is
+                    // expected, not a failure of this chapter's progress.
+                    if (axios.isAxiosError(error) && error.response?.status === 403) {
+                        toast.info("Finish the remaining chapters to earn your certificate");
+                    } else {
+                        throw error;
+                    }
+                }
             }
 
             if (!nextChapterId) {
