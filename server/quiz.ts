@@ -43,6 +43,23 @@ export const getQuizById = async(courseId: string, quizId: string, userId: strin
             }
         });
 
+        if (!quiz) {
+            return null;
+        }
+
+        // Everything returned here is serialised into the quiz page, so the
+        // correct answers were readable in the page source before submitting.
+        // They're only needed afterwards, on the result page.
+        if (quiz.result.length === 0) {
+            return {
+                ...quiz,
+                questions : quiz.questions.map((question) => ({
+                    ...question,
+                    options : question.options.map((option) => ({ ...option, isCorrect : false })),
+                })),
+            };
+        }
+
         return quiz;
 
     } catch (error) {
