@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import axios from "axios";
 import { useCertificate } from "@/hooks/use-certificate-modal";
 import { useSession } from "@/lib/auth-client";
+import { cn } from "@/lib/utils";
 
 
 interface VideoPlayerProps {
@@ -22,6 +23,7 @@ interface VideoPlayerProps {
     completeOnEnd: boolean;
     thumbnail: string;
     certificate: boolean;
+    canEarnCertificate: boolean;
 }
 export const VideoPlayer = ({
     chapterId,
@@ -32,7 +34,8 @@ export const VideoPlayer = ({
     title,
     videoUrl,
     thumbnail,
-    certificate
+    certificate,
+    canEarnCertificate
 } : VideoPlayerProps ) => {
 
 
@@ -105,7 +108,7 @@ export const VideoPlayer = ({
 
             let certificateId : string|null = null;
 
-            if ( !certificate && !nextChapterId) {
+            if ( canEarnCertificate && !certificate && !nextChapterId) {
                 try {
                     const response = await axios.post(`/api/courses/${courseId}/certificate`);
                     certificateId = response.data.id;
@@ -178,7 +181,10 @@ export const VideoPlayer = ({
                 )
             }
             <div
-                className="absolute bg-red-400/40 text-zinc-100 rounded-lg left-0 top-0 px-4 py-2"
+                className={cn(
+                    "absolute bg-red-400/40 text-zinc-100 rounded-lg left-0 top-0 px-4 py-2",
+                    !session.data?.user.email && "hidden"
+                )}
                 ref={identityRef}
             >
                 {session.data?.user.email}

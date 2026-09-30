@@ -32,27 +32,30 @@ const ViewLayoutPage = async (props: ViewLayoutPageProps) => {
         children
     } = props;
 
+    // Signed-out visitors may watch a course's free preview chapter, so the
+    // player shell renders without a session; each chapter page decides
+    // whether its own content needs one.
     const session = await auth();
-    if (!session) {
-        redirect("/login");
-    }
+    const userId = session?.user?.id;
 
-    const course = await getCourseAndProgress(params.courseId, session.user.id!);
+    const course = await getCourseAndProgress(params.courseId, userId ?? "");
 
     if (!course) {
         redirect("/");
     }
 
-    const progressCount = await getUserProgressCount(session.user.id!, course.id);
+    const progressCount = userId ? await getUserProgressCount(userId, course.id) : 0;
 
-    const purchase = await db.purchase.findUnique({
-        where : {
-            userId_courseId : {
-                userId : session.user.id!,
-                courseId : course.id
+    const purchase = userId
+        ? await db.purchase.findUnique({
+            where : {
+                userId_courseId : {
+                    userId,
+                    courseId : course.id
+                }
             }
-        }
-    });
+        })
+        : null;
 
     return (
         <>
