@@ -1,5 +1,6 @@
 "use server";
 
+import { Prisma } from "@prisma/client";
 import { db } from "@/lib/db";
 import { Course } from "@/types";
 
@@ -256,38 +257,51 @@ export const getCoursesByCategoryId = async (categoryId: string) => {
 }
 
 
+// Purchases and ratings are aggregated in their own subqueries before joining
+// back to Course. Joining both tables directly onto Course in one query fans
+// rows out (purchases x ratings per course), inflating COUNT(p.id) by a
+// multiple of the rating count — the cause of counts that didn't match the
+// (independently-aggregated) course detail page.
+const COURSE_CARD_FROM = Prisma.sql`
+    SELECT
+        c.id AS id,
+        c.title AS title,
+        c.price AS price,
+        c.image AS image,
+        COALESCE(p.total_purchases, 0) AS total_purchases,
+        COALESCE(r.total_ratings, 0) AS total_ratings,
+        COALESCE(r.average_rating, 0) AS average_rating,
+        t.name AS tutor_name
+    FROM
+        "Course" c
+    LEFT JOIN (
+        SELECT "courseId", COUNT(*) AS total_purchases
+        FROM "Purchase"
+        GROUP BY "courseId"
+    ) p ON p."courseId" = c.id
+    LEFT JOIN (
+        SELECT "courseId", COUNT(*) AS total_ratings, AVG(star) AS average_rating
+        FROM "Rate"
+        GROUP BY "courseId"
+    ) r ON r."courseId" = c.id
+    LEFT JOIN
+        "User" t ON c."tutorId" = t.id`;
+
+// COUNT() comes back as a BigInt and AVG() as a Prisma.Decimal; neither is a
+// plain value, and passing them to a Client Component (every course card)
+// throws "Only plain objects can be passed ...".
+const serializeCourseCard = (course: any): Course => ({
+    ...course,
+    total_purchases: Number(course.total_purchases),
+    total_ratings: Number(course.total_ratings),
+    average_rating: String(Number(course.average_rating)),
+});
+
 export const searchCourses = async(query: string) : Promise<Course[]> =>{
     try {
 
-        // Purchases and ratings are aggregated in their own subqueries before
-        // joining back to Course. Joining both tables directly onto Course in
-        // one query fans rows out (purchases x ratings per course), inflating
-        // COUNT(p.id) by a multiple of the rating count — the cause of counts
-        // that didn't match the (independently-aggregated) course detail page.
-        const courses: any = await db.$queryRaw`
-            SELECT
-                c.id AS id,
-                c.title AS title,
-                c.price AS price,
-                c.image AS image,
-                COALESCE(p.total_purchases, 0) AS total_purchases,
-                COALESCE(r.total_ratings, 0) AS total_ratings,
-                COALESCE(r.average_rating, 0) AS average_rating,
-                t.name AS tutor_name
-            FROM
-                "Course" c
-            LEFT JOIN (
-                SELECT "courseId", COUNT(*) AS total_purchases
-                FROM "Purchase"
-                GROUP BY "courseId"
-            ) p ON p."courseId" = c.id
-            LEFT JOIN (
-                SELECT "courseId", COUNT(*) AS total_ratings, AVG(star) AS average_rating
-                FROM "Rate"
-                GROUP BY "courseId"
-            ) r ON r."courseId" = c.id
-            LEFT JOIN
-                "User" t ON c."tutorId" = t.id
+        const courses: any[] = await db.$queryRaw`
+            ${COURSE_CARD_FROM}
             WHERE
                 c."isPublished" = true
                 AND c.title ILIKE ${`%${query}%`}
@@ -295,19 +309,28 @@ export const searchCourses = async(query: string) : Promise<Course[]> =>{
                 total_purchases DESC
             LIMIT 10;`
 
-        // AVG() comes back as a Prisma.Decimal, which isn't a plain object —
-        // passing it straight through as a prop to a Client Component (every
-        // course card) throws "Only plain objects can be passed ...". Coerce
-        // it to a number, same as the BigInt counts below.
-        const serializedCourses = courses.map((course: any) => ({
-            ...course,
-            total_purchases: Number(course.total_purchases),
-            total_ratings: Number(course.total_ratings),
-            average_rating: String(Number(course.average_rating)),
-        }));
+        return courses.map(serializeCourseCard);
 
-        return serializedCourses
+    } catch (error) {
+        return [];
+    }
+}
 
+export const getCourseCardsByIds = async(ids: string[]) : Promise<Course[]> => {
+    if (ids.length === 0) {
+        return [];
+    }
+
+    try {
+
+        const courses: any[] = await db.$queryRaw`
+            ${COURSE_CARD_FROM}
+            WHERE
+                c."isPublished" = true
+                AND c.id IN (${Prisma.join(ids)});`
+
+        const byId = new Map(courses.map((course) => [course.id, serializeCourseCard(course)]));
+        return ids.flatMap((id) => byId.get(id) ?? []);
 
     } catch (error) {
         return [];

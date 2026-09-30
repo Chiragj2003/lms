@@ -8,6 +8,7 @@ import { EdgeStoreProvider } from "@/providers/edgestore.provider";
 import { ConfettiProvider } from "@/providers/confetti.provider";
 import { ModalProvider } from "@/providers/modal.provider";
 import { QueryProvider } from "@/providers/query.provider";
+import { CartSync } from "@/components/utils/cart-sync";
 
 const inter = Inter({
     subsets: ["latin"],
@@ -49,6 +50,7 @@ export default async function RootLayout({
                             />
                         <ConfettiProvider />
                         <ModalProvider />
+                        <CartSync />
                         {children}
                     </EdgeStoreProvider>
                 </QueryProvider>

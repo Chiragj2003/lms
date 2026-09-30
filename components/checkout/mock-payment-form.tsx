@@ -9,8 +9,11 @@ import { Lock } from "lucide-react";
 import { formatPrice } from "@/lib/format";
 
 interface MockPaymentFormProps {
-    courseId : string;
     amount : number;
+    // Endpoint that grants the purchase, and where to go once it has.
+    confirmUrl : string;
+    successUrl : string;
+    onSuccess? : ()=>void;
 }
 
 // Prefilled so the flow can be demonstrated without typing anything. These are
@@ -24,7 +27,7 @@ const DEFAULTS = {
     zip : "560001"
 };
 
-export const MockPaymentForm = ({ courseId, amount } : MockPaymentFormProps) => {
+export const MockPaymentForm = ({ amount, confirmUrl, successUrl, onSuccess } : MockPaymentFormProps) => {
 
     const router = useRouter();
     const [values, setValues] = useState(DEFAULTS);
@@ -38,9 +41,10 @@ export const MockPaymentForm = ({ courseId, amount } : MockPaymentFormProps) => 
         setPaying(true);
 
         try {
-            await axios.post(`/api/courses/${courseId}/checkout/confirm`);
+            await axios.post(confirmUrl);
+            onSuccess?.();
             toast.success("Payment successful. You're enrolled.");
-            router.push(`/course/${courseId}/view`);
+            router.push(successUrl);
             router.refresh();
         } catch {
             toast.error("Payment could not be completed");

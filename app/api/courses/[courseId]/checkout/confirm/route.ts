@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
+import { purchaseCourses } from "@/lib/cart";
 
 /**
  * Completes a purchase made through the mock payment gateway.
@@ -37,14 +38,8 @@ export async function POST(req: Request, props: { params : Promise<{ courseId : 
             return new NextResponse("Course not found", {status: 404});
         }
 
-        // Upsert so a double submit cannot fail on the unique constraint.
-        await db.purchase.upsert({
-            where  : {
-                userId_courseId : { userId : session.user.id, courseId : course.id }
-            },
-            update : {},
-            create : { userId : session.user.id, courseId : course.id }
-        });
+        // Idempotent, so a double submit can't fail on the unique constraint.
+        await purchaseCourses(session.user.id, [course.id]);
 
         return NextResponse.json({ success : true });
 
