@@ -36,6 +36,13 @@ export const getCourseById = async(id: string)=> {
     }
 }
 
+// Chapter lists (course page, player sidebar) are rendered by client
+// components, so every field on each row ships to the browser. The video URL
+// and transcript are paid material and are served only by getChapter, which
+// checks the purchase first.
+const withoutPaidMedia = <T extends { videoUrl: string | null; transcript: string | null }>(chapters: T[]): T[] =>
+    chapters.map((chapter) => ({ ...chapter, videoUrl : null, transcript : null }));
+
 export const getCourseByPublicId = async(id: string)=> {
     try {
 
@@ -130,7 +137,9 @@ export const getCourseByPublicId = async(id: string)=> {
             )
         ])
 
-        
+        if (course) {
+            course.chapters = withoutPaidMedia(course.chapters);
+        }
 
         return {course, avgRating};
 
@@ -162,11 +171,15 @@ export const getCourseAndProgress = async(id: string, userId: string)=> {
                         }
                     },
                     orderBy : {
-                        position : "asc" 
+                        position : "asc"
                     }
                 },
             }
         });
+
+        if (course) {
+            course.chapters = withoutPaidMedia(course.chapters);
+        }
 
         return course;
 

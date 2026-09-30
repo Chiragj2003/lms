@@ -83,9 +83,13 @@ export const getChapter = async({
             }
         });
 
+        // Scoped to courseId: the purchase check above is for courseId, so an
+        // unscoped lookup let an owner of any course open another course's
+        // paid chapter by putting its id in the URL.
         const chapter = await db.chapter.findUnique({
             where : {
                 id: chapterId,
+                courseId,
                 isPublished :true
             },
             include : {
@@ -156,8 +160,16 @@ export const getChapter = async({
             }
         });
 
+        // Whatever is returned here ends up in the page payload, so paid
+        // material must never leave the server for a locked chapter — hiding
+        // the player in the UI still shipped the direct video URL.
+        const isLocked = !chapter.isFree && !purchase;
+        const visibleChapter = isLocked
+            ? { ...chapter, videoUrl : null, transcript : null, attachments : [] }
+            : chapter;
+
         return  {
-            chapter,
+            chapter : visibleChapter,
             course,
             nextChapter,
             userProgress,
