@@ -16,6 +16,40 @@ export async function PUT(
 
         const { isCompleted } = await req.json();
 
+        if (typeof isCompleted !== "boolean") {
+            return new NextResponse("isCompleted must be a boolean", {status: 400});
+        }
+
+        const chapter = await db.chapter.findUnique({
+            where : {
+                id : params.chapterId,
+                courseId : params.courseId,
+                isPublished : true
+            },
+            select : { isFree : true }
+        });
+
+        if (!chapter) {
+            return new NextResponse("Chapter not found", {status: 404});
+        }
+
+        // Progress feeds certificates, so it can only be recorded for a
+        // chapter the learner can actually watch.
+        if (!chapter.isFree) {
+            const purchase = await db.purchase.findUnique({
+                where : {
+                    userId_courseId : {
+                        userId : session.user.id,
+                        courseId : params.courseId
+                    }
+                }
+            });
+
+            if (!purchase) {
+                return new NextResponse("Course is not purchased", {status: 403});
+            }
+        }
+
         const userProgress = await db.userProgress.upsert({
             where : {
                 userId_chapterId : {
