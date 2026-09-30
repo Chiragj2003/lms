@@ -39,11 +39,12 @@ A comprehensive full-stack Learning Management System (LMS) built with modern te
 - Learning history and achievements tracking
 
 ### 💳 Payment System
-- **Stripe** integration for secure payments
+- **Razorpay** integration for payments (cards, UPI, net banking)
+- Demo checkout while Razorpay keys are unset, so the flow works without a gateway
 - Coupon/discount code support with validation
-- Shopping cart functionality
+- Shopping cart with multi-course checkout, synced to the learner's account
 - Payment verification and instant course access
-- Stripe webhook integration for async payment processing
+- Razorpay webhook integration for async payment processing
 - Payment success modal with celebration animations
 
 ### 💬 Interactive Features
@@ -109,7 +110,7 @@ A comprehensive full-stack Learning Management System (LMS) built with modern te
 - **[React Hook Form](https://react-hook-form.com/)** + **[Zod](https://zod.dev/)** - Form handling
 
 ### Payment & File Storage
-- **[Stripe](https://stripe.com/)** - Payment processing
+- **[Razorpay](https://razorpay.com/)** - Payment processing
 - **[Mux](https://www.mux.com/)** - Video streaming and hosting
 - **[EdgeStore](https://edgestore.dev/)** - File uploads
 - **[Cloudinary](https://cloudinary.com/)** - Image optimization
@@ -132,7 +133,7 @@ A comprehensive full-stack Learning Management System (LMS) built with modern te
 ### Prerequisites
 - Node.js 18+ and npm/yarn
 - PostgreSQL database
-- Stripe account (for payments)
+- Razorpay account (optional — without keys, checkout runs in demo mode)
 - Mux account (for video hosting)
 - Ollama installed locally (for AI features)
 
@@ -169,10 +170,10 @@ GOOGLE_CLIENT_SECRET="your-google-client-secret"
 GITHUB_CLIENT_ID="your-github-client-id"
 GITHUB_CLIENT_SECRET="your-github-client-secret"
 
-# Stripe
-STRIPE_API_KEY="your-stripe-secret-key"
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY="your-stripe-publishable-key"
-STRIPE_WEBHOOK_SECRET="your-stripe-webhook-secret"
+# Razorpay (leave empty to use the demo checkout)
+RAZORPAY_KEY_ID="your-razorpay-key-id"
+RAZORPAY_KEY_SECRET="your-razorpay-key-secret"
+RAZORPAY_WEBHOOK_SECRET="your-razorpay-webhook-secret"
 
 # Mux
 MUX_TOKEN_ID="your-mux-token-id"
@@ -223,7 +224,7 @@ lms/
 │   │   ├── auth/            # Authentication endpoints
 │   │   ├── courses/         # Course management
 │   │   ├── user/            # User operations
-│   │   └── webhook/         # Stripe webhooks
+│   │   └── webhook/         # Razorpay webhooks
 │   ├── globals.css          # Global styles
 │   └── layout.tsx           # Root layout
 ├── components/              # React components
@@ -273,12 +274,12 @@ lms/
 - Chat history persisted in Zustand store
 
 ### Payment Flow
-1. User adds course to cart (Zustand)
-2. Checkout creates Stripe session
-3. User completes payment on Stripe
-4. Webhook creates Purchase record
-5. User redirected with success modal
-6. Course access granted immediately
+1. User enrolls in a course, or adds courses to the cart (synced to their account)
+2. Checkout creates a Razorpay order for the course(s), recording them in the order's notes
+3. User completes payment in the Razorpay popup
+4. The server verifies the payment signature and that the order belongs to this user and course(s)
+5. Purchase records are created (the Razorpay webhook does the same as a fallback)
+6. Course access is granted immediately
 
 ## 🔒 Security
 
@@ -364,4 +365,4 @@ If you have any questions or need help, please open an issue or contact me.
 
 ---
 
-**Note**: Make sure to configure all external services (Stripe, Mux, Cloudinary, etc.) before running the application. Refer to their respective documentation for setup instructions.
+**Note**: Make sure to configure all external services (Razorpay, EdgeStore, Cloudinary, etc.) before running the application. Refer to their respective documentation for setup instructions.

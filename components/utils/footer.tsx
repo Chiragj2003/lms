@@ -107,7 +107,7 @@ export const Footer = () => {
                     </p>
                     <div className="flex items-center gap-x-4">
                         <span className="text-xs text-zinc-500">
-                            Built with Next.js, Prisma & Stripe
+                            Built with Next.js, Prisma & Razorpay
                         </span>
                     </div>
                 </div>
