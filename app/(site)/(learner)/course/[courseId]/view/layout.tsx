@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 
 import { auth } from "@/auth";
 import { MobileSidebar } from "@/components/courses/ui/mobile-sidebar";
@@ -22,7 +22,7 @@ export async function generateMetadata(props: ViewLayoutPageProps): Promise<Meta
     // A specific chapter's own generateMetadata overrides this with the
     // chapter title; this is only what's shown before one is picked.
     return {
-        title : data?.title ?? "Course Player"
+        title : data?.isPublished ? data.title : "Course Player"
     };
 }
 const ViewLayoutPage = async (props: ViewLayoutPageProps) => {
@@ -40,8 +40,9 @@ const ViewLayoutPage = async (props: ViewLayoutPageProps) => {
 
     const course = await getCourseAndProgress(params.courseId, userId ?? "");
 
-    if (!course) {
-        redirect("/");
+    // Drafts aren't browsable; only their tutor may open them.
+    if (!course || (!course.isPublished && course.tutorId !== userId)) {
+        notFound();
     }
 
     const progressCount = userId ? await getUserProgressCount(userId, course.id) : 0;
