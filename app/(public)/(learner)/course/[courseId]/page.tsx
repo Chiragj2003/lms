@@ -1,5 +1,6 @@
 import Image from "next/image";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
+import { Banner } from "@/components/utils/banner";
 
 import { Header } from "@/components/utils/header";
 import { getCourseByPublicId } from "@/server/course";
@@ -26,7 +27,9 @@ export async function generateMetadata(props: CoursePageProps): Promise<Metadata
 
     const data = await courseMetadata(params.courseId);
 
-    if ( !data ) {
+    // Drafts get no title/preview image, so their name doesn't leak through
+    // link previews or the browser tab.
+    if ( !data || !data.isPublished ) {
         return {};
     }
 
@@ -55,6 +58,12 @@ const CoursePage = async (props:CoursePageProps) => {
     }
 
     const session = await auth();
+
+    // A draft is only visible to the tutor who owns it, as a preview.
+    const isOwnerPreview = !course.isPublished && course.tutor.id === session?.user?.id;
+    if (!course.isPublished && !isOwnerPreview) {
+        notFound();
+    }
     const purchase = session?.user?.id
         ? await db.purchase.findUnique({
             where : { userId_courseId : { userId : session.user.id, courseId : course.id } },
@@ -66,7 +75,13 @@ const CoursePage = async (props:CoursePageProps) => {
     return (
         <div className="flex flex-col min-h-screen">
             <Header variant="default" />
-            
+            {isOwnerPreview && (
+                <Banner
+                    variant="warning"
+                    label="This course is a draft. Only you can see this page until you publish it."
+                />
+            )}
+
             <main className="flex-1 pb-24">
                 <CourseHeader
                     id={course.id}

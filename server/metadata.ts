@@ -14,7 +14,8 @@ export const courseMetadata = async( courseId: string )=>{
                 id : true,
                 image : true,
                 title : true,
-                shortDescription : true
+                shortDescription : true,
+                isPublished : true
             }
         });
 
