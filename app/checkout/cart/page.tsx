@@ -38,41 +38,41 @@ const CartCheckoutPage = async () => {
     return (
         <main className="min-h-screen grid md:grid-cols-2">
             {/* Order summary */}
-            <section className="bg-zinc-50 border-r border-zinc-200 px-6 py-10 md:px-12 md:py-16">
+            <section className="bg-muted border-r border-border px-6 py-10 md:px-12 md:py-16">
                 <div className="max-w-md ml-auto w-full space-y-8">
                     <Link
                         href="/cart"
-                        className="inline-flex items-center text-sm text-zinc-600 hover:text-zinc-900"
+                        className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground"
                     >
                         <ChevronLeft className="h-4 w-4 mr-1" />
                         Back to cart
                     </Link>
 
                     <div className="space-y-2">
-                        <p className="text-sm text-zinc-600">
+                        <p className="text-sm text-muted-foreground">
                             Enrol in {courses.length} {courses.length === 1 ? "course" : "courses"}
                         </p>
-                        <p className="text-4xl font-semibold text-zinc-900">{formatPrice(total)}</p>
+                        <p className="text-4xl font-semibold text-foreground">{formatPrice(total)}</p>
                     </div>
 
                     <ul className="space-y-4 pt-2">
                         {courses.map((course) => (
                             <li key={course.id} className="flex gap-4">
-                                <div className="relative w-24 aspect-video rounded-md overflow-hidden shrink-0 bg-zinc-200">
+                                <div className="relative w-24 aspect-video rounded-md overflow-hidden shrink-0 bg-muted">
                                     {course.image && (
                                         <Image src={course.image} alt="" fill sizes="6rem" className="object-cover" />
                                     )}
                                 </div>
                                 <div className="flex-1 min-w-0">
-                                    <p className="font-medium text-zinc-900 leading-snug line-clamp-2">{course.title}</p>
+                                    <p className="font-medium text-foreground leading-snug line-clamp-2">{course.title}</p>
                                 </div>
-                                <p className="text-sm text-zinc-700">{formatPrice(course.price)}</p>
+                                <p className="text-sm text-foreground">{formatPrice(course.price)}</p>
                             </li>
                         ))}
                     </ul>
 
-                    <dl className="border-t border-zinc-200 pt-4 text-sm">
-                        <div className="flex justify-between font-semibold text-zinc-900">
+                    <dl className="border-t border-border pt-4 text-sm">
+                        <div className="flex justify-between font-semibold text-foreground">
                             <dt>Total due</dt>
                             <dd>{formatPrice(total)}</dd>
                         </div>
@@ -83,7 +83,7 @@ const CartCheckoutPage = async () => {
             {/* Payment form */}
             <section className="px-6 py-10 md:px-12 md:py-16">
                 <div className="max-w-md mr-auto w-full space-y-6">
-                    <h1 className="text-xl font-semibold text-zinc-900">Pay with card</h1>
+                    <h1 className="text-xl font-semibold text-foreground">Pay with card</h1>
                     <CartMockPaymentForm amount={total} />
                 </div>
             </section>

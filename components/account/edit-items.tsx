@@ -1,43 +1,42 @@
 "use client"
 
-import { useMemo } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
+// A "Social accounts" tab used to be listed here, but it led to an empty page
+// (the profile API can't save social links yet), so it's hidden until that
+// exists.
+const ITEMS = [
+    { label : "Public profile", href : "/user/edit-profile" },
+];
+
 export const EditItems = () => {
-    
-    const router = useRouter();
+
     const pathname = usePathname();
 
-    const items = useMemo(()=>[
-        {
-            label : "Basics",
-            href : "/user/edit-profile",
-            active : pathname === "/user/edit-profile"
-        },
-        {
-            label : "Social Account",
-            href : "/user/edit-profile/social",
-            active : pathname === "/user/edit-profile/social"
-        },
-    ], [pathname]);
-    
     return (
-        <div className="w-full h-full">
+        <nav className="flex md:flex-col gap-1" aria-label="Profile sections">
             {
-                items.map((item)=>(
-                    <div
-                        key={item.label}
-                        className={cn(
-                            "py-4 px-6 text-zinc-300 font-medium border-l-4 border-transparent cursor-default md:cursor-pointer",
-                            item.active && "bg-neutral-700 text-white border-violet-500"
-                        )}
-                        onClick={()=>router.push(item.href)}
-                    >
-                        {item.label}
-                    </div>
-                ))
+                ITEMS.map((item)=>{
+                    const active = pathname === item.href;
+                    return (
+                        <Link
+                            key={item.href}
+                            href={item.href}
+                            aria-current={active ? "page" : undefined}
+                            className={cn(
+                                "px-4 py-2.5 rounded-lg text-sm font-medium transition-colors",
+                                active
+                                    ? "bg-accent text-accent-foreground"
+                                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                            )}
+                        >
+                            {item.label}
+                        </Link>
+                    );
+                })
             }
-        </div>
+        </nav>
     )
 }

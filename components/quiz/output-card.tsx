@@ -16,22 +16,22 @@ export const OutputCard= ({
 
     return (
         <div className={cn(
-            "w-full p-6 rounded-2xl bg-violet-100 border border-violet-200",
-            type === "correct" && "bg-emerald-50 border-emerald-200",
-            type === "incorrect" && "bg-red-50 border-red-200",
+            "w-full p-6 rounded-2xl bg-card border border-border shadow-sm",
+            type === "correct" && "bg-success/5 border-success/30",
+            type === "incorrect" && "bg-destructive/5 border-destructive/30",
         )}>
             <div className="flex items-center justify-end py-2">
                 <p className={cn(
-                    "text-zinc-700 font-semibold",
-                    type === "correct" && "text-emerald-600",
-                    type === "incorrect" && "text-red-600"
+                    "text-muted-foreground font-semibold",
+                    type === "correct" && "text-success",
+                    type === "incorrect" && "text-destructive"
                 )}>
                     {
                         type.charAt(0).toUpperCase()+type.slice(1)
                     }
                 </p>
             </div>
-            <h3 className="font-medium text-zinc-700 text-base" >{question.question}</h3>
+            <h3 className="font-medium text-foreground text-base" >{question.question}</h3>
             <div className="mt-6 flex flex-col space-y-2">
                 {
                     question.options.map((option)=> (

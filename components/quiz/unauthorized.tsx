@@ -33,7 +33,7 @@ export const Unauthorized = ({
                     </p>
                     <Button
                         size="lg"
-                        className="rounded-none bg-violet-600 hover:bg-violet-600/80"
+                        className="font-semibold"
                         onClick={()=>router.push(`/course/${courseId}`)}
                     >
                         Go to course

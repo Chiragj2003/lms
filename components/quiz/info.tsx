@@ -15,13 +15,13 @@ export const InfoCard = ({
     variant
 } : InfoCardProps) => {
     return (
-        <div className="border rounded-md flex items-center gap-x-6 p-3 border-zinc-300 border-l-4 shadow-sm">
-            <div className="h-10 w-10 shrink-0 relative">
-                <IconBage icon={icon} iconVariant ={variant} />
+        <div className="bg-card border border-border rounded-2xl flex items-center gap-x-4 p-4 shadow-sm">
+            <div className="shrink-0">
+                <IconBage icon={icon} variant={variant} />
             </div>
             <div className="flex flex-col text-sm">
-                <h1 className="text-lg font-semibold text-zinc-700">{label}</h1>
-                <span className="text-zinc-600 font-medium" >{value} {value===1?"Question" :"Questions"}</span>
+                <p className="text-base font-semibold text-foreground">{label}</p>
+                <span className="text-muted-foreground" >{value} {value===1?"Question" :"Questions"}</span>
             </div>
         </div>
     )

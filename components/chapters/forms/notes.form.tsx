@@ -84,7 +84,7 @@ export const NotesForm = ({
                                 <FormControl>
                                     <Input 
                                         placeholder="Enter time in seconds"
-                                        className="rounded-none h-12 border-zinc-500 border-2 outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                                        className="h-11"
                                         onChange={(e)=>field.onChange(Number.parseInt(e.target.value))}
                                         type="number"
                                         step={1}
@@ -122,7 +122,7 @@ export const NotesForm = ({
                         Cancel
                     </Button>
                     <Button
-                        className="rounded-none bg-neutral-800 hover:bg-neutral-800/80"
+                        className="font-semibold"
                         disabled={isLoading || !isValid}
                         type="submit"
                     >

@@ -6,12 +6,12 @@ import { cn } from "@/lib/utils";
 
 
 const bannerVariants = cva(
-    "border text-center p-4 text-sm flex items-center w-full",
+    "border-b text-center px-4 py-3 text-sm font-medium flex items-center w-full",
     {
         variants : {
             variant : {
-                warning : "bg-yellow-200/80 border-yellow-30 text-primary",
-                success : "bg-emerald-700 border-emerald-800 text-secondary"
+                warning : "bg-warning/15 border-warning/30 text-warning-foreground",
+                success : "bg-success/10 border-success/30 text-success"
             }
         },
         defaultVariants : {

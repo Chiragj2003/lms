@@ -39,7 +39,7 @@ export const Notes = ({
                             />
                         ) : (
                             <Button
-                                className="w-full h-12 rounded-none border-2 border-zinc-400 font-semibold text-zinc-700 justify-between"
+                                className="w-full h-11 font-semibold justify-between"
                                 variant="outline"
                                 onClick={()=>setIsCreating(true)}
                                 disabled={!isPurchased}

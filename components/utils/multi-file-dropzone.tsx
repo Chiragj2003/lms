@@ -16,8 +16,8 @@ const variants = {
     active: "border-2",
     disabled:
         "bg-gray-200 border-gray-300 cursor-default pointer-events-none bg-opacity-30 dark:bg-gray-700 dark:border-gray-600",
-    accept: "border border-blue-500 bg-blue-500 bg-opacity-10",
-    reject: "border border-red-700 bg-red-700 bg-opacity-10",
+    accept: "border border-primary bg-primary/10",
+    reject: "border border-destructive bg-destructive/10",
 };
 
 export type FileState = {

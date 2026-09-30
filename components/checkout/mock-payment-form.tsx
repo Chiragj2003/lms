@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { Lock } from "lucide-react";
 
 import { formatPrice } from "@/lib/format";
+import { Button } from "@/components/ui/button";
 
 interface MockPaymentFormProps {
     amount : number;
@@ -52,17 +53,18 @@ export const MockPaymentForm = ({ amount, confirmUrl, successUrl, onSuccess } : 
         }
     };
 
-    const field = "w-full h-11 px-3 border border-zinc-300 rounded-md text-sm text-zinc-800 focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent";
+    const field = "w-full h-11 px-3 border border-input bg-background rounded-lg text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent";
+    const label = "text-sm font-medium text-foreground";
 
     return (
         <form onSubmit={onPay} className="space-y-5">
             <div className="space-y-1.5">
-                <label htmlFor="email" className="text-sm font-medium text-zinc-700">Email</label>
+                <label htmlFor="email" className={label}>Email</label>
                 <input id="email" type="email" value={values.email} onChange={set("email")} className={field} required />
             </div>
 
             <div className="space-y-1.5">
-                <label htmlFor="card" className="text-sm font-medium text-zinc-700">Card information</label>
+                <label htmlFor="card" className={label}>Card information</label>
                 <input
                     id="card"
                     value={values.card}
@@ -90,24 +92,25 @@ export const MockPaymentForm = ({ amount, confirmUrl, successUrl, onSuccess } : 
             </div>
 
             <div className="space-y-1.5">
-                <label htmlFor="name" className="text-sm font-medium text-zinc-700">Name on card</label>
+                <label htmlFor="name" className={label}>Name on card</label>
                 <input id="name" value={values.name} onChange={set("name")} className={field} required />
             </div>
 
             <div className="space-y-1.5">
-                <label htmlFor="zip" className="text-sm font-medium text-zinc-700">Postal code</label>
+                <label htmlFor="zip" className={label}>Postal code</label>
                 <input id="zip" value={values.zip} onChange={set("zip")} className={field} required />
             </div>
 
-            <button
+            <Button
                 type="submit"
+                size="lg"
                 disabled={paying}
-                className="w-full h-12 bg-[#635bff] hover:bg-[#5b53f0] disabled:opacity-60 text-white font-semibold rounded-md transition-colors"
+                className="w-full h-12 text-base font-semibold"
             >
                 {paying ? "Processing…" : `Pay ${formatPrice(amount)}`}
-            </button>
+            </Button>
 
-            <p className="flex items-center justify-center gap-1.5 text-xs text-zinc-500">
+            <p className="flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
                 <Lock className="h-3 w-3" />
                 Demo checkout — no card is charged and no card data is sent anywhere.
             </p>

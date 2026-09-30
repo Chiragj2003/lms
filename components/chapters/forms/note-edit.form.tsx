@@ -104,7 +104,7 @@ export const NoteEditForm = ({
                         Cancel
                     </Button>
                     <Button
-                        className="rounded-none bg-neutral-800 hover:bg-neutral-800/80"
+                        className="font-semibold"
                         disabled={isLoading || !isValid}
                         type="submit"
                     >

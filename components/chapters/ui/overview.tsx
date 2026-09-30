@@ -15,7 +15,7 @@ import { FaFacebookSquare } from "react-icons/fa";
 import { IoMdLink } from "react-icons/io";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-import Preview from "@/components/utils/preview";
+import { RichText as Preview } from "@/components/utils/rich-text";
 import { Cerificate, UserProgress } from "@prisma/client";
 import { CourseProgressButton } from "@/components/courses/ui/course-progress-button";
 import { useRouter } from "next/navigation";
@@ -115,17 +115,17 @@ export const Overview = ({
                     </div>
                     <div>
                         <h2 className="text-xl text-zinc-700 font-semibold">Certificate</h2>
-                        <p className="text-sm text-zinc-700 font-medium">Get LearnIT certificate by completing entire course</p>
+                        <p className="text-sm text-muted-foreground">Earn your LearnIt certificate by completing every chapter.</p>
                     </div>
                 </div>
                 <div className="w-full">
-                    <Button 
-                        className="w-full rounded-none border-2 border-zinc-400 text-zinc-700 font-semibold"
+                    <Button
+                        className="w-full font-semibold"
                         variant="outline"
                         disabled={!certificate}
                         onClick={()=>router.push(`/certificate/${certificate?.id}`)}
                     >
-                        LearnIT Certificate
+                        {certificate ? "View your certificate" : "Complete every chapter to unlock"}
                     </Button>
                 </div>
             </div>
@@ -149,10 +149,13 @@ export const Overview = ({
                             </div>
                         </div>
                         <div className="w-full">
-                            <Button 
-                                className="w-full rounded-none border-2 border-zinc-400 text-zinc-700 font-semibold"
+                            <Button
+                                className="w-full font-semibold"
                                 variant="outline"
-                                disabled={!certificate}
+                                // Was gated on having a certificate (copied from the
+                                // button above), which hid the quiz until the whole
+                                // course was finished; owning the course is enough.
+                                disabled={!isPurchased}
                                 onClick={()=>router.push( quizResultId? `/course/${courseId}/quiz/${quizId}/result` : `/course/${courseId}/quiz/${quizId}`)}
                             >
                                 { quizResultId ? "View result" : "Take test" }

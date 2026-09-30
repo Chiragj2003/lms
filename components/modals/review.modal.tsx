@@ -81,7 +81,7 @@ export const ReviewModal = () => {
             open={isOpen}
             onOpenChange={onOpenChange}
         >
-            <DialogContent className="rounded-none md:rounded-none">
+            <DialogContent className="rounded-2xl">
                 <div className="flex flex-col items-center gap-x-4 py-6">
                     <h1 className="text-center text-lg md:text-xl text-zinc-800 font-bold">Why did you leave this rating?</h1>
                     <div className="mt-6">
@@ -115,7 +115,7 @@ export const ReviewModal = () => {
                                     <FormItem>
                                         <FormControl>
                                             <Textarea
-                                                className="border-zinc-400 border-2 rounded-none outline-none focus-visible:ring-0 focus-visible:ring-offset-0 resize-none text-zinc-800"
+                                                className="resize-none"
                                                 {...field}
                                                 placeholder="Share your personal experience with this course. Did it meet your expectations?"
                                                 rows={6}
@@ -128,7 +128,7 @@ export const ReviewModal = () => {
                         </div>
                         <Button
                             size="lg"
-                            className="bg-neutral-800 hover:bg-neutral-800/80 w-full rounded-none"
+                            className="w-full font-semibold"
                             type="submit"
                             disabled={isSubmitting || !isValid}
                         >
