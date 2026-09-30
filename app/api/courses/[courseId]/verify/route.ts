@@ -2,6 +2,7 @@ import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 import crypto from "crypto";
+import Razorpay from "razorpay";
 import { v4 as uuidv4 } from "uuid";
 
 export async function POST(req: Request, props: { params: Promise<{ courseId: string }> }) {
@@ -12,44 +13,52 @@ export async function POST(req: Request, props: { params: Promise<{ courseId: st
             return new NextResponse("Unauthorized attempt", { status: 401 });
         }
 
+        const keyId = process.env.RAZORPAY_KEY_ID;
+        const keySecret = process.env.RAZORPAY_KEY_SECRET;
+        if (!keyId || !keySecret) {
+            return new NextResponse("Payments are not configured", { status: 400 });
+        }
+
         const { razorpay_payment_id, razorpay_order_id, razorpay_signature } = await req.json();
 
         if (!razorpay_payment_id || !razorpay_order_id || !razorpay_signature) {
             return new NextResponse("Invalid payment details", { status: 400 });
         }
 
-        const body = razorpay_order_id + "|" + razorpay_payment_id;
-
         const expectedSignature = crypto
-            .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET as string)
-            .update(body.toString())
+            .createHmac("sha256", keySecret)
+            .update(`${razorpay_order_id}|${razorpay_payment_id}`)
             .digest("hex");
 
-        const isAuthentic = expectedSignature === razorpay_signature;
-
-        if (!isAuthentic) {
+        const expected = Buffer.from(expectedSignature);
+        const received = Buffer.from(String(razorpay_signature));
+        if (expected.length !== received.length || !crypto.timingSafeEqual(expected, received)) {
             return new NextResponse("Invalid signature", { status: 400 });
         }
 
-        // Verify purchase doesn't already exist
-        const existingPurchase = await db.purchase.findUnique({
+        // A valid signature only proves *some* order was paid. Without checking
+        // what the order was for, a payment for the cheapest course could be
+        // replayed against any other course's verify URL.
+        const razorpay = new Razorpay({ key_id: keyId, key_secret: keySecret });
+        const order = await razorpay.orders.fetch(razorpay_order_id);
+
+        if (order.notes?.courseId !== params.courseId || order.notes?.userId !== session.user.id) {
+            return new NextResponse("Payment does not match this course", { status: 400 });
+        }
+
+        await db.purchase.upsert({
             where: {
                 userId_courseId: {
                     userId: session.user.id,
                     courseId: params.courseId
                 }
+            },
+            update: {},
+            create: {
+                userId: session.user.id,
+                courseId: params.courseId,
             }
         });
-
-        if (!existingPurchase) {
-            // Create the purchase
-            await db.purchase.create({
-                data: {
-                    userId: session.user.id,
-                    courseId: params.courseId,
-                }
-            });
-        }
 
         return NextResponse.json({ url: `/course/${params.courseId}/view?paymentId=${uuidv4()}` });
 
