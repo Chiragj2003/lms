@@ -297,22 +297,34 @@ const serializeCourseCard = (course: any): Course => ({
     average_rating: String(Number(course.average_rating)),
 });
 
-export const searchCourses = async(query: string) : Promise<Course[]> =>{
+export const searchCourses = async(query: string, page = 1, pageSize = 12) : Promise<{ courses: Course[], total: number }> =>{
     try {
 
-        const courses: any[] = await db.$queryRaw`
-            ${COURSE_CARD_FROM}
-            WHERE
-                c."isPublished" = true
-                AND c.title ILIKE ${`%${query}%`}
-            ORDER BY
-                total_purchases DESC
-            LIMIT 10;`
+        // Escape LIKE wildcards so a search for "100%" or "c_" is literal.
+        const pattern = `%${query.replace(/[\\%_]/g, (char) => `\\${char}`)}%`;
+        const offset = (Math.max(1, page) - 1) * pageSize;
 
-        return courses.map(serializeCourseCard);
+        const [courses, total] = await Promise.all([
+            db.$queryRaw<any[]>`
+                ${COURSE_CARD_FROM}
+                WHERE
+                    c."isPublished" = true
+                    AND c.title ILIKE ${pattern}
+                ORDER BY
+                    total_purchases DESC, c.title ASC
+                LIMIT ${pageSize} OFFSET ${offset};`,
+            db.course.count({
+                where : {
+                    isPublished : true,
+                    title : { contains : query, mode : "insensitive" }
+                }
+            })
+        ]);
+
+        return { courses : courses.map(serializeCourseCard), total };
 
     } catch (error) {
-        return [];
+        return { courses : [], total : 0 };
     }
 }
 
