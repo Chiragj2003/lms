@@ -46,7 +46,9 @@ export async function PUT( req: Request ) {
             },
             create : {
                 userId : session.user.id,
-                courseId : data.courseId
+                courseId : data.courseId,
+                comment : data.comment,
+                star : data.star
             },
             update : {
                 comment : data.comment,
