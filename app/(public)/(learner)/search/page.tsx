@@ -2,7 +2,6 @@ import Image from "next/image";
 import { searchCourses } from "@/server/course";
 import { CardWithRating } from "@/components/courses/ui/card-with-ratings";
 import { PageContainer } from "@/components/ui/page-container";
-import { SectionHeader } from "@/components/ui/section-header";
 import { SearchForm } from "@/components/courses/forms/search.form";
 
 
@@ -14,22 +13,12 @@ interface SearchPageProps {
 
 const SearchPage = async (props: SearchPageProps) => {
     const searchParams = await props.searchParams;
+    const query = searchParams.query || "";
 
-    if (!searchParams.query){
-        return (
-            <PageContainer className="py-20 md:py-32">
-                <div className="max-w-xl mx-auto text-center space-y-8">
-                    <SectionHeader 
-                        title="Search Courses"
-                        subtitle="Find the perfect course to advance your career."
-                    />
-                    <SearchForm />
-                </div>
-            </PageContainer>
-        )
-    }
-
-    const courses = await searchCourses(searchParams.query);
+    // An empty query still matches every published course (title ILIKE '%%'),
+    // so this is the catalog view rather than a dead end that needs typing
+    // something first.
+    const courses = await searchCourses(query);
 
     if (courses.length === 0) {
         return (
@@ -46,7 +35,9 @@ const SearchPage = async (props: SearchPageProps) => {
                             />
                         </div>
                         <div className="text-center mt-6">
-                            <h3 className="text-xl font-semibold text-foreground mb-2">No courses found for &quot;{searchParams.query}&quot;</h3>
+                            <h3 className="text-xl font-semibold text-foreground mb-2">
+                                {query ? `No courses found for "${query}"` : "No courses available yet"}
+                            </h3>
                             <p className="text-muted-foreground">
                                 Try searching with different keywords or explore popular categories.
                             </p>
@@ -66,24 +57,26 @@ const SearchPage = async (props: SearchPageProps) => {
                     <div className="absolute top-10 left-10 w-64 h-64 bg-primary rounded-full blur-3xl" />
                     <div className="absolute bottom-10 right-10 w-64 h-64 bg-highlight rounded-full blur-3xl" />
                 </div>
-                
+
                 <PageContainer className="relative z-10 flex flex-col items-center text-center space-y-6">
                     <h1 className="text-3xl md:text-5xl font-bold tracking-tight">
-                        Discover your next skill
+                        {query ? "Discover your next skill" : "Browse all courses"}
                     </h1>
                     <p className="text-muted text-lg max-w-xl mx-auto">
-                        Showing {courses.length} highly rated {courses.length === 1 ? 'course' : 'courses'} for &quot;{searchParams.query}&quot;
+                        {query
+                            ? `Showing ${courses.length} highly rated ${courses.length === 1 ? 'course' : 'courses'} for "${query}"`
+                            : `${courses.length} ${courses.length === 1 ? 'course' : 'courses'} available right now`}
                     </p>
                     <div className="w-full max-w-2xl mx-auto mt-6">
                         <SearchForm />
                     </div>
                 </PageContainer>
             </div>
-            
+
             <PageContainer className="py-12">
                 <div className="flex items-center justify-between mb-8 border-b border-border pb-4">
                     <h2 className="text-xl font-bold text-foreground">
-                        All Results ({courses.length})
+                        All {query ? "Results" : "Courses"} ({courses.length})
                     </h2>
                     {/* Placeholder for future sorting/filtering */}
                     <div className="text-sm font-medium text-muted-foreground bg-card border border-border px-4 py-2 rounded-lg">

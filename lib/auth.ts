@@ -14,6 +14,18 @@ export const auth = betterAuth({
         provider : "postgresql"
     }),
 
+    session : {
+        cookieCache : {
+            // useSession() on the client otherwise waits on a network round
+            // trip before it knows who's signed in, so every page briefly
+            // rendered as logged-out (no avatar, no My Learning link) before
+            // popping to the real state a moment later. A short signed cookie
+            // lets the client read the session instantly instead.
+            enabled : true,
+            maxAge : 60
+        }
+    },
+
     socialProviders : {
         google : {
             clientId : process.env.GOOGLE_CLIENT_ID as string,

@@ -9,7 +9,7 @@ import { PageContainer } from "@/components/ui/page-container";
 import { SectionHeader } from "@/components/ui/section-header";
 
 export const metadata : Metadata = {
-    title : "My learning"
+    title : "My Learning"
 }
 
 const MyLearningPage = async() => {

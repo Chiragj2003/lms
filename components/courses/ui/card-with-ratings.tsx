@@ -71,7 +71,7 @@ export const CardWithRating = ({
                                 onClick={(e)=>{
                                     e.preventDefault();
                                     toast.info(inCart ? "Course removed from cart" : "Course added to cart")
-                                    // toggleItem(course);
+                                    toggleItem(course);
                                 }}
                             >
                                 { inCart ? <MdOutlineRemoveShoppingCart className="h-5 w-5"/> : <MdOutlineShoppingCart className="h-5 w-5"/> }
@@ -95,9 +95,9 @@ export const CardWithRating = ({
                 </p>
                 
                 <div className="flex items-center gap-x-2 mt-2">
-                    <span className="text-sm font-semibold text-foreground">{Number(course.average_rating).toFixed(1)}</span>
-                    <Stars avgRating={course.average_rating} />
-                    <span className="text-xs text-muted-foreground">({course.total_purchases})</span>
+                    <span className="text-sm font-semibold text-foreground">{Number(course.average_rating || 0).toFixed(1)}</span>
+                    <Stars avgRating={`${course.average_rating || 0}`} />
+                    <span className="text-xs text-muted-foreground">({course.total_ratings ?? 0})</span>
                 </div>
                 
                 <div className="mt-auto pt-4 flex items-center justify-between">

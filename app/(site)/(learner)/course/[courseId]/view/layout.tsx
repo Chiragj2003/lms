@@ -6,16 +6,24 @@ import { MobileSidebar } from "@/components/courses/ui/mobile-sidebar";
 import { SideBar } from "@/components/courses/ui/sidebar";
 import { getCourseAndProgress } from "@/server/course";
 import { getUserProgressCount } from "@/server/progress";
+import { courseMetadata } from "@/server/metadata";
 import { db } from "@/lib/db";
-
-
-export const metadata : Metadata = ({
-    title : ""
-});
 
 interface ViewLayoutPageProps {
     params : Promise<{ courseId : string }>
     children : React.ReactNode;
+}
+
+export async function generateMetadata(props: ViewLayoutPageProps): Promise<Metadata> {
+    const params = await props.params;
+
+    const data = await courseMetadata(params.courseId);
+
+    // A specific chapter's own generateMetadata overrides this with the
+    // chapter title; this is only what's shown before one is picked.
+    return {
+        title : data?.title ?? "Course Player"
+    };
 }
 const ViewLayoutPage = async (props: ViewLayoutPageProps) => {
     const params = await props.params;

@@ -29,6 +29,7 @@ export type Course  = {
     price: number;
     image: string;
     total_purchases: number;
+    total_ratings: number;
     average_rating: string;
     tutor_name: string;
 }

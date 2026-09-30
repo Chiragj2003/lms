@@ -21,7 +21,9 @@ import {
     ChartTooltip,
     ChartTooltipContent,
 } from "@/components/ui/chart";
+import { EmptyState } from "@/components/ui/empty-state";
 import { Heading } from "../utils/heading";
+import { Clock } from "lucide-react";
 
 export const description = "A line chart with dots";
 
@@ -40,6 +42,8 @@ export const GraphChart = ({
     data
 }: GraphChartProps) => {
 
+    const hasActivity = data.some((day) => day.time > 0);
+
     return (
         <Card>
             <CardHeader>
@@ -51,41 +55,51 @@ export const GraphChart = ({
                 <CardDescription>Last 7 Days</CardDescription>
             </CardHeader>
             <CardContent>
-                <ChartContainer config={chartConfig}>
-                    <LineChart
-                        accessibilityLayer
-                        data={data}
-                        margin={{
-                            left: 12,
-                            right: 12,
-                        }}
-                    >
-                        <CartesianGrid vertical={false} />
-                        <XAxis
-                            dataKey="day"
-                            tickLine={false}
-                            axisLine={false}
-                            tickMargin={8}
-                            tickFormatter={(value) => value.slice(0, 3)}
+                {
+                    hasActivity ? (
+                        <ChartContainer config={chartConfig}>
+                            <LineChart
+                                accessibilityLayer
+                                data={data}
+                                margin={{
+                                    left: 12,
+                                    right: 12,
+                                }}
+                            >
+                                <CartesianGrid vertical={false} />
+                                <XAxis
+                                    dataKey="day"
+                                    tickLine={false}
+                                    axisLine={false}
+                                    tickMargin={8}
+                                    tickFormatter={(value) => value.slice(0, 3)}
+                                />
+                                <ChartTooltip
+                                    cursor={false}
+                                    content={<ChartTooltipContent hideLabel />}
+                                />
+                                <Line
+                                    dataKey="time"
+                                    type="natural"
+                                    stroke="var(--color-desktop)"
+                                    strokeWidth={2}
+                                    dot={{
+                                        fill: "var(--color-desktop)",
+                                    }}
+                                    activeDot={{
+                                        r: 6,
+                                    }}
+                                />
+                            </LineChart>
+                        </ChartContainer>
+                    ) : (
+                        <EmptyState
+                            icon={<Clock className="h-10 w-10" />}
+                            title="No study time logged yet"
+                            description="Watch a lesson to completion and it'll show up here."
                         />
-                        <ChartTooltip
-                            cursor={false}
-                            content={<ChartTooltipContent hideLabel />}
-                        />
-                        <Line
-                            dataKey="time"
-                            type="natural"
-                            stroke="var(--color-desktop)"
-                            strokeWidth={2}
-                            dot={{
-                                fill: "var(--color-desktop)",
-                            }}
-                            activeDot={{
-                                r: 6,
-                            }}
-                        />
-                    </LineChart>
-                </ChartContainer>
+                    )
+                }
             </CardContent>
             <CardFooter className="flex-col items-start gap-2 text-sm">
                 <div className="leading-none text-muted-foreground">

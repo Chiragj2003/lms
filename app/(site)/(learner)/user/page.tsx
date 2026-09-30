@@ -7,6 +7,7 @@ import { RoleForm } from "@/components/profile/form/role.form";
 import { getUserCourses } from "@/server/course";
 import { UserCourses } from "@/components/courses/ui/user-courses";
 import { PageContainer } from "@/components/ui/page-container";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 
 const ProfilePage = async() => {
@@ -34,14 +35,12 @@ const ProfilePage = async() => {
                 <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/3 w-96 h-96 bg-primary/20 rounded-full blur-3xl opacity-50" />
                 <PageContainer className="relative z-10">
                     <div className="flex items-center gap-x-6 md:gap-x-10">
-                        <div className="h-24 md:h-32 aspect-square relative rounded-full overflow-hidden border-4 border-zinc-800 shadow-xl">
-                            <Image
-                                src={session.user?.image || ""}
-                                alt={session.user.name || "Profile Image"}
-                                fill
-                                className="object-cover"
-                            />
-                        </div>
+                        <Avatar className="h-24 w-24 md:h-32 md:w-32 border-4 border-zinc-800 shadow-xl">
+                            <AvatarImage src={session.user?.image || ""} alt={session.user.name || "Profile"} />
+                            <AvatarFallback className="text-2xl md:text-4xl font-semibold">
+                                {session.user.name?.charAt(0)}
+                            </AvatarFallback>
+                        </Avatar>
                         <div className="space-y-2">
                             <h1 className="text-3xl md:text-5xl font-bold text-white tracking-tight">
                                 Welcome back, {session.user.name?.split(" ")[0]}!

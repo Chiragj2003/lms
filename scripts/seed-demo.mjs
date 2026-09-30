@@ -14,6 +14,11 @@ const db = new PrismaClient();
 const IMAGE = "https://res.cloudinary.com/dhkq9icc5/image/upload/v1762110188/aaqsfaiidpoq051pljmu.jpg";
 const VIDEO = "https://files.edgestore.dev/k07eqvcnhw0kq0xm/publicFiles/_public/e3e16506-218c-4ac9-a463-84c2816c2252.mp4";
 
+// Every seeded chapter reuses the same demo video, but shouldn't all report
+// the same length — that read as an obviously-fake placeholder. Deterministic
+// per (course, position) so re-running the seed doesn't reshuffle durations.
+const chapterDuration = (courseIndex, position) => 240 + ((courseIndex * 5 + position * 17) % 13) * 41;
+
 // BlockNote stores rich text as a JSON document; this is the minimal valid shape.
 const doc = (text) => JSON.stringify([{
     id : crypto.randomUUID(),
@@ -153,14 +158,23 @@ const run = async () => {
             const hasChapter = await db.chapter.findFirst({
                 where : { courseId : course.id, title }
             });
-            if (hasChapter) continue;
+            if (hasChapter) {
+                // Re-running the seed after the duration formula changed
+                // shouldn't leave already-created chapters on the old
+                // (identical, placeholder) value.
+                await db.chapter.update({
+                    where : { id : hasChapter.id },
+                    data : { duration : chapterDuration(i, pos) }
+                });
+                continue;
+            }
 
             const chapter = await db.chapter.create({
                 data : {
                     title,
                     description : doc(`In this chapter: ${title.toLowerCase()}.`),
                     videoUrl : VIDEO,
-                    duration : 143,
+                    duration : chapterDuration(i, pos),
                     position : pos,
                     isPublished : true,
                     // First chapter is the free preview.

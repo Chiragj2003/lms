@@ -17,7 +17,11 @@ interface SubscriptionCardProps {
     video?: string;
     price: number;
     title: string;
-    course: Course
+    course: Course;
+    avgRating: number;
+    totalRatings: number;
+    totalPurchases: number;
+    tutorName: string;
 }
 
 export const SubscriptionCard = ({
@@ -26,13 +30,28 @@ export const SubscriptionCard = ({
     price,
     video,
     title,
-    course
+    course,
+    avgRating,
+    totalRatings,
+    totalPurchases,
+    tutorName
 }: SubscriptionCardProps ) => {
 
     const [appliedPrice, setAppliedPrice] = useState(price);
     const { items, toggleItem } = useCart();
     const session = useSession();
     const isTutor = session.data?.user.role === "TUTOR";
+
+    const toggleCartItem = () => toggleItem({
+        id : courseId,
+        title,
+        price : course.price ?? price,
+        image : course.image ?? poster,
+        total_purchases : totalPurchases,
+        total_ratings : totalRatings,
+        average_rating : String(avgRating || 0),
+        tutor_name : tutorName
+    });
 
     return (
         <div className="w-full h-fit shrink-0 bg-card border border-border rounded-2xl shadow-lg overflow-hidden">
@@ -54,7 +73,7 @@ export const SubscriptionCard = ({
                                     className="w-full h-12 text-base font-semibold"
                                     variant={items.find(item=>item.id===courseId) ? "secondary" : "default"}
                                     size="lg"
-                                    // onClick={()=>toggleItem(course)}
+                                    onClick={toggleCartItem}
                                 >
                                     {
                                         items.find(item=>item.id===courseId) ? "Remove from cart" : "Add to cart"

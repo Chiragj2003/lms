@@ -1,13 +1,23 @@
 import Image from "next/image";
+import { redirect } from "next/navigation";
 import { Header } from "@/components/utils/header";
+import { auth } from "@/auth";
 
 interface AuthLayoutProps {
     children : React.ReactNode;
 }
 
-const AuthLayout = ({
+const AuthLayout = async ({
     children
 } : AuthLayoutProps ) => {
+
+    // A signed-in user has nothing to do on /login or /register: send them
+    // straight to their dashboard instead of showing the form again.
+    const session = await auth();
+    if (session) {
+        redirect("/user");
+    }
+
     return (
         <main className="h-full overflow-y-auto">
             <Header variant="default" />

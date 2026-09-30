@@ -21,6 +21,22 @@ export async function PUT( req: Request ) {
 
         const data = validatedData.data;
 
+        // Ratings are scoped to enrolled learners: without this, a course can
+        // show reviews from people who never purchased it, alongside a
+        // students-enrolled count of zero.
+        const purchase = await db.purchase.findUnique({
+            where : {
+                userId_courseId : {
+                    userId : session.user.id,
+                    courseId : data.courseId
+                }
+            }
+        });
+
+        if (!purchase) {
+            return new NextResponse("You must purchase this course before leaving a review", {status: 403});
+        }
+
         const rating =  await db.rate.upsert({
             where : {
                 userId_courseId : {
