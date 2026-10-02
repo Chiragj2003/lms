@@ -2,6 +2,7 @@ import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 import { rateLimit, tooManyRequests } from "@/lib/rate-limit";
+import { purchaseCourses } from "@/lib/cart";
 import { getRazorpay, isDemoCheckoutEnabled, isRazorpayConfigured, PAYMENTS_UNAVAILABLE } from "@/lib/razorpay";
 import { v4 as uuidv4 } from "uuid";
 
@@ -68,12 +69,10 @@ export async function POST(req: Request, props: { params : Promise<{ courseId : 
 
         // If the course is free or fully discounted, bypass payment
         if (amount <= 0) {
-            await db.purchase.create({
-                data: {
-                    userId: session.user.id,
-                    courseId: course.id,
-                }
-            });
+            // Idempotent and also clears the course from the cart; a plain
+            // insert failed with a 500 on a double click and left the course
+            // sitting in the cart.
+            await purchaseCourses(session.user.id, [course.id]);
             return NextResponse.json({ url: `/course/${course.id}/view?paymentId=${uuidv4()}` });
         }
 
