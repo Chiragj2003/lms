@@ -104,13 +104,14 @@ export const QuizItem = ({
     return (
         <div className="w-full bg-card border border-border rounded-2xl shadow-sm border-l-8 border-l-primary group">
             <div className="flex items-center justify-center h-6">
-                <GripHorizontal className="h-6 w-6 text-zinc-400 hidden group-hover:block"/>
+                <GripHorizontal className="h-6 w-6 text-muted-foreground hidden group-hover:block"/>
             </div>
             <div className="px-6 py-4 space-y-6">
                 <Input
                     value={question}
                     disabled={disabled}
                     placeholder="Question"
+                    aria-label="Question"
                     onChange={(e)=>setQuestion(e.target.value)}
                     className="rounded-none h-12 border-0 border-b-2 border-border outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-primary focus:bg-muted font-medium text-foreground"
                 />
@@ -126,21 +127,23 @@ export const QuizItem = ({
                                 disabled={disabled}
                             />
                             <Button
-                                className="text-zinc-600"
+                                className="text-muted-foreground hover:text-destructive"
                                 size="icon"
                                 variant="ghost"
                                 onClick={()=>onDelete(option.id)}
                                 disabled={disabled}
+                                aria-label={`Remove option ${index+1}`}
                             >
-                                <X className="h-6 w-6 text-zinc-700" />
+                                <X className="h-5 w-5" />
                             </Button>
                         </div>
                     ))}
                 </div>
                 <div className="flex items-center justify-end space-x-4">
                     <Button
-                        className="text-zinc-700 font-semibold"
+                        className="font-semibold hover:text-destructive"
                         variant="secondary"
+                        aria-label="Delete question"
                         onClick={()=>onQuestionDelete(item.id)}
                         disabled={disabled}
                         size="sm"
@@ -148,7 +151,7 @@ export const QuizItem = ({
                         <Trash2/>
                     </Button>
                     <Button
-                        className="text-zinc-700 font-semibold"
+                        className="font-semibold"
                         variant="secondary"
                         onClick={onCreate}
                         disabled={disabled}

@@ -98,7 +98,7 @@ export const QuizOption = ({
                         <FormItem>
                             <FormControl>
                                 <Input
-                                    className="rounded-none h-10 border-0 w-full outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-input focus:bg-zinc-50 font-medium text-foreground  focus:border-b-2"
+                                    className="rounded-none h-10 border-0 w-full outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-input focus:bg-muted font-medium text-foreground  focus:border-b-2"
                                     placeholder={`Option ${index}`}
                                     {...field}
                                     disabled={disabled}

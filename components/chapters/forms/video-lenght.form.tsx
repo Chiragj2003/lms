@@ -133,7 +133,7 @@ export const VideoLengthForm = ({
                                             <FormControl>
                                                 <Input
                                                     placeholder="Hours"
-                                                    className="rounded-lg h-11 border-input outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-primary"
+                                                    className="rounded-lg h-11"
                                                     value={field.value}
                                                     onChange={(e)=>field.onChange(Number.parseInt(e.target.value))}
                                                     disabled = {isSubmitting}
@@ -152,7 +152,7 @@ export const VideoLengthForm = ({
                                             <FormControl>
                                                 <Input
                                                     placeholder="Minutes"
-                                                    className="rounded-lg h-11 border-input outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-primary"
+                                                    className="rounded-lg h-11"
                                                     value={field.value}
                                                     onChange={(e)=>field.onChange(Number.parseInt(e.target.value))}
                                                     disabled = {isSubmitting}
@@ -171,7 +171,7 @@ export const VideoLengthForm = ({
                                             <FormControl>
                                                 <Input
                                                     placeholder="Seconds"
-                                                    className="rounded-lg h-11 border-input outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-primary"
+                                                    className="rounded-lg h-11"
                                                     value={field.value}
                                                     onChange={(e)=>field.onChange(Number.parseInt(e.target.value))}
                                                     disabled = {isSubmitting}

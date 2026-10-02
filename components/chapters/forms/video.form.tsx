@@ -102,8 +102,8 @@ export const VideoForm = ({
             {
                 !isEditing ? (
                     !initialData.videoUrl ? (
-                        <div className="flex items-center justify-center aspect-video bg-slate-200 rounded-md mt-2">
-                            <VideoIcon className="h-10 w-10 text-zinc-500" />
+                        <div className="flex items-center justify-center aspect-video bg-muted rounded-md mt-2">
+                            <VideoIcon className="h-10 w-10 text-muted-foreground" />
                         </div>
                     ) : (
                         <div className="relative aspect-video mt-2">

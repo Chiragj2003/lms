@@ -1,8 +1,6 @@
 import {
     Sheet,
     SheetContent,
-    SheetDescription,
-    SheetHeader,
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet";
@@ -13,10 +11,11 @@ import { AlignJustify } from "lucide-react";
 export const TutorHeader = () => {
     return (
         <Sheet>
-            <SheetTrigger>
+            <SheetTrigger aria-label="Open tutor menu">
                 <AlignJustify/>
             </SheetTrigger>
-            <SheetContent className="bg-neutral-800 px-0 pt-10 border-none" side="left" >
+            <SheetContent className="bg-zinc-900 px-0 pt-10 border-none" side="left" >
+                <SheetTitle className="sr-only">Tutor menu</SheetTitle>
                 <Sidebar/>
             </SheetContent>
         </Sheet>

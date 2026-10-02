@@ -103,7 +103,7 @@ export const TitleForm = ({
                                             <FormControl>
                                                 <Input
                                                     placeholder="e.g 'Introduction to course'"
-                                                    className="rounded-lg h-11 border-input outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-primary"
+                                                    className="rounded-lg h-11"
                                                     {...field}
                                                     disabled = {isSubmitting}
                                                 />

@@ -72,16 +72,16 @@ export const ChaptersList = ({
                                     {(provided)=>(
                                         <div
                                             className={cn(
-                                                "flex items-center gap-x-2 bg-slate-200 border-slate-200 border text-zinc-700 rounded-md mb-2 text-sm",
-                                                chapter.isPublished && "bg-violet-100 border-violet-200 text-violet-700"
+                                                "flex items-center gap-x-2 bg-muted border-border border text-foreground rounded-md mb-2 text-sm",
+                                                chapter.isPublished && "bg-accent border-primary/20 text-accent-foreground"
                                             )}
                                             ref={provided.innerRef}
                                             {...provided.draggableProps}
                                         >
                                             <div
                                                 className={cn(
-                                                    "px-2 py-3 border-r border-r-slate-200 hover:bg-slate-300 rounded-l-md transition-all",
-                                                    chapter.isPublished && "border-r-violet-200 hover:bg-violet-200"
+                                                    "px-2 py-3 border-r border-r-border hover:bg-muted-foreground/10 rounded-l-md transition-all cursor-grab",
+                                                    chapter.isPublished && "border-r-primary/20 hover:bg-primary/10"
                                                 )}
                                                 {...provided.dragHandleProps}
                                             >

@@ -9,7 +9,7 @@ import { MonthlyChart } from "@/components/dashboard/monthly-chart";
 import { PageContainer } from "@/components/ui/page-container";
 import { SectionHeader } from "@/components/ui/section-header";
 import { formatPrice } from "@/lib/format";
-import { DollarSign, ShoppingCart, Users, Star, BookOpen, Layers, TrendingUp, FileEdit } from "lucide-react";
+import { IndianRupee, ShoppingCart, Users, Star, BookOpen, Layers, TrendingUp, FileEdit } from "lucide-react";
 
 export const metadata: Metadata = {
     title : 'Analytics'
@@ -46,7 +46,7 @@ const AnalyticPage = async() => {
                 <StatCard 
                     label="Total Revenue" 
                     value={formatPrice(totalRevenue)} 
-                    icon={<DollarSign className="h-4 w-4" />} 
+                    icon={<IndianRupee className="h-4 w-4" />} 
                 />
                 <StatCard 
                     label="Total Sales" 
@@ -60,7 +60,7 @@ const AnalyticPage = async() => {
                 />
                 <StatCard
                     label="Average Rating"
-                    value={averageRating ? Number(averageRating.toFixed(2)) : "0.0"}
+                    value={averageRating ? averageRating.toFixed(1) : "No ratings"}
                     icon={<Star className="h-4 w-4" />}
                 />
             </div>

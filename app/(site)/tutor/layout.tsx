@@ -34,7 +34,7 @@ const TutorLayout = async ({
             </aside>
             <div className="h-full w-full md:w-[calc(100%-14rem)] lg:w-[calc(100%-15rem)]">
                 <header
-                    className="h-16 flex items-center border-b border-border z-10 w-full bg-white"
+                    className="h-16 flex items-center border-b border-border z-10 w-full bg-background"
                 >
                     <div className="px-6 md:px-10 flex items-center justify-between w-full">
                         <div className="md:hidden">

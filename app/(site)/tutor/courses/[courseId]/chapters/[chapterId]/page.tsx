@@ -7,17 +7,15 @@ import { ChapterAccessForm } from "@/components/chapters/forms/chapter-access.fo
 import { DescriptionForm } from "@/components/chapters/forms/description.form";
 import { TitleForm } from "@/components/chapters/forms/title.form";
 import { VideoForm } from "@/components/chapters/forms/video.form";
-import { IconBage } from "@/components/ui/icon-badge";
 import { Progress } from "@/components/ui/progress";
 import { Banner } from "@/components/utils/banner";
 import { getChapterById } from "@/server/chapter";
 import { ResourcesForm } from "@/components/chapters/forms/resource.form";
-import { ArrowLeft, Braces, Eye, FileText, LayoutDashboard, Video, BookOpenCheck } from "lucide-react";
+import { ArrowLeft, FileText, LayoutDashboard, Video } from "lucide-react";
 import { QuizForm } from "@/components/chapters/forms/quiz.form";
 import { VideoLengthForm } from "@/components/chapters/forms/video-lenght.form";
 import { TranscriptForm } from "@/components/chapters/forms/transcript";
 import { PageContainer } from "@/components/ui/page-container";
-import { Button } from "@/components/ui/button";
 
 interface ChapterPageProps {
     params : Promise<{ courseId: string, chapterId: string }>
@@ -51,7 +49,7 @@ const ChapterPage = async (props: ChapterPageProps) => {
             { !chapter.isPublished && (
                 <Banner
                     variant="warning"
-                    label="This chapter is unpublished. It will not be published in course"
+                    label="This chapter is unpublished. Learners won't see it in the course."
                 />
             ) }
             
