@@ -2,6 +2,7 @@ import { auth } from "@/auth";
 import { purchaseCourses } from "@/lib/cart";
 import { getRazorpay, isRazorpayConfigured, isValidPaymentSignature } from "@/lib/razorpay";
 import { NextResponse } from "next/server";
+import { rateLimit, tooManyRequests } from "@/lib/rate-limit";
 import { v4 as uuidv4 } from "uuid";
 
 export async function POST(req: Request, props: { params: Promise<{ courseId: string }> }) {
@@ -10,6 +11,10 @@ export async function POST(req: Request, props: { params: Promise<{ courseId: st
         const session = await auth();
         if (!session || !session.user || !session.user.id) {
             return new NextResponse("Unauthorized attempt", { status: 401 });
+        }
+
+        if (!(await rateLimit(`verify:${session.user.id}`, 20, 60))) {
+            return tooManyRequests(60);
         }
 
         if (!isRazorpayConfigured()) {

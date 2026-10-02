@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { rateLimit, tooManyRequests } from "@/lib/rate-limit";
 
 import { auth } from "@/auth";
 import { courseIdsFromNotes, purchaseCourses } from "@/lib/cart";
@@ -9,6 +10,10 @@ export async function POST(req: Request) {
         const session = await auth();
         if (!session?.user?.id) {
             return new NextResponse("Unauthorized", { status: 401 });
+        }
+
+        if (!(await rateLimit(`verify:${session.user.id}`, 20, 60))) {
+            return tooManyRequests(60);
         }
 
         if (!isRazorpayConfigured()) {
