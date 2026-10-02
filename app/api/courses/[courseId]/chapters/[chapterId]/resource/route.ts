@@ -2,6 +2,7 @@ import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { isRecordNotFound } from "@/lib/prisma-errors";
 import { NextResponse } from "next/server";
+import { deleteUnusedUploads } from "@/lib/storage-cleanup";
 import * as z from "zod";
 
 const ResourceSchema = z.object({
@@ -37,7 +38,7 @@ export async function POST(
 
         const chapter = await findOwnedChapter(params.courseId, params.chapterId, session.user.id);
         if ( !chapter ) {
-            return new NextResponse("Unauthorized attempt", {status: 401});
+            return new NextResponse("Chapter not found", {status: 404});
         }
 
         const resource = await db.attachment.create({
@@ -83,8 +84,13 @@ export async function PATCH(
 
         const chapter = await findOwnedChapter(params.courseId, params.chapterId, session.user.id);
         if ( !chapter ) {
-            return new NextResponse("Unauthorized attempt", {status: 401});
+            return new NextResponse("Chapter not found", {status: 404});
         }
+
+        const previous = await db.attachment.findFirst({
+            where : { id, chapterId : chapter.id },
+            select : { url : true }
+        });
 
         const resource = await db.attachment.update({
             where : {
@@ -93,6 +99,10 @@ export async function PATCH(
             },
             data : parsed.data
         });
+
+        if (previous && previous.url !== resource.url) {
+            await deleteUnusedUploads([previous.url]);
+        }
 
         return NextResponse.json(resource);
 

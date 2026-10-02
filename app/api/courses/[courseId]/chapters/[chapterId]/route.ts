@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import { isRecordNotFound } from "@/lib/prisma-errors";
 import { ChapterUpdateSchema } from "@/schemas/chapter-update.schema";
 import { NextResponse } from "next/server";
+import { deleteUnusedUploads } from "@/lib/storage-cleanup";
 
 
 export async function PATCH(
@@ -35,6 +36,11 @@ export async function PATCH(
             return new NextResponse("Course not found", {status: 404});
         }
 
+        const previous = parsed.data.videoUrl === undefined ? null : await db.chapter.findFirst({
+            where : { id : params.chapterId, courseId : params.courseId },
+            select : { videoUrl : true }
+        });
+
         // Scoped to the owned course: matching on chapterId alone let a tutor
         // edit any chapter on the platform by pairing it with their own course.
         const chapter = await db.chapter.update({
@@ -44,6 +50,11 @@ export async function PATCH(
             },
             data : parsed.data
         });
+
+        // A replaced video would otherwise stay in storage forever.
+        if (previous?.videoUrl && previous.videoUrl !== chapter.videoUrl) {
+            await deleteUnusedUploads([previous.videoUrl]);
+        }
 
         return NextResponse.json(chapter);
 
@@ -80,12 +91,15 @@ export async function DELETE(
             return new NextResponse("Course not found", {status: 404});
         }
 
-        await db.chapter.delete({
+        const removed = await db.chapter.delete({
             where : {
                 id : params.chapterId,
                 courseId : params.courseId
-            }
+            },
+            select : { videoUrl : true, attachments : { select : { url : true } } }
         });
+
+        await deleteUnusedUploads([removed.videoUrl, ...removed.attachments.map((a) => a.url)]);
 
         const publishedChaptersInCourse = await db.chapter.findMany({
             where : {
