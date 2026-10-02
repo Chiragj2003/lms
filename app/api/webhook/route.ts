@@ -7,18 +7,26 @@ import { courseIdsFromNotes, purchaseCourses } from "@/lib/cart";
 export async function POST(req: Request) {
     try {
         const body = await req.text();
-        const signature = (await headers()).get("X-Razorpay-Signature") as string;
+        const signature = (await headers()).get("X-Razorpay-Signature");
 
         if (!signature) {
             return new NextResponse("Webhook error: No signature", { status: 400 });
         }
 
-        const expectedSignature = crypto
-            .createHmac("sha256", process.env.RAZORPAY_WEBHOOK_SECRET as string)
-            .update(body)
-            .digest("hex");
+        const secret = process.env.RAZORPAY_WEBHOOK_SECRET;
+        if (!secret) {
+            console.error("RAZORPAY WEBHOOK: RAZORPAY_WEBHOOK_SECRET is not set");
+            return new NextResponse("Webhook not configured", { status: 503 });
+        }
 
-        if (expectedSignature !== signature) {
+        const expected = Buffer.from(
+            crypto.createHmac("sha256", secret).update(body).digest("hex")
+        );
+        const received = Buffer.from(signature);
+
+        // Constant-time comparison: `!==` stops at the first differing
+        // character, which leaks how much of a forged signature was right.
+        if (expected.length !== received.length || !crypto.timingSafeEqual(expected, received)) {
             return new NextResponse("Webhook error: Invalid signature", { status: 400 });
         }
 
