@@ -2,6 +2,7 @@ import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { QNASchema } from "@/schemas/qna.schema";
 import { QNAResponse } from "@/types";
+import { canAccessChapter } from "@/lib/chapter-access";
 import { NextResponse } from "next/server";
 
 const BATCH_SIZE = 5;
@@ -11,12 +12,22 @@ export async function GET (
 ) {
     try {
 
+        const session = await auth();
+        if (!session?.user?.id) {
+            return new NextResponse("Unauthorized", {status: 401});
+        }
+
         const { searchParams } = new URL(req.url);
         const cursor = searchParams.get("cursor");
         const id = searchParams.get("id");
 
         if (!id) {
             return new NextResponse("ChapterId is missing", {status: 400});
+        }
+
+        // Discussion on a paid chapter was readable by anyone, signed in or not.
+        if (!(await canAccessChapter(session.user.id, id))) {
+            return new NextResponse("You don't have access to this chapter", {status: 403});
         }
 
         let qna : QNAResponse[] = [];
@@ -101,6 +112,11 @@ export async function POST (req: Request) {
         }
 
         const data = validatedData.data;
+
+        // Only people who can watch the chapter can ask about it.
+        if (!(await canAccessChapter(session.user.id, data.chapterId))) {
+            return new NextResponse("You don't have access to this chapter", {status: 403});
+        }
 
         const response = await db.qNA.create({
             data: {

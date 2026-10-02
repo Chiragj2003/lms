@@ -18,7 +18,7 @@ export const QNA = ({
 }: QNAProps) => {
     
     const [ instantData, setInstantData ] = useState<QNAResponse[]>([])
-    const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } = useQuery({ url : `/api/user/qna`, paramKey : "id" , paramValue : chapterId, queryKey:chapterId })
+    const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status, error } = useQuery({ url : `/api/user/qna`, paramKey : "id" , paramValue : chapterId, queryKey:chapterId })
 
     const { ref, inView } = useInView();
     const viewRef = useRef<HTMLDivElement>(null);
@@ -48,8 +48,8 @@ export const QNA = ({
 
     if ( status === "error" ) {
         return (
-            <div className="mt-16 md:mt-20 w-full flex items-center justify-center text-base font-medium text-zinc-400 select-none">
-                Something went wrong
+            <div className="mt-16 md:mt-20 px-6 w-full flex items-center justify-center text-center text-sm font-medium text-muted-foreground">
+                {error?.message || "Something went wrong"}
             </div>
         )
     }
