@@ -87,8 +87,8 @@ export const ChaptersForm = ({
         <div className="mt-6 bg-card border border-border rounded-2xl shadow-sm p-4 transition-transform relative">
             {
                 isUpdating && (
-                    <div className="absolute h-full w-full bg-zinc-500/20 top-0 right-0 rounded-m flex items-center justify-center">
-                        <Loader2 className="animate-spin text-violet-600 h-6 w-6" />
+                    <div className="absolute h-full w-full bg-background/60 top-0 right-0 rounded-2xl flex items-center justify-center">
+                        <Loader2 className="animate-spin text-primary h-6 w-6" />
                     </div>
                 )
             }
@@ -126,7 +126,7 @@ export const ChaptersForm = ({
                                             <FormControl>
                                                 <Input
                                                     placeholder={`Introduction of the ${initialData.title}`}
-                                                    className="rounded-lg h-11 border-input outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-primary"
+                                                    className="rounded-lg h-11"
                                                     {...field}
                                                     disabled = {isSubmitting}
                                                 />

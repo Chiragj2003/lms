@@ -1,9 +1,8 @@
 import { auth } from "@/auth"
 import { redirect } from "next/navigation";
 
-import { CircleDollarSign, LayoutDashboard, ListChecks } from "lucide-react";
+import { IndianRupee, LayoutDashboard, ListChecks } from "lucide-react";
 import { getCourseById } from "@/server/course";
-import { IconBage } from "@/components/ui/icon-badge";
 import { Progress } from "@/components/ui/progress";
 import { TitleForm } from "@/components/courses/forms/title.form";
 import { DescriptionForm } from "@/components/courses/forms/description.form";
@@ -102,7 +101,7 @@ const CoursePage = async (props: CoursePageProps) => {
                             Curriculum
                         </a>
                         <a href="#pricing" className="px-4 py-3 rounded-lg text-sm font-medium hover:bg-muted text-foreground transition-colors flex items-center gap-x-3">
-                            <CircleDollarSign className="w-4 h-4 text-primary" />
+                            <IndianRupee className="w-4 h-4 text-primary" />
                             Pricing & Sales
                         </a>
                     </div>
@@ -151,7 +150,7 @@ const CoursePage = async (props: CoursePageProps) => {
                         <section id="pricing" className="space-y-6 scroll-mt-32">
                             <div className="flex flex-col gap-y-2 pb-4 border-b border-border">
                                 <h2 className="text-2xl text-foreground font-bold flex items-center gap-x-2">
-                                    <CircleDollarSign className="w-5 h-5 text-primary" />
+                                    <IndianRupee className="w-5 h-5 text-primary" />
                                     Sell your course
                                 </h2>
                                 <p className="text-muted-foreground text-sm">Set your price and manage promotional coupons.</p>

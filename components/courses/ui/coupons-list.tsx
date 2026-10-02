@@ -43,14 +43,14 @@ export const CouponList = ({
             {
                 coupons.map((coupon)=>(
                     <div 
-                        className="w-full p-4 bg-slate-200 border rounded-md"
+                        className="w-full p-4 bg-muted border border-border rounded-md"
                         key={coupon.id}
                     >
-                        <div className="text-zinc-800 font-medium line-clamp-1">
+                        <div className="text-foreground font-medium line-clamp-1">
                             {coupon.coupon}
                         </div>
                         <div className="grid items-center grid-cols-5">
-                            <p className="col-span-3 w-full text-zinc-600 text-sm font-medium">
+                            <p className="col-span-3 w-full text-muted-foreground text-sm font-medium">
                                 {format(coupon.expires, "PPP")}
                             </p>
                             <div className="flex items-center justify-center">
