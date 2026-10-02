@@ -1,10 +1,17 @@
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
+import { clientIp, rateLimit, tooManyRequests } from "@/lib/rate-limit";
 
 export async function GET(req: Request, props: { params : Promise<{ courseId : string }> }) {
     const params = await props.params;
 
     try {
+
+        // Unauthenticated and answers "valid/invalid", so without a limit
+        // coupon codes could be guessed by brute force.
+        if (!(await rateLimit(`coupon:${await clientIp()}`, 10, 60))) {
+            return tooManyRequests(60);
+        }
 
         const { searchParams } = new URL(req.url);
         const coupon = searchParams.get("coupon");

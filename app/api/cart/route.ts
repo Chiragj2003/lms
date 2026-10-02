@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { rateLimit, tooManyRequests } from "@/lib/rate-limit";
 import * as z from "zod";
 
 import { auth } from "@/auth";
@@ -35,6 +36,10 @@ export async function POST(req: Request) {
             return new NextResponse("Unauthorized", { status: 401 });
         }
 
+        if (!(await rateLimit(`cart:${session.user.id}`, 60, 60))) {
+            return tooManyRequests(60);
+        }
+
         if (session.user.role === "TUTOR") {
             return new NextResponse("Tutors cannot purchase courses", { status: 403 });
         }
@@ -67,6 +72,10 @@ export async function DELETE(req: Request) {
         const session = await auth();
         if (!session?.user?.id) {
             return new NextResponse("Unauthorized", { status: 401 });
+        }
+
+        if (!(await rateLimit(`cart:${session.user.id}`, 60, 60))) {
+            return tooManyRequests(60);
         }
 
         const courseId = new URL(req.url).searchParams.get("courseId");

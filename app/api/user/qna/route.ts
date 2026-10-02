@@ -4,6 +4,7 @@ import { QNASchema } from "@/schemas/qna.schema";
 import { QNAResponse } from "@/types";
 import { canAccessChapter } from "@/lib/chapter-access";
 import { NextResponse } from "next/server";
+import { rateLimit, tooManyRequests } from "@/lib/rate-limit";
 
 const BATCH_SIZE = 5;
 
@@ -102,6 +103,10 @@ export async function POST (req: Request) {
         const session = await auth();
         if (!session || !session.user || !session.user.id) {
             return new NextResponse("Unauthorized", {status: 400});
+        }
+
+        if (!(await rateLimit(`qna:${session.user.id}`, 10, 60))) {
+            return tooManyRequests(60);
         }
 
         const body = await req.json();

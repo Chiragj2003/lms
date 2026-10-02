@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { rateLimit, tooManyRequests } from "@/lib/rate-limit";
 
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
@@ -23,6 +24,10 @@ export async function POST(req: Request, props: { params : Promise<{ courseId : 
         const session = await auth();
         if (!session?.user?.id) {
             return new NextResponse("Unauthorized", {status: 401});
+        }
+
+        if (!(await rateLimit(`checkout:${session.user.id}`, 10, 60))) {
+            return tooManyRequests(60);
         }
 
         if (session.user.role === "TUTOR") {

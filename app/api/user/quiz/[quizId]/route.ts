@@ -2,6 +2,7 @@ import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { QuizResponseSchema } from "@/schemas/quiz-response.schema";
 import { NextResponse } from "next/server";
+import { rateLimit, tooManyRequests } from "@/lib/rate-limit";
 
 export async function POST(req : Request, props: { params : Promise<{ quizId: string }> }) {
     const params = await props.params;
@@ -10,6 +11,10 @@ export async function POST(req : Request, props: { params : Promise<{ quizId: st
         const session = await auth();
         if (!session || !session.user || !session.user.id) {
             return new NextResponse("Unauthorized", {status: 400});
+        }
+
+        if (!(await rateLimit(`quiz:${session.user.id}`, 10, 60))) {
+            return tooManyRequests(60);
         }
 
         const body = await req.json();

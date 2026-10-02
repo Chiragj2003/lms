@@ -2,6 +2,7 @@ import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { RatingSchema } from "@/schemas/rating.schema";
 import { NextResponse } from "next/server";
+import { rateLimit, tooManyRequests } from "@/lib/rate-limit";
 
 
 export async function PUT( req: Request ) {
@@ -10,6 +11,10 @@ export async function PUT( req: Request ) {
         const session = await auth();
         if (!session || !session.user || !session.user.id) {
             return new NextResponse("Unauthorized", {status: 400});
+        }
+
+        if (!(await rateLimit(`rating:${session.user.id}`, 10, 60))) {
+            return tooManyRequests(60);
         }
 
         const body = await req.json();

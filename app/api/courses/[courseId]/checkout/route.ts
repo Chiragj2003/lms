@@ -1,6 +1,7 @@
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
+import { rateLimit, tooManyRequests } from "@/lib/rate-limit";
 import Razorpay from "razorpay";
 import { v4 as uuidv4 } from "uuid";
 
@@ -10,6 +11,10 @@ export async function POST(req: Request, props: { params : Promise<{ courseId : 
         const session = await auth();
         if ( !session || !session.user || !session.user.id) {
             return new NextResponse("Unauthorized attempt", {status: 401});
+        }
+
+        if (!(await rateLimit(`checkout:${session.user.id}`, 10, 60))) {
+            return tooManyRequests(60);
         }
 
         if (session.user.role === "TUTOR") {

@@ -394,3 +394,13 @@ model Solution {
 
   @@index([questionId])
 }
+
+// Fixed-window request counters for rate limiting (lib/rate-limit.ts). Kept
+// in Postgres because serverless instances don't share memory.
+model RateLimit {
+  key         String   @id
+  count       Int
+  windowStart DateTime
+
+  @@index([windowStart])
+}

@@ -2,6 +2,7 @@ import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { NotesSchema } from "@/schemas/notes.schema";
 import { NextResponse } from "next/server";
+import { rateLimit, tooManyRequests } from "@/lib/rate-limit";
 
 export async function POST(
     req: Request,
@@ -13,6 +14,10 @@ export async function POST(
         const session = await auth();
         if (!session || !session.user.id) {
             return new NextResponse("Unauthorized Access", {status:401});
+        }
+
+        if (!(await rateLimit(`notes:${session.user.id}`, 30, 60))) {
+            return tooManyRequests(60);
         }
 
         const body = await req.json();
