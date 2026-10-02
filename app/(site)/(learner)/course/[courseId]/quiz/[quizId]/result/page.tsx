@@ -1,6 +1,7 @@
 import { auth } from "@/auth";
 import { InfoCard } from "@/components/quiz/info";
 import { OutputCard } from "@/components/quiz/output-card";
+import { RetakeQuizButton } from "@/components/quiz/retake-quiz-button";
 import { Unauthorized } from "@/components/quiz/unauthorized";
 import { Badge } from "@/components/ui/badge";
 import { getQuizById } from "@/server/quiz";
@@ -46,11 +47,14 @@ const QuizResultPage = async (props: QuizResultPageProps) => {
         <main
             className="px-6 max-w-3xl w-full mx-auto"
         >
-            <div className="py-10 flex flex-col items-start gap-y-3">
-                <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground">Quiz result</h1>
-                <Badge className="px-3 py-1">
-                    {quiz._count.questions} {quiz._count.questions === 1 ? "question" : "questions"}
-                </Badge>
+            <div className="py-10 flex flex-wrap items-end justify-between gap-4">
+                <div className="flex flex-col items-start gap-y-3">
+                    <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground">Quiz result</h1>
+                    <Badge className="px-3 py-1">
+                        {quiz._count.questions} {quiz._count.questions === 1 ? "question" : "questions"}
+                    </Badge>
+                </div>
+                <RetakeQuizButton courseId={params.courseId} quizId={params.quizId} />
             </div>
             <div className="mt-10 w-full grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <InfoCard

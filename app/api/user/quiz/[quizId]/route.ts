@@ -66,7 +66,7 @@ export async function POST(req : Request, props: { params : Promise<{ quizId: st
         });
 
         if (existing) {
-            return new NextResponse("You've already submitted this quiz", {status: 409});
+            return new NextResponse("You've already submitted this quiz — use Retake quiz on the result page to try again", {status: 409});
         }
 
         const quizQuestions = await db.quizQuestion.findMany({
@@ -108,6 +108,67 @@ export async function POST(req : Request, props: { params : Promise<{ quizId: st
 
     } catch (error) {
         console.error("USER QUIZ POST API ERROR", error);
+        return new NextResponse("Internal server error", {status: 500});
+    }
+}
+
+
+/**
+ * Clears the learner's result so they can take the quiz again. Results were
+ * final (one per learner per quiz), so a single failed attempt could never
+ * be improved. Answers stay hidden until the next submission (see
+ * getQuizById), so a retake reveals nothing new.
+ */
+export async function DELETE(req : Request, props: { params : Promise<{ quizId: string }> }) {
+    const params = await props.params;
+    try {
+
+        const session = await auth();
+        if (!session?.user?.id) {
+            return new NextResponse("Unauthorized", {status: 401});
+        }
+
+        if (!(await rateLimit(`quiz:${session.user.id}`, 10, 60))) {
+            return tooManyRequests(60);
+        }
+
+        const quiz = await db.quiz.findFirst({
+            where : {
+                id : params.quizId,
+                isPublished : true,
+                chapter : { isPublished : true }
+            },
+            select : { chapter : { select : { courseId : true } } }
+        });
+
+        if (!quiz) {
+            return new NextResponse("Quiz not found", {status: 404});
+        }
+
+        const purchase = await db.purchase.findUnique({
+            where : {
+                userId_courseId : {
+                    userId : session.user.id,
+                    courseId : quiz.chapter.courseId
+                }
+            }
+        });
+
+        if (!purchase) {
+            return new NextResponse("Course is not purchased", {status: 403});
+        }
+
+        await db.quizResult.deleteMany({
+            where : {
+                userId : session.user.id,
+                quizId : params.quizId
+            }
+        });
+
+        return NextResponse.json({success: true});
+
+    } catch (error) {
+        console.error("USER QUIZ DELETE API ERROR", error);
         return new NextResponse("Internal server error", {status: 500});
     }
 }
