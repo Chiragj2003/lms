@@ -63,13 +63,7 @@ const CertificatePage = async (props: CertificatePageProps) => {
     const result = splitString(certificate.course.title);
 
     const certificateSVG = `
-        <svg id="eGYjkPJVzEd1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1920 1080" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" project-id="9a07026d0363451abcb2ed10f077953b" export-id="0a64bbe2d78743d6b16c729b5ea8ce5e" cached="false" style="background-color:#fff"><text dx="0" dy="0" font-family="&quot;eGYjkPJVzEd1:::Open Sans&quot;" font-size="100" font-weight="700" transform="translate(120 210.905281)" fill="#252525" stroke-width="0"><tspan y="0" font-weight="700" fill="#252525" stroke-width="0"><![CDATA[
-        Learn
-        ]]></tspan><tspan y="0" font-weight="700" fill="#e228ef" stroke-width="0"><![CDATA[
-        IT
-        ]]></tspan><tspan y="0" font-weight="700" fill="#252525" stroke-width="0"><![CDATA[
-        
-        ]]></tspan></text><text dx="0" dy="0" font-family="&quot;eGYjkPJVzEd1:::Roboto&quot;" font-size="25" font-weight="700" transform="translate(120 383.443512)" fill="#454545" stroke-width="0"><tspan y="0" font-weight="700" stroke-width="0"><![CDATA[
+        <svg id="eGYjkPJVzEd1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1920 1080" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" project-id="9a07026d0363451abcb2ed10f077953b" export-id="0a64bbe2d78743d6b16c729b5ea8ce5e" cached="false" style="background-color:#fff"><rect x="0" y="0" width="24" height="1080" fill="#0e816a"/><text dx="0" dy="0" font-family="&quot;eGYjkPJVzEd1:::Open Sans&quot;" font-size="100" font-weight="700" transform="translate(120 210.905281)" fill="#252525" stroke-width="0"><tspan y="0" font-weight="700" fill="#252525" stroke-width="0"><![CDATA[Learn]]></tspan><tspan y="0" font-weight="700" fill="#0e816a" stroke-width="0"><![CDATA[It]]></tspan><tspan y="0" font-weight="700" fill="#252525" stroke-width="0"></tspan></text><text dx="0" dy="0" font-family="&quot;eGYjkPJVzEd1:::Roboto&quot;" font-size="25" font-weight="700" transform="translate(120 383.443512)" fill="#454545" stroke-width="0"><tspan y="0" font-weight="700" stroke-width="0"><![CDATA[
         CERTIFICATE OF COMPLETION
         ]]></tspan></text><text dx="0" dy="0" font-family="&quot;eGYjkPJVzEd1:::Noto Serif&quot;" font-size="90" font-weight="700" transform="translate(120 495.905281)" stroke-width="0"><tspan y="0" font-weight="700" stroke-width="0"><![CDATA[
         ${cdataSafe(result.firstPart)}
