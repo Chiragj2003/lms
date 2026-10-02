@@ -7,7 +7,7 @@ import axios from "axios";
 import { toast } from "sonner";
 import { CircleCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { cn, errorMessage } from "@/lib/utils";
 
 const ROLES = [
     {
@@ -38,7 +38,13 @@ export const RoleForm = () => {
             // straight back to this picker.
             window.location.href = role === "TUTOR" ? "/tutor/courses" : "/user";
         } catch (error) {
-            toast.error("Something went wrong");
+            // Already set (e.g. a retried request after the first succeeded):
+            // nothing left to do here, so carry on to the dashboard.
+            if (axios.isAxiosError(error) && error.response?.status === 409) {
+                window.location.href = "/user";
+                return;
+            }
+            toast.error(errorMessage(error));
             setIsLoading(false);
         }
     }

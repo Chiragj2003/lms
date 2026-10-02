@@ -1,7 +1,6 @@
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { Role } from "@prisma/client";
-import { profile } from "console";
 import { NextResponse } from "next/server";
 
 export async function PATCH (req: Request) {
@@ -14,7 +13,20 @@ export async function PATCH (req: Request) {
 
         const  { role }: { role: "LEARNER" | "TUTOR" } = await req.json();
         if ( role !== "LEARNER" && role!="TUTOR" ) {
-            return new NextResponse("Invalid role", {status: 401});
+            return new NextResponse("Invalid role", {status: 400});
+        }
+
+        // The role is chosen once, during first-time setup (before a profile
+        // exists); the setup screen says it can't be changed later. Without
+        // this, a direct request could flip an existing account between
+        // learner and tutor at any time.
+        const existingProfile = await db.profile.findUnique({
+            where : { userId : session.user.id },
+            select : { id : true }
+        });
+
+        if (existingProfile) {
+            return new NextResponse("Your account type has already been set", {status: 409});
         }
 
         await db.user.update({
