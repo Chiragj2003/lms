@@ -16,7 +16,13 @@ export const getUserProfile = async(userId: string )=>{
                         headline : true,
                         description : true,
                         dob : true,
-                        gender : true
+                        gender : true,
+                        websiteLink : true,
+                        twitterLink : true,
+                        facebookLink : true,
+                        githubLink : true,
+                        youtubeLink : true,
+                        linkedinLink : true
                     }
                 }
             }
