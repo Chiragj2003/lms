@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useSession } from "@/lib/auth-client";
+import { useMounted } from "@/hooks/use-mounted";
 import { usePathname, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { UserAvatar } from "@/components/account/user-avatar";
@@ -35,6 +36,13 @@ export const Header = ({ variant }: HeaderProps) => {
 
     const router = useRouter();
     const session = useSession();
+    // The browser can read the session from a cookie on its very first
+    // render, while the server renders it as still loading. Treating it as
+    // loading until after hydration keeps both first renders identical (they
+    // differed, so React discarded the server HTML with a hydration error).
+    const mounted = useMounted();
+    const sessionReady = mounted && !session.isPending;
+    const user = sessionReady ? session.data : null;
     const pathname = usePathname();
     const { items } = useCart();
     const { onOpen } = useSidebar();
@@ -44,7 +52,7 @@ export const Header = ({ variant }: HeaderProps) => {
     const isHome = pathname === "/";
     const isGhost = variant === "ghost";
     const isPlayerPage = pathname.includes("/course") && pathname.includes("/view");
-    const isTutor = session.data?.user.role === "TUTOR";
+    const isTutor = user?.user.role === "TUTOR";
 
     useEffect(() => {
         if (!isGhost) return;
@@ -108,7 +116,7 @@ export const Header = ({ variant }: HeaderProps) => {
                             {link.label}
                         </Link>
                     ))}
-                    {!isTutor && !session.isPending && session.data && (
+                    {!isTutor && sessionReady && user && (
                         <Link
                             href="/user/my-learning"
                             className="px-3 py-2 rounded-lg text-sm font-medium transition-colors text-zinc-600 hover:text-foreground hover:bg-accent"
@@ -165,7 +173,7 @@ export const Header = ({ variant }: HeaderProps) => {
                 )}
 
                 {/* Auth */}
-                {!session.isPending && !session.data ? (
+                {sessionReady && !user ? (
                     <div className="flex items-center gap-x-2">
                         <Button
                             onClick={() => router.push("/login")}
@@ -183,7 +191,7 @@ export const Header = ({ variant }: HeaderProps) => {
                             Get Started
                         </Button>
                     </div>
-                ) : session.data ? (
+                ) : user ? (
                     <UserAvatar />
                 ) : null}
 
@@ -229,7 +237,7 @@ export const Header = ({ variant }: HeaderProps) => {
                                     <GraduationCap className="h-4 w-4" />
                                     Categories
                                 </Link>
-                                {session.data && !isTutor && (
+                                {user && !isTutor && (
                                     <Link
                                         href="/user/my-learning"
                                         className="flex items-center gap-x-3 px-3 py-2.5 rounded-lg text-sm font-medium text-zinc-700 hover:bg-accent"
@@ -252,7 +260,7 @@ export const Header = ({ variant }: HeaderProps) => {
                             </nav>
 
                             {/* Mobile auth actions */}
-                            {!session.isPending && !session.data && (
+                            {sessionReady && !user && (
                                 <div className="p-4 border-t border-border space-y-2">
                                     <Button
                                         className="w-full rounded-lg"
