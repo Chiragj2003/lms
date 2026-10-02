@@ -6,7 +6,6 @@ import {
     useState
 } from 'react';
 import Image from 'next/image';
-import { Ollama } from 'ollama/browser';
 import { useSession } from '@/lib/auth-client';
 import { toast } from 'sonner';
 import { useChat } from '@/hooks/use-chat';
@@ -29,8 +28,6 @@ import { ChatResponse } from './chat';
 
 interface AIProps {
     chapterId: string;
-    title: string;
-    transcript : string|null;
 }
 
 const formSchema = z.object({
@@ -40,21 +37,15 @@ const formSchema = z.object({
 
 export const AI = ({
     chapterId,
-    title,
-    transcript
 }: AIProps ) => {
     
     const session = useSession();
 
-    // Runs in the browser, so this host must be reachable from the user's
-    // machine. Hardcoding localhost only ever works for local dev.
-    const ollama = new Ollama({
-        host: process.env.NEXT_PUBLIC_OLLAMA_HOST ?? 'http://127.0.0.1:11434',
-    });
-
     const ref = useRef<HTMLDivElement>(null);
     const[loading, setLoading] = useState(false);
-    const [thinking, setThinking] = useState(false)
+    // The message whose answer hasn't started streaming yet (spinner shows
+    // only on that one, not on every message in the history).
+    const [pendingId, setPendingId] = useState<string|null>(null);
     
     const { addChat, getUserChat, addResponse, messages } = useChat();
 
@@ -67,33 +58,40 @@ export const AI = ({
     });
 
     const onPromptSubmit = async ({ prompt }: z.infer<typeof formSchema>) => {
+        const id = uuidv4();
         try {
-            
-            setLoading(true);
-            setThinking(true)
-            form.reset();
-            const id = uuidv4();
-            addChat(id, chapterId, prompt, session.data?.user.id||"");
-            const response = await ollama.chat({
-                model: 'qwen2.5-coder:latest',
-                messages: [
-                    { 
-                        role: 'user',
-                        content: `You are a helpful chatbot that provides answers strictly related to the transcript and title of the current chapter. Only respond with information relevant to the chapter's topic. If the user's question is unrelated, politely redirect them to focus on the chapter's title. The current chapter is titled: ${title} and transcript of the chpater is ${transcript}
-                                Question ${prompt}`,
-                    }
-                ],
-                stream : true,
-            });
-            setThinking(false)
 
-            for await (const part of response) {
-                addResponse(id, part.message.content);
+            setLoading(true);
+            setPendingId(id);
+            form.reset();
+            addChat(id, chapterId, prompt, session.data?.user.id||"");
+
+            // The model runs on the server (see /api/ai/chat); the answer
+            // streams back as plain text.
+            const response = await fetch("/api/ai/chat", {
+                method : "POST",
+                headers : { "Content-Type" : "application/json" },
+                body : JSON.stringify({ chapterId, prompt }),
+            });
+
+            if (!response.ok || !response.body) {
+                throw new Error((await response.text()) || "Something went wrong");
+            }
+
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            setPendingId(null);
+
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+                addResponse(id, decoder.decode(value, { stream : true }));
             }
 
         } catch (error) {
-            toast.error("Something went wrong")
+            toast.error(error instanceof Error ? error.message : "Something went wrong")
         } finally {
+            setPendingId(null);
             setLoading(false);
         }
         
@@ -141,7 +139,7 @@ export const AI = ({
                                 </div>
                                 <div className='w-[calc(100%-52px)]'>
                                     {
-                                        thinking && (
+                                        pendingId === message.id && (
                                             <div className='py-1'>
                                                 <Loader2 className='h-8 w-8 animate-spin text-zinc-500' />
                                             </div>
