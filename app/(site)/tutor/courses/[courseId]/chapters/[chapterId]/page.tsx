@@ -29,7 +29,7 @@ const ChapterPage = async (props: ChapterPageProps) => {
         redirect("/");
     }
 
-    const chapter = await getChapterById(params.chapterId, params.courseId);
+    const chapter = await getChapterById(params.chapterId, params.courseId, session.user.id);
     if (!chapter ) {
         redirect("/");
     }
