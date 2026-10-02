@@ -87,7 +87,9 @@ const ChapterPage = async (props: ChapterPageProps) => {
                         title = {chapter.title}
                         courseId = {params.courseId}
                         nextChapterId = {nextChapter?.id}
-                        videoUrl = {chapter.videoUrl!}
+                        // Streamed through an access-checked route; the
+                        // storage URL itself never reaches the browser.
+                        videoUrl = {`/api/chapters/${params.chapterId}/video`}
                         isLocked = {isLocked}
                         completeOnEnd = {completeOnEnd}
                         thumbnail={course.image!}

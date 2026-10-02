@@ -167,10 +167,12 @@ export const getChapter = async({
         // Whatever is returned here ends up in the page payload, so paid
         // material must never leave the server for a locked chapter — hiding
         // the player in the UI still shipped the direct video URL.
+        // The storage URL is never sent at all: the player streams through
+        // /api/chapters/[chapterId]/video, which checks access per request.
         const isLocked = !chapter.isFree && !purchase;
         const visibleChapter = isLocked
             ? { ...chapter, videoUrl : null, transcript : null, attachments : [] }
-            : chapter;
+            : { ...chapter, videoUrl : null };
 
         return  {
             chapter : visibleChapter,
