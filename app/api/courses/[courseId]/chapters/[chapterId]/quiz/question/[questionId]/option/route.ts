@@ -2,6 +2,14 @@ import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { OptionSchema } from "@/schemas/option.schema";
 import { NextResponse } from "next/server";
+import { isRecordNotFound } from "@/lib/prisma-errors";
+
+// Options are only reachable through this chapter's quiz in the course from
+// the URL (whose ownership is checked below). Matching on the option or
+// question id alone let a tutor change which answer is correct on any quiz.
+const ownedQuestionScope = (params : { courseId : string, chapterId : string }) => ({
+    quiz : { chapterId : params.chapterId, chapter : { courseId : params.courseId } }
+});
 
 
 export async function POST(
@@ -30,17 +38,29 @@ export async function POST(
             return new NextResponse("Unauthorized attempt", {status: 401});
         }
 
+        const question = await db.quizQuestion.findFirst({
+            where : { id : params.questionId, ...ownedQuestionScope(params) },
+            select : { id : true }
+        });
+
+        if (!question) {
+            return new NextResponse("Question not found", {status: 404});
+        }
+
         const option = await db.option.create({
             data : {
                 answer : "",
-                questionId : params.questionId
+                questionId : question.id
             }
         });
 
         return NextResponse.json(option);
         
     } catch (error) {
-        console.error("QUIZ OPTION POST API ERROR", error);
+        if (isRecordNotFound(error)) {
+            return new NextResponse("Option not found", {status: 404});
+        }
+        console.error("QUIZ OPTION API ERROR", error);
         return new NextResponse("Internal server error", {status: 500});
     }
 }
@@ -88,7 +108,8 @@ export async function PATCH(
 
         const option = await db.option.update({
             where : {
-                id
+                id,
+                question : { id : params.questionId, ...ownedQuestionScope(params) }
             },
             data : validatedData.data
         });
@@ -96,7 +117,10 @@ export async function PATCH(
         return NextResponse.json(option);
         
     } catch (error) {
-        console.error("QUIZ OPTION POST API ERROR", error);
+        if (isRecordNotFound(error)) {
+            return new NextResponse("Option not found", {status: 404});
+        }
+        console.error("QUIZ OPTION API ERROR", error);
         return new NextResponse("Internal server error", {status: 500});
     }
 }
@@ -138,13 +162,17 @@ export async function DELETE(
 
         await db.option.delete({
             where : {
-                id
+                id,
+                question : { id : params.questionId, ...ownedQuestionScope(params) }
             }
         });
         
         return NextResponse.json({success: true});
         
     } catch (error) {
+        if (isRecordNotFound(error)) {
+            return new NextResponse("Option not found", {status: 404});
+        }
         console.error("QUIZ OPTION DELETE API ERROR", error);
         return new NextResponse("Internal server error", {status: 500});
     }

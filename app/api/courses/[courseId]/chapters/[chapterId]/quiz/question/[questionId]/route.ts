@@ -1,5 +1,6 @@
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
+import { isRecordNotFound } from "@/lib/prisma-errors";
 import { NextResponse } from "next/server";
 
 
@@ -37,7 +38,8 @@ export async function PATCH(
 
         await db.quizQuestion.update({
             where : {
-                id : params.questionId
+                id : params.questionId,
+                quiz : { chapterId : params.chapterId, chapter : { courseId : params.courseId } }
             },
             data : {
                 question
@@ -47,7 +49,10 @@ export async function PATCH(
         return NextResponse.json({success: true});
         
     } catch (error) {
-        console.error("QUIZ QUESTION DELETE API ERROR", error);
+        if (isRecordNotFound(error)) {
+            return new NextResponse("Question not found", {status: 404});
+        }
+        console.error("QUIZ QUESTION API ERROR", error);
         return new NextResponse("Internal server error", {status: 500});
     }
 }
@@ -83,14 +88,18 @@ export async function DELETE(
 
         await db.quizQuestion.delete({
             where : {
-                id : params.questionId
+                id : params.questionId,
+                quiz : { chapterId : params.chapterId, chapter : { courseId : params.courseId } }
             }
         });
         
         return NextResponse.json({success: true});
         
     } catch (error) {
-        console.error("QUIZ QUESTION DELETE API ERROR", error);
+        if (isRecordNotFound(error)) {
+            return new NextResponse("Question not found", {status: 404});
+        }
+        console.error("QUIZ QUESTION API ERROR", error);
         return new NextResponse("Internal server error", {status: 500});
     }
 }

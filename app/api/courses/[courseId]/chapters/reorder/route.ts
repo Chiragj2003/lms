@@ -23,8 +23,14 @@ export async function PUT(req : Request, props: {params : Promise<{ courseId: st
             return new NextResponse("Unauthorized attempt", {status: 401});
         }
 
-        await Promise.all(list.map((item)=>db.chapter.update({
-            where : { id: item.id },
+        if (!Array.isArray(list) || list.some((item)=>typeof item?.id !== "string" || !Number.isInteger(item?.position))) {
+            return new NextResponse("Invalid chapter order", {status: 400});
+        }
+
+        // updateMany scoped to the owned course: an id from another course
+        // matches nothing instead of reordering someone else's chapters.
+        await db.$transaction(list.map((item)=>db.chapter.updateMany({
+            where : { id: item.id, courseId: params.courseId },
             data : { position: item.position }
         })));
 

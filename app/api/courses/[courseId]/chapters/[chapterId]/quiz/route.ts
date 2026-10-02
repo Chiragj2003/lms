@@ -1,5 +1,6 @@
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
+import { isRecordNotFound } from "@/lib/prisma-errors";
 import { NextResponse } from "next/server";
 
 
@@ -26,9 +27,20 @@ export async function POST(
             return new NextResponse("Unauthorized attempt", {status: 401});
         }
 
+        // The chapter must belong to the owned course, or a tutor could attach
+        // a quiz to any chapter on the platform.
+        const chapter = await db.chapter.findFirst({
+            where : { id : params.chapterId, courseId : params.courseId },
+            select : { id : true }
+        });
+
+        if (!chapter) {
+            return new NextResponse("Chapter not found", {status: 404});
+        }
+
         await db.quiz.create({
             data : {
-                chapterId : params.chapterId
+                chapterId : chapter.id
             }
         });
 
@@ -66,13 +78,17 @@ export async function DELETE(
 
         await db.quiz.delete({
             where : {
-                chapterId : params.chapterId
+                chapterId : params.chapterId,
+                chapter : { courseId : params.courseId }
             }
         });
 
         return NextResponse.json({success : true});
         
     } catch (error) {
+        if (isRecordNotFound(error)) {
+            return new NextResponse("Quiz not found", {status: 404});
+        }
         console.error("CHAPTER QUIZ DELETE API ERROR", error);
         return new NextResponse("Internal server error", {status: 500});
     }
