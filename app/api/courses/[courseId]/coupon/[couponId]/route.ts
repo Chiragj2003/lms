@@ -1,6 +1,7 @@
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
+import { isRecordNotFound } from "@/lib/prisma-errors";
 
 export async function DELETE(
     req: Request,
@@ -36,6 +37,10 @@ export async function DELETE(
         return NextResponse.json({success: true});
 
     } catch (error) {
+        if (isRecordNotFound(error)) {
+            return new NextResponse("Coupon not found", { status: 404 });
+        }
+        console.error("COUPON DELETE API ERROR", error);
         return new NextResponse("Internal server error", { status: 500});
     }
 }

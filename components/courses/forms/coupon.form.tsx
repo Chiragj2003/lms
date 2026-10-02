@@ -28,6 +28,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import { errorMessage } from "@/lib/utils";
 import { Coupon } from "@prisma/client";
 import { CalendarIcon, PlusCircle } from "lucide-react";
 import { CouponSchema } from "@/schemas/coupon.schema";
@@ -71,8 +72,7 @@ export const CouponForm = ({
             router.refresh();
 
         } catch (error) {
-            console.log(error);
-            toast.error("Something went wrong");
+            toast.error(errorMessage(error));
         } finally {
             setIsCreating(false);
         }
@@ -172,7 +172,13 @@ export const CouponForm = ({
                                                     <Calendar
                                                         mode="single"
                                                         selected={new Date(field.value)}
-                                                        onSelect={(date)=>field.onChange(`${date}`)}
+                                                        onSelect={(date)=>{
+                                                            // Valid through the whole chosen day.
+                                                            if (!date) return field.onChange("");
+                                                            const end = new Date(date);
+                                                            end.setHours(23, 59, 59, 999);
+                                                            field.onChange(end.toISOString());
+                                                        }}
                                                         disabled={(date) =>
                                                             date < new Date()
                                                         }
