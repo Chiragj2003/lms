@@ -20,7 +20,7 @@ export async function PUT(req : Request, props: {params : Promise<{ courseId: st
         });
 
         if ( !courseTutor ) {
-            return new NextResponse("Unauthorized attempt", {status: 401});
+            return new NextResponse("Course not found", {status: 404});
         }
 
         if (!Array.isArray(list) || list.some((item)=>typeof item?.id !== "string" || !Number.isInteger(item?.position))) {

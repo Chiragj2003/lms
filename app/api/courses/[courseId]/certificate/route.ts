@@ -22,7 +22,7 @@ export async function POST(req : Request, props: { params : Promise<{ courseId :
         });
 
         if (!purchase) {
-            return new NextResponse("Course is not purchased", {status: 401});
+            return new NextResponse("Course is not purchased", {status: 403});
         }
 
         const existing = await db.cerificate.findUnique({

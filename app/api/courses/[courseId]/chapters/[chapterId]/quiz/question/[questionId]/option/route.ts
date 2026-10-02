@@ -35,7 +35,7 @@ export async function POST(
         });
 
         if ( !courseTutor ) {
-            return new NextResponse("Unauthorized attempt", {status: 401});
+            return new NextResponse("Course not found", {status: 404});
         }
 
         const question = await db.quizQuestion.findFirst({
@@ -82,14 +82,14 @@ export async function PATCH(
         const id = searchParams.get("id");
 
         if (!id) {
-            return new NextResponse("Id required", {status: 401});
+            return new NextResponse("Id required", {status: 400});
         }
 
         const body = await req.json();
         const validatedData = await OptionSchema.safeParseAsync(body);
 
         if (!validatedData.success) {
-            return new NextResponse("Invalid fields", {status: 401});
+            return new NextResponse("Invalid fields", {status: 400});
         }
 
         const courseTutor = await db.course.findUnique({
@@ -103,7 +103,7 @@ export async function PATCH(
         });
 
         if ( !courseTutor ) {
-            return new NextResponse("Unauthorized attempt", {status: 401});
+            return new NextResponse("Course not found", {status: 404});
         }
 
         const option = await db.option.update({
@@ -142,7 +142,7 @@ export async function DELETE(
         const id = searchParams.get("id");
 
         if (!id) {
-            return new NextResponse("Id required", {status: 401});
+            return new NextResponse("Id required", {status: 400});
         }
 
         const courseTutor = await db.course.findUnique({
@@ -156,7 +156,7 @@ export async function DELETE(
         });
 
         if ( !courseTutor ) {
-            return new NextResponse("Unauthorized attempt", {status: 401});
+            return new NextResponse("Course not found", {status: 404});
         }
 
 

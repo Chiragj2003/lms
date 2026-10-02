@@ -18,7 +18,7 @@ export async function GET () {
 
         const session = await auth();
         if (!session || !session.user || !session.user.id) {
-            return new NextResponse("Unauthorized", {status: 400});
+            return new NextResponse("Unauthorized", {status: 401});
         }
 
         const courses = await db.course.findMany({
