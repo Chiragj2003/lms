@@ -17,24 +17,22 @@ import { Button } from "@/components/ui/button";
 
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
+const uuidRegex = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/;
+const pathRegex = /^\/course\/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}\/view$/;
+
 
 export const PaymentModal = () => {
 
     const pathname = usePathname();
     const router = useRouter()
     const searchParams = useSearchParams();
-    const uuidRegex = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/;
-    const pathRegex = /^\/course\/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}\/view$/;
 
     const paymentId = searchParams.get("paymentId");
     
     const isPaymentDone = useMemo(()=>{
         if (paymentId && uuidRegex.test(paymentId) && pathRegex.test(pathname)) return true;
         return false;
-    }, [pathname, searchParams, paymentId]);
-
-
-    console.log(isPaymentDone)
+    }, [pathname, paymentId]);
 
     const handleClose = (open: boolean)=>{
         if (!open) {

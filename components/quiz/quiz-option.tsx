@@ -2,13 +2,14 @@
 
 
 import { useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 
 import * as z from "zod";
 import axios from "axios";
 import { Option } from "@prisma/client";
 import { toast } from "sonner";
 import { OptionSchema } from "@/schemas/option.schema";
+import { errorMessage } from "@/lib/utils";
 import {
     Form,
     FormControl,
@@ -48,26 +49,25 @@ export const QuizOption = ({
 
 
     const { isValid } = form.formState;
-    const w = form.watch();
+    // useWatch instead of form.watch(), which the React Compiler can't
+    // memoize and which returned a new object every render.
+    const answer = useWatch({ control : form.control, name : "answer" });
+    const isCorrect = useWatch({ control : form.control, name : "isCorrect" });
 
-    const updateOption = async(value:z.input<typeof OptionSchema>)=> {
-        try {
-            await axios.patch(`/api/courses/${courseId}/chapters/${chapterId}/quiz/question/${option.questionId}/option?id=${option.id}`, value);
-        } catch (error) {
-            console.log(error);
-            toast.error("Something went wrong");
-        } finally {
-        }
-    }
-
+    // Autosave a second after the last change.
     useEffect(()=>{
-        if (isValid && (w.answer !== option.answer || w.isCorrect!=option.isCorrect)) {
-            const timer = setTimeout(()=>{
-                updateOption(w);
-            }, 1000);
-            return ()=>clearTimeout(timer);
+        if (!isValid || (answer === option.answer && !!isCorrect === option.isCorrect)) {
+            return;
         }
-    }, [w]);
+        const timer = setTimeout(async ()=>{
+            try {
+                await axios.patch(`/api/courses/${courseId}/chapters/${chapterId}/quiz/question/${option.questionId}/option?id=${option.id}`, { answer, isCorrect });
+            } catch (error) {
+                toast.error(errorMessage(error));
+            }
+        }, 1000);
+        return ()=>clearTimeout(timer);
+    }, [answer, isCorrect, isValid, option.answer, option.isCorrect, option.id, option.questionId, courseId, chapterId]);
 
 
 

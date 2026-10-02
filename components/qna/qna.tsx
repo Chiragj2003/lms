@@ -24,10 +24,10 @@ export const QNA = ({
     const viewRef = useRef<HTMLDivElement>(null);
 
     useEffect(()=>{
-        if (inView && hasNextPage) {
+        if (inView && hasNextPage && !isFetchingNextPage) {
             fetchNextPage();
         }
-    }, [hasNextPage, inView]);
+    }, [hasNextPage, inView, isFetchingNextPage, fetchNextPage]);
 
     const addData = ( value: QNAResponse ) => {
         setInstantData((prev)=>[value, ...prev]);
