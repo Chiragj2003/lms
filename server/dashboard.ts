@@ -1,4 +1,7 @@
-"use server";
+// Data loaders take ids from their (server) callers. "use server" would
+// expose them as public endpoints if a client ever imported one; this
+// makes that a build error instead.
+import "server-only";
 
 import { db } from "@/lib/db";
 import { getUserProgressCount } from "./progress";

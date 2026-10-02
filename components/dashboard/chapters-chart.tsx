@@ -21,7 +21,7 @@ import {
     ChartTooltipContent,
 } from "@/components/ui/chart";
 import { EmptyState } from "@/components/ui/empty-state";
-import { ChapterCompletion } from "@/server/dashboard";
+import type { ChapterCompletion } from "@/server/dashboard";
 import { Heading } from "../utils/heading";
 import { BarChart3 } from "lucide-react";
 
