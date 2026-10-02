@@ -47,7 +47,8 @@ const CoursePage = async (props: CoursePageProps) => {
         course.title,
         course.image,
         course.description,
-        course.price,
+        // 0 is a valid (free) price; only an unset price is incomplete.
+        course.price !== null,
         course.subCategoryId,
         course.shortDescription,
         course.chapters.some((chapter)=>chapter.isPublished)

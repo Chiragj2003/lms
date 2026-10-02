@@ -7,6 +7,7 @@ import { Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
+import { errorMessage } from "@/lib/utils";
 
 interface ActionsProps {
     courseId : string;
@@ -34,8 +35,7 @@ export const Actions = ({
             }
             router.refresh();
         } catch (error) {
-            console.log(error);
-            toast.error("Something went wrong");
+            toast.error(errorMessage(error));
         } finally {
             setLoading(false);
         }
@@ -48,8 +48,7 @@ export const Actions = ({
             toast.success("Course has been deleted successfully");
             router.push(`/tutor/courses`)
         } catch (error) {
-            console.log(error);
-            toast.error("Something went wrong");
+            toast.error(errorMessage(error));
         } finally {
             setLoading(false);
         }

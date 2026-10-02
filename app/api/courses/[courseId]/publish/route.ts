@@ -1,5 +1,6 @@
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
+import { missingForCourse, notReadyMessage } from "@/lib/publish-readiness";
 import { NextResponse } from "next/server";
 
 export async function PATCH(req: Request, props: { params : Promise<{ courseId : string }> }) {
@@ -20,6 +21,11 @@ export async function PATCH(req: Request, props: { params : Promise<{ courseId :
 
         if ( !courseTutor ) {
             return new NextResponse("Unauthorized attempt", {status: 401});
+        }
+
+        const missing = await missingForCourse(params.courseId);
+        if (missing.length > 0) {
+            return new NextResponse(notReadyMessage(missing), {status: 400});
         }
 
         const chapter = await db.course.update({

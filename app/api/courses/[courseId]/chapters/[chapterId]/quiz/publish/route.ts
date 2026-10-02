@@ -1,6 +1,7 @@
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { isRecordNotFound } from "@/lib/prisma-errors";
+import { missingForQuiz, notReadyMessage } from "@/lib/publish-readiness";
 import { NextResponse } from "next/server";
 
 
@@ -25,6 +26,20 @@ export async function PATCH(
 
         if ( !courseTutor ) {
             return new NextResponse("Unauthorized attempt", {status: 401});
+        }
+
+        const owned = await db.quiz.findFirst({
+            where : { chapterId : params.chapterId, chapter : { courseId : params.courseId } },
+            select : { id : true }
+        });
+
+        if (!owned) {
+            return new NextResponse("Quiz not found", {status: 404});
+        }
+
+        const missing = await missingForQuiz(params.chapterId);
+        if (missing.length > 0) {
+            return new NextResponse(notReadyMessage(missing), {status: 400});
         }
 
         await db.quiz.update({
