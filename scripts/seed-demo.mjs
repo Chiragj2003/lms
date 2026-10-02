@@ -14,10 +14,12 @@ const db = new PrismaClient();
 const IMAGE = "https://res.cloudinary.com/dhkq9icc5/image/upload/v1762110188/aaqsfaiidpoq051pljmu.jpg";
 const VIDEO = "https://files.edgestore.dev/k07eqvcnhw0kq0xm/publicFiles/_public/e3e16506-218c-4ac9-a463-84c2816c2252.mp4";
 
-// Every seeded chapter reuses the same demo video, but shouldn't all report
-// the same length — that read as an obviously-fake placeholder. Deterministic
-// per (course, position) so re-running the seed doesn't reshuffle durations.
-const chapterDuration = (courseIndex, position) => 240 + ((courseIndex * 5 + position * 17) % 13) * 41;
+// Every seeded chapter reuses the same demo video, so every seeded chapter is
+// this long. (An earlier version invented a different length per chapter;
+// that disagreed with the player, which shows the real 2:23.) Real courses
+// get their length read from the uploaded video.
+const VIDEO_SECONDS = 143;
+const chapterDuration = () => VIDEO_SECONDS;
 
 // BlockNote stores rich text as a JSON document; this is the minimal valid shape.
 const doc = (text) => JSON.stringify([{

@@ -20,6 +20,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Pencil, PlusCircle, VideoIcon } from "lucide-react";
+import { readVideoDuration } from "@/lib/video-duration";
+import { errorMessage } from "@/lib/utils";
 import { Chapter } from "@prisma/client";
 import { VideoUpload } from "@/components/utils/video-upload";
 import { FileUpload } from "@/components/utils/file-upload";
@@ -55,13 +57,20 @@ export const VideoForm = ({
 
     const onSubmit = async( values : z.infer<typeof VideoSchema>)=>{
         try {
-            const response = await axios.patch(`/api/courses/${courseId}/chapters/${chapterId}`, values);
-            toast.success("Course Updated")
+            // Record the video's real length with it. Durations used to be
+            // typed in by hand (or not at all), so the chapter list could show
+            // a length unrelated to the video. The manual duration field
+            // remains available as an override.
+            const duration = await readVideoDuration(values.videoUrl);
+            await axios.patch(`/api/courses/${courseId}/chapters/${chapterId}`, {
+                ...values,
+                ...(duration !== null ? { duration } : {}),
+            });
+            toast.success(duration !== null ? "Video saved" : "Video saved — set its duration manually below")
             toggleEdit();
             router.refresh();
         } catch (error) {
-            console.log(error);
-            toast.error("Something went wrong")
+            toast.error(errorMessage(error))
         }
     }
 
