@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import axios from "axios";
 import { toast } from "sonner";
+import { errorMessage } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { AlertDelete } from "@/components/modals/delete-alert.modal";
 
@@ -37,8 +38,7 @@ export const Actions = ({
             }
             router.refresh();
         } catch (error) {
-            console.log(error);
-            toast.error("Something went wrong");
+            toast.error(errorMessage(error));
         } finally {
             setLoading(false);
         }
@@ -52,8 +52,7 @@ export const Actions = ({
             router.refresh();
             router.push(`/tutor/courses/${courseId}/chapters/${chapterId}`);
         } catch (error) {
-            console.log(error);
-            toast.error("Something went wrong");
+            toast.error(errorMessage(error));
         } finally {
             setLoading(false);
         }

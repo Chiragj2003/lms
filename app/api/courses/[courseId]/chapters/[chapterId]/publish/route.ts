@@ -1,6 +1,7 @@
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { isRecordNotFound } from "@/lib/prisma-errors";
+import { missingForChapter, notReadyMessage } from "@/lib/publish-readiness";
 import { NextResponse } from "next/server";
 
 export async function PATCH(
@@ -26,9 +27,23 @@ export async function PATCH(
             return new NextResponse("Unauthorized attempt", {status: 401});
         }
 
+        const owned = await db.chapter.findFirst({
+            where : { id : params.chapterId, courseId : params.courseId },
+            select : { id : true }
+        });
+
+        if (!owned) {
+            return new NextResponse("Chapter not found", {status: 404});
+        }
+
+        const missing = await missingForChapter(owned.id);
+        if (missing.length > 0) {
+            return new NextResponse(notReadyMessage(missing), {status: 400});
+        }
+
         const chapter = await db.chapter.update({
             where : {
-                id : params.chapterId,
+                id : owned.id,
                 courseId : params.courseId
             },
             data : {
