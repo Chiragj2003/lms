@@ -19,7 +19,7 @@ export async function PATCH(req: Request, props: { params : Promise<{ courseId :
         });
 
         if ( !courseTutor ) {
-            return new NextResponse("Unauthorized attempt", {status: 401});
+            return new NextResponse("Course not found", {status: 404});
         }
 
         const chapter = await db.course.update({

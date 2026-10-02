@@ -24,7 +24,7 @@ export async function POST(
         });
 
         if ( !courseTutor ) {
-            return new NextResponse("Unauthorized attempt", {status: 401});
+            return new NextResponse("Course not found", {status: 404});
         }
 
         // The chapter must belong to the owned course, or a tutor could attach
@@ -73,7 +73,7 @@ export async function DELETE(
         });
 
         if ( !courseTutor ) {
-            return new NextResponse("Unauthorized attempt", {status: 401});
+            return new NextResponse("Course not found", {status: 404});
         }
 
         await db.quiz.delete({

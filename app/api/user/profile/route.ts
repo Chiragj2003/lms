@@ -10,7 +10,7 @@ export async function PATCH (req: Request) {
         
         const session = await auth();
         if (!session || !session.user || !session.user.id){
-            return new NextResponse("Unauthorized attempt", {status: 400});
+            return new NextResponse("Unauthorized attempt", {status: 401});
         }
 
         const body = await req.json();

@@ -32,7 +32,7 @@ export async function PATCH(
         });
 
         if ( !courseTutor ) {
-            return new NextResponse("Unauthorized attempt", {status: 401});
+            return new NextResponse("Course not found", {status: 404});
         }
 
         // Scoped to the owned course: matching on chapterId alone let a tutor
@@ -77,7 +77,7 @@ export async function DELETE(
         });
 
         if ( !courseTutor ) {
-            return new NextResponse("Unauthorized attempt", {status: 401});
+            return new NextResponse("Course not found", {status: 404});
         }
 
         await db.chapter.delete({

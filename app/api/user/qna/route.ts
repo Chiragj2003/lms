@@ -102,7 +102,7 @@ export async function POST (req: Request) {
 
         const session = await auth();
         if (!session || !session.user || !session.user.id) {
-            return new NextResponse("Unauthorized", {status: 400});
+            return new NextResponse("Unauthorized", {status: 401});
         }
 
         if (!(await rateLimit(`qna:${session.user.id}`, 10, 60))) {

@@ -25,7 +25,7 @@ export async function POST(
         });
 
         if ( !courseTutor ) {
-            return new NextResponse("Unauthorized attempt", {status: 401});
+            return new NextResponse("Course not found", {status: 404});
         }
 
         // The quiz must belong to a chapter of the owned course.
@@ -86,7 +86,7 @@ export async function PATCH(
         });
 
         if ( !courseTutor ) {
-            return new NextResponse("Unauthorized attempt", {status: 401});
+            return new NextResponse("Course not found", {status: 404});
         }
 
 

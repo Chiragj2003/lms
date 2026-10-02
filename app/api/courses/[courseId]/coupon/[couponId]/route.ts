@@ -24,7 +24,7 @@ export async function DELETE(
         });
 
         if ( !courseTutor ) {
-            return new NextResponse("Unauthorized attempt", {status: 401});
+            return new NextResponse("Course not found", {status: 404});
         }
 
         await db.coupon.delete({

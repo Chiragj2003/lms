@@ -18,7 +18,7 @@ export async function PATCH(
 
         const { question } : { question: string } = await req.json();
         if (!question) {
-            return new NextResponse("Question required", {status: 401});
+            return new NextResponse("Question required", {status: 400});
         }
 
         const courseTutor = await db.course.findUnique({
@@ -32,7 +32,7 @@ export async function PATCH(
         });
 
         if ( !courseTutor ) {
-            return new NextResponse("Unauthorized attempt", {status: 401});
+            return new NextResponse("Course not found", {status: 404});
         }
 
 
@@ -82,7 +82,7 @@ export async function DELETE(
         });
 
         if ( !courseTutor ) {
-            return new NextResponse("Unauthorized attempt", {status: 401});
+            return new NextResponse("Course not found", {status: 404});
         }
 
 
