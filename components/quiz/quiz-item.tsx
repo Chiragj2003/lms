@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { toast } from "sonner";
 import { v4 as uuidv4 } from 'uuid';
@@ -12,6 +12,7 @@ import { QuizOption } from "./quiz-option";
 import { GripHorizontal, Trash2, X } from "lucide-react";
 import { useSave } from "@/hooks/use-save";
 import { useDebounce } from "@/hooks/use-debounce";
+import { errorMessage } from "@/lib/utils";
 
 
 interface QuizItemProps {
@@ -76,24 +77,27 @@ export const QuizItem = ({
     }
 
 
-    const onUpdate = async(value: string)=> {
-        try {
-            if (!value) {
-                return;
-            }
-            setIsSaving(true);
-            await axios.patch(`/api/courses/${courseId}/chapters/${chapterId}/quiz/question/${item.id}`, { question : value});
-        } catch (error) {
-            console.log(error);
-            toast.error("Something went wrong");
-        } finally {
-            setIsSaving(false);
-        }
-    }
+    // Last text the server has, so mounting (or typing back the same text)
+    // doesn't send a pointless save.
+    const savedQuestion = useRef(item.question);
 
     useEffect(()=>{
-        onUpdate(debounceValue)
-    }, [debounceValue])
+        if (!debounceValue || debounceValue === savedQuestion.current) {
+            return;
+        }
+        const save = async () => {
+            try {
+                setIsSaving(true);
+                await axios.patch(`/api/courses/${courseId}/chapters/${chapterId}/quiz/question/${item.id}`, { question : debounceValue});
+                savedQuestion.current = debounceValue;
+            } catch (error) {
+                toast.error(errorMessage(error));
+            } finally {
+                setIsSaving(false);
+            }
+        };
+        save();
+    }, [debounceValue, courseId, chapterId, item.id, setIsSaving])
 
 
 

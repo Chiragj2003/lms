@@ -48,9 +48,11 @@ export const NotesForm = ({
         }
     });
 
+    const { setValue } = form;
+
     useEffect(()=>{
-        form.setValue("time", timeStamp);
-    }, [timeStamp]);
+        setValue("time", timeStamp);
+    }, [timeStamp, setValue]);
 
     const { isValid } = form.formState;
 

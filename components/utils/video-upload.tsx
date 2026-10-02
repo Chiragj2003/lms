@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useMounted } from "@/hooks/use-mounted";
 import { CldUploadWidget, CldVideoPlayer } from 'next-cloudinary';
 import 'next-cloudinary/dist/cld-video-player.css';
 
@@ -21,11 +21,7 @@ export const VideoUpload = ({
     onRemove
 } : VideoUploadProps) => {
 
-    const [isMounted, setIsMounted] = useState(false);
-
-    useEffect(()=>{
-        setIsMounted(true);
-    }, []);
+    const isMounted = useMounted();
 
     const onUpload = (result : any)=>{
         onChange(result.info.secure_url)

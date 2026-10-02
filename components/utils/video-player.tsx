@@ -81,7 +81,7 @@ export const VideoPlayer = ({
             document.removeEventListener('fullscreenchange', handleFullscreenChange);
         };
 
-    }, []);
+    }, [setSeek, setTimeStamp]);
 
 
     useEffect(()=>{

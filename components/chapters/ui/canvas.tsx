@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import { Excalidraw } from "@excalidraw/excalidraw";
 import { useCanvas } from "@/hooks/use-canvas";
 import { ExcalidrawElement } from "@excalidraw/excalidraw/element/types";
@@ -18,7 +18,6 @@ export const Canvas = ({
 } : CanvasProps ) => {
 
     const { getCanvasValue, setCanvasValue } = useCanvas();
-    const [initialData, setInitialData] = useState<ExcalidrawElement[]>([]);
 
     const onUpdate = (e: readonly ExcalidrawElement[])=>{
         const value = JSON.stringify(e);
@@ -27,16 +26,23 @@ export const Canvas = ({
         }
     }
 
-    useEffect(()=>{
+    // Excalidraw only reads initialData when it mounts, so the saved drawing
+    // has to be ready on the first render (it used to arrive one render late,
+    // via an effect, and was ignored).
+    const initialData = useMemo<ExcalidrawElement[]>(()=>{
         const canvasValue = getCanvasValue(chapterId);
-        if (canvasValue) {
-            setInitialData(JSON.parse(canvasValue));
+        if (!canvasValue) return [];
+        try {
+            return JSON.parse(canvasValue);
+        } catch {
+            return [];
         }
     }, [chapterId, getCanvasValue]);
 
     return (
         <div className="h-full">
             <Excalidraw
+                key={chapterId}
                 isCollaborating={false}
                 theme="light"
                 initialData={{

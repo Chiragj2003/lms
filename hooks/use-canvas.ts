@@ -11,9 +11,7 @@ export const useCanvas = create(persist<UseCanvasProps>((set, get)=>({
         canvasValue : {},
         setCanvasValue : (id: string, value: string)=>set({canvasValue : {...get().canvasValue, [id]:value}}),
         getCanvasValue : (id: string)=>{
-            const value = get().canvasValue[id];
-            console.log(value);
-            return value;
+            return get().canvasValue[id] ?? null;
         }
     }),
     {

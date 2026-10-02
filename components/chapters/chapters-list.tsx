@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useMounted } from "@/hooks/use-mounted";
 import { Chapter } from "@prisma/client";
 import {
     DragDropContext,
@@ -25,16 +26,16 @@ export const ChaptersList = ({
     onReorder
 } : ChaptersListProps) => {
 
-    const [isMounted, setIsMounted] = useState(false);
+    const isMounted = useMounted();
     const [chapters, setChapters] = useState(items);
 
-    useEffect(()=>{
-        setIsMounted(true);
-    }, []);
-
-    useEffect(()=>{
+    // Take the server's order again whenever new items arrive (after a save
+    // or refresh), while keeping the optimistic order between drags.
+    const [prevItems, setPrevItems] = useState(items);
+    if (items !== prevItems) {
+        setPrevItems(items);
         setChapters(items);
-    }, [items]);
+    }
 
     const onDragEnd = ( result : DropResult )=>{
         if (!result.destination) return;

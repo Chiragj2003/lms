@@ -40,11 +40,13 @@ export const ReviewModal = () => {
         }
     });
 
+    const { setValue } = form;
+
     useEffect(()=>{
         if (rating) {
-            form.setValue("comment", rating.comment||"");
+            setValue("comment", rating.comment||"");
         }
-    }, [rating]);
+    }, [rating, setValue]);
 
 
     const onOpenChange = (open: boolean)=>{
