@@ -23,6 +23,7 @@ A full-stack Learning Management System (LMS): tutors create and sell courses, l
 - Video upload via **EdgeStore**; the chapter length is read from the video itself
 - Quizzes with a required passing score
 - Coupons with expiry dates
+- **Questions** page to answer learners' chapter questions (unanswered first)
 - Publish checks: a course, chapter or quiz can't go live until it is complete
 - Revenue and enrollment analytics
 
