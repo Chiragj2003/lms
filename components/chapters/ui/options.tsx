@@ -125,7 +125,7 @@ export const Options = ({
                             <QNA chapterId={chapter.id}/>
                         )}
                         {activeTool === "ai" && (
-                            <AI chapterId={chapter.id} title={chapter.title} transcript={chapter.transcript} />
+                            <AI chapterId={chapter.id} />
                         )}
                     </div>
                     {activeTool === "overview" && (
