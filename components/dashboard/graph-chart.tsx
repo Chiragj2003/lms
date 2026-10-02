@@ -1,6 +1,6 @@
 "use client";
 
-import { TimeSpent } from "@/server/dashboard";
+import type { TimeSpent } from "@/server/dashboard";
 import { 
     CartesianGrid,
     Line,

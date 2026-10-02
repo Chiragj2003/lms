@@ -1,3 +1,5 @@
+import "server-only";
+
 import { db } from "@/lib/db";
 
 const PAGE_SIZE = 50;
