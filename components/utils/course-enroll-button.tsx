@@ -39,7 +39,7 @@ export const CourseEnrollButton = ({
             setLoading(true);
             const response =  await axios.post(`/api/courses/${courseId}/checkout`, { coupon : coupon });
             
-            // Bypass Razorpay if free course / keys missing mock url returned
+            // A free course (or the demo gateway) returns a URL instead of an order.
             if (response.data.url) {
                 window.location.assign(response.data.url);
                 return;

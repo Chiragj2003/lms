@@ -4,6 +4,18 @@ import Razorpay from "razorpay";
 export const isRazorpayConfigured = () =>
     Boolean(process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET);
 
+/**
+ * The demo gateway enrolls learners without charging them. It used to switch
+ * on whenever the Razorpay keys were missing, so a deployment without keys
+ * gave every paid course away. Now it also needs an explicit opt-in, meant
+ * for local development and demos only.
+ */
+export const isDemoCheckoutEnabled = () =>
+    !isRazorpayConfigured() && process.env.DEMO_CHECKOUT === "true";
+
+/** Neither real payments nor the demo gateway is available. */
+export const PAYMENTS_UNAVAILABLE = "Payments aren't set up yet. Please try again later.";
+
 export const getRazorpay = () => new Razorpay({
     key_id : process.env.RAZORPAY_KEY_ID!,
     key_secret : process.env.RAZORPAY_KEY_SECRET!,

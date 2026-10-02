@@ -39,7 +39,7 @@ A full-stack Learning Management System (LMS): tutors create and sell courses, l
 
 ### 💳 Payments
 - **Razorpay** (cards, UPI, net banking), single course or a whole cart
-- **Demo checkout** while the Razorpay keys are unset, so the purchase flow works without a gateway
+- **Demo checkout** for local development (`DEMO_CHECKOUT=true`, only while the Razorpay keys are unset); it enrolls without charging, so never enable it in production
 - Coupon codes
 - Server-side signature verification, plus the Razorpay webhook as a fallback
 - Cart saved to the learner's account
@@ -79,7 +79,7 @@ A full-stack Learning Management System (LMS): tutors create and sell courses, l
 - A PostgreSQL database (a free [Neon](https://neon.tech/) database works)
 - Google and/or GitHub OAuth app
 - EdgeStore and Cloudinary accounts
-- Optional: Razorpay keys (without them, checkout runs in demo mode)
+- Optional: Razorpay keys (without them, set `DEMO_CHECKOUT=true` locally to try the purchase flow)
 - Optional: Ollama (without it, the AI assistant is turned off)
 
 ### Setup
@@ -103,7 +103,8 @@ A full-stack Learning Management System (LMS): tutors create and sell courses, l
    | `DATABASE_URL` | Postgres connection string |
    | `AUTH_SECRET`, `NEXT_PUBLIC_APP_URL` | Better Auth secret and the app's origin |
    | `GOOGLE_CLIENT_ID/SECRET`, `GITHUB_CLIENT_ID/SECRET` | OAuth sign-in (callback: `/api/auth/callback/google` or `/github`) |
-   | `RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET`, `RAZORPAY_WEBHOOK_SECRET` | Payments. Set both keys or neither; empty means demo checkout |
+   | `RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET`, `RAZORPAY_WEBHOOK_SECRET` | Payments. Set both keys or neither |
+| `DEMO_CHECKOUT` | `true` enables the free demo gateway when Razorpay isn't set up. Local/demo only |
    | `EDGE_STORE_ACCESS_KEY/SECRET_KEY` | Video and file uploads |
    | `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME` | Course images |
    | `OLLAMA_HOST`, `OLLAMA_API_KEY`, `OLLAMA_MODEL` | AI assistant (optional) |
@@ -155,7 +156,7 @@ lms/
 4. The server verifies the signature, and that the order belongs to this learner and these courses.
 5. Purchases are created (the webhook does the same as a fallback) and access is immediate.
 
-With no Razorpay keys set, steps 2–4 are replaced by the demo checkout, which enrolls the learner without charging them.
+With no Razorpay keys, paid checkout is unavailable. Locally, `DEMO_CHECKOUT=true` replaces steps 2–4 with a demo gateway that enrolls the learner without charging them.
 
 ## 🧪 Checks
 
