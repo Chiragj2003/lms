@@ -1,89 +1,123 @@
 "use client"
 
+import useSWRInfinite from "swr/infinite";
 import { format } from "date-fns";
 import { Rate } from "@prisma/client";
-import { useSWRQuery } from "@/hooks/useSWRQuery";
-import { cn } from "@/lib/utils";
 import { FaStar } from "react-icons/fa6";
-import { 
+import { Star } from "lucide-react";
+
+import fetcher from "@/lib/fetcher";
+import {
     Avatar,
     AvatarFallback,
     AvatarImage
 } from "@/components/ui/avatar";
-import { Star } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { Separator } from "../ui/separator";
 
+type Review = Rate & { user : { id: string, name: string|null, image: string|null } };
 
-interface Response {
-    data : (Rate & { user : { id: string, name: string|null, image: string|null } })[];
-    error : any;
-    isLoading :  boolean;
+interface ReviewsPage {
+    items : Review[];
+    nextCursor : string|null;
 }
-
 
 interface ReviewsProps {
     courseId: string;
 }
 
+const PAGE_SIZE = 10;
+const stars = [1, 2, 3, 4, 5];
+
 export const Reviews = ({
     courseId
 } : ReviewsProps ) => {
-    
-    const { data, error, isLoading }: Response = useSWRQuery(`/api/courses/${courseId}/review`)
 
-    if (isLoading || error || data.length==0) {
+    // Newest first, ten at a time; "Show more" fetches the next page.
+    const getKey = (index : number, previous : ReviewsPage | null) => {
+        if (previous && !previous.nextCursor) return null;
+        const cursor = previous?.nextCursor ? `&cursor=${previous.nextCursor}` : "";
+        return `/api/courses/${courseId}/review?take=${PAGE_SIZE}${cursor}`;
+    };
+
+    const { data, error, isLoading, isValidating, size, setSize } = useSWRInfinite<ReviewsPage>(getKey, fetcher, {
+        revalidateFirstPage : false,
+        revalidateOnFocus : false,
+    });
+
+    const reviews = data?.flatMap((page) => page.items) ?? [];
+    const hasMore = !!data?.[data.length - 1]?.nextCursor;
+    const loadingMore = isValidating && size > (data?.length ?? 0);
+
+    if (isLoading || error || reviews.length === 0) {
         return null;
     }
-
-    const stars = [1, 2, 3, 4, 5];
 
     return (
         <div
             className="mt-10 space-y-6 w-full"
         >
-            <h1 className="font-semibold text-zinc-800 md:text-lg">Reviews</h1>          
+            <h2 className="font-semibold text-foreground md:text-lg">Reviews</h2>
             {
-                data.map((review)=>(
+                reviews.map((review)=>(
                     <div key={review.id} className="w-full">
                         <div className="flex items-start w-full gap-x-6 mb-2">
                             <div className="h-8 md:h-10 aspect-square shrink-0">
                                 <Avatar className="h-full w-full">
-                                    <AvatarImage src={review.user?.image||""} />
-                                    <AvatarFallback className="bg-neutral-800 text-zinc-200 font-semibold md:text-lg" >{review.user.name?.charAt(0)}</AvatarFallback>
+                                    <AvatarImage src={review.user?.image||""} alt="" />
+                                    <AvatarFallback className="bg-muted text-muted-foreground font-semibold md:text-lg" >{review.user.name?.charAt(0)}</AvatarFallback>
                                 </Avatar>
                             </div>
                             <div className="space-y-4">
                                 <div className="space-y-1">
-                                    <h2 className="text-base text-zinc-800 font-semibold" >{review.user?.name}</h2>
+                                    <h3 className="text-base text-foreground font-semibold" >{review.user?.name}</h3>
                                     <div className="flex items-center flex-wrap gap-x-6">
-                                        <div className="flex gap-x-0.5 items-center">
-                                            { stars.map((value, index)=>(
+                                        <div className="flex gap-x-0.5 items-center" aria-label={`${review.star ?? 0} out of 5 stars`}>
+                                            { stars.map((value)=>(
                                                 value <= (review?.star || 0) ? (
                                                     <FaStar
-                                                        key={index}
-                                                        className="h-4 w-4 text-zinc-600"
+                                                        key={value}
+                                                        className="h-4 w-4 text-amber-500"
+                                                        aria-hidden
                                                     />
                                                 ) : (
                                                     <Star
-                                                        key={index}
-                                                        className="h-4 w-4 text-zinc-600"
+                                                        key={value}
+                                                        className="h-4 w-4 text-muted-foreground"
+                                                        aria-hidden
                                                     />
                                                 )
                                             )) }
                                         </div>
-                                        <p className="text-zinc-700 text-xs font-semibold">
+                                        <p className="text-muted-foreground text-xs font-semibold">
                                             { format(review.createdAt, "dd LLL yyyy")}
                                         </p>
                                     </div>
                                 </div>
-                                <p className="text-sm text-zinc-700">
-                                    {review?.comment}
-                                </p>
+                                {
+                                    review.comment && (
+                                        <p className="text-sm text-foreground whitespace-pre-wrap">
+                                            {review.comment}
+                                        </p>
+                                    )
+                                }
                             </div>
                         </div>
                         <Separator/>
                     </div>
                 ))
+            }
+            {
+                hasMore && (
+                    <Button
+                        variant="outline"
+                        className="w-full"
+                        onClick={() => setSize(size + 1)}
+                        disabled={loadingMore}
+                    >
+                        {loadingMore ? "Loading…" : "Show more reviews"}
+                    </Button>
+                )
             }
         </div>
     )
