@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
 import { format } from "date-fns";
 
@@ -19,6 +18,26 @@ import { RichText as Preview } from "@/components/utils/rich-text";
 import { Cerificate, UserProgress } from "@prisma/client";
 import { CourseProgressButton } from "@/components/courses/ui/course-progress-button";
 import { useRouter } from "next/navigation";
+
+// Only plain web links are rendered; older rows were saved without validation.
+const safeLink = (value : string | null | undefined) => {
+    if (!value) return null;
+    try {
+        const url = new URL(value);
+        return url.protocol === "https:" || url.protocol === "http:" ? url.href : null;
+    } catch {
+        return null;
+    }
+};
+
+const SOCIAL_LINKS = [
+    { key : "linkedinLink", label : "LinkedIn", icon : FaLinkedin, className : "text-[#0072b1]" },
+    { key : "githubLink", label : "GitHub", icon : FaGithub, className : "text-neutral-900" },
+    { key : "facebookLink", label : "Facebook", icon : FaFacebookSquare, className : "text-[#4267B2]" },
+    { key : "twitterLink", label : "X", icon : FaXTwitter, className : "text-zinc-900" },
+    { key : "youtubeLink", label : "YouTube", icon : FaYoutube, className : "text-red-600" },
+    { key : "websiteLink", label : "their website", icon : IoMdLink, className : "text-zinc-800" },
+] as const;
 
 
 interface OverviewProps {
@@ -198,70 +217,22 @@ export const Overview = ({
                         <p className="text-sm text-zinc-700 font-medium">{tutor.profile?.headline || "Instructor"}</p>
                         <div className="flex items-center justify-start flex-wrap gap-4 mt-4">
                             {
-                                tutor.profile?.linkedinLink && (
-                                    <Link
-                                        href={tutor.profile.linkedinLink}
-                                    >
-                                        <div className="h-9 w-9 bg-muted flex items-center justify-center">
-                                            <FaLinkedin className="h-6 w-6 text-[#0072b1]"/>
-                                        </div>
-                                    </Link>
-                                )
-                            }
-                            {
-                                tutor.profile?.githubLink && (
-                                    <Link
-                                        href={tutor.profile.githubLink}
-                                    >
-                                        <div className="h-9 w-9 bg-muted flex items-center justify-center">
-                                            <FaGithub className="h-6 w-6 text-neutral-900"/>
-                                        </div>
-                                    </Link>
-                                )
-                            }
-                            {
-                                tutor.profile?.facebookLink && (
-                                    <Link
-                                        href={tutor.profile.facebookLink}
-                                    >
-                                        <div className="h-9 w-9 bg-muted flex items-center justify-center">
-                                            <FaFacebookSquare className="h-6 w-6 text-[#4267B2]"/>
-                                        </div>
-                                    </Link>
-                                )
-                            }
-                            {
-                                tutor.profile?.twitterLink && (
-                                    <Link
-                                        href={tutor.profile.twitterLink}
-                                    >
-                                        <div className="h-9 w-9 bg-muted flex items-center justify-center">
-                                            <FaXTwitter className="h-6 w-6 text-zinc-900"/>
-                                        </div>
-                                    </Link>
-                                )
-                            }
-                            {
-                                tutor.profile?.youtubeLink && (
-                                    <Link
-                                        href={tutor.profile.youtubeLink}
-                                    >
-                                        <div className="h-9 w-9 bg-muted flex items-center justify-center">
-                                            <FaYoutube className="h-6 w-6 text-red-600"/>
-                                        </div>
-                                    </Link>
-                                )
-                            }
-                            {
-                                tutor.profile?.websiteLink && (
-                                    <Link
-                                        href={tutor.profile.websiteLink}
-                                    >
-                                        <div className="h-9 w-9 bg-muted flex items-center justify-center">
-                                            <IoMdLink className="h-6 w-6 text-zinc-800"/>
-                                        </div>
-                                    </Link>
-                                )
+                                SOCIAL_LINKS.map(({ key, label, icon : Icon, className }) => {
+                                    const href = safeLink(tutor.profile?.[key]);
+                                    if (!href) return null;
+                                    return (
+                                        <a
+                                            key={key}
+                                            href={href}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            aria-label={`${tutor.name || "Instructor"} on ${label}`}
+                                            className="h-9 w-9 rounded-md bg-muted flex items-center justify-center hover:bg-accent transition-colors"
+                                        >
+                                            <Icon className={`h-6 w-6 ${className}`} aria-hidden />
+                                        </a>
+                                    );
+                                })
                             }
                         </div>
                     </div>

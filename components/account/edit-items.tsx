@@ -4,11 +4,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
-// A "Social accounts" tab used to be listed here, but it led to an empty page
-// (the profile API can't save social links yet), so it's hidden until that
-// exists.
 const ITEMS = [
     { label : "Public profile", href : "/user/edit-profile" },
+    { label : "Social accounts", href : "/user/edit-profile/social" },
 ];
 
 export const EditItems = () => {
