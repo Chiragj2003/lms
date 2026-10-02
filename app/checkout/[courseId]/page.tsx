@@ -7,6 +7,7 @@ import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { formatPrice } from "@/lib/format";
 import { MockPaymentForm } from "@/components/checkout/mock-payment-form";
+import { isDemoCheckoutEnabled } from "@/lib/razorpay";
 
 interface CheckoutPageProps {
     params : Promise<{ courseId : string }>;
@@ -19,6 +20,11 @@ const CheckoutPage = async ({ params, searchParams } : CheckoutPageProps) => {
 
     const { courseId } = await params;
     const { amount : amountParam } = await searchParams;
+
+    // The demo page is only for the demo gateway.
+    if (!isDemoCheckoutEnabled()) {
+        return redirect(`/course/${courseId}`);
+    }
 
     const session = await auth();
     if (!session) {

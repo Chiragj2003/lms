@@ -4,21 +4,20 @@ import { rateLimit, tooManyRequests } from "@/lib/rate-limit";
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { purchaseCourses } from "@/lib/cart";
+import { isDemoCheckoutEnabled } from "@/lib/razorpay";
 
 /**
  * Completes a purchase made through the mock payment gateway.
  *
- * Only reachable while Razorpay is unconfigured — the same condition under
- * which the checkout route falls back to the mock. Once real keys are set,
- * Razorpay verification owns purchase creation and this route refuses to run,
- * so it can't be used to grant a course for free alongside real payments.
+ * Only runs when the demo gateway is explicitly enabled (DEMO_CHECKOUT=true)
+ * and Razorpay is unconfigured. Otherwise it would grant any course for free.
  */
 export async function POST(req: Request, props: { params : Promise<{ courseId : string }> }) {
     const params = await props.params;
 
     try {
-        if (process.env.RAZORPAY_KEY_ID || process.env.RAZORPAY_KEY_SECRET) {
-            return new NextResponse("Mock checkout is disabled when Razorpay is configured", {status: 403});
+        if (!isDemoCheckoutEnabled()) {
+            return new NextResponse("Demo checkout is turned off", {status: 403});
         }
 
         const session = await auth();

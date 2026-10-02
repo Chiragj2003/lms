@@ -3,15 +3,16 @@ import { rateLimit, tooManyRequests } from "@/lib/rate-limit";
 
 import { auth } from "@/auth";
 import { getCartCourseIds, purchaseCourses } from "@/lib/cart";
+import { isDemoCheckoutEnabled } from "@/lib/razorpay";
 
 /**
- * Completes a cart purchase through the demo gateway. Refuses to run once
- * Razorpay is configured, same as the single-course demo confirm route.
+ * Completes a cart purchase through the demo gateway. Only runs when the demo
+ * is explicitly enabled (DEMO_CHECKOUT=true) and Razorpay is unconfigured.
  */
 export async function POST() {
     try {
-        if (process.env.RAZORPAY_KEY_ID || process.env.RAZORPAY_KEY_SECRET) {
-            return new NextResponse("Mock checkout is disabled when Razorpay is configured", { status: 403 });
+        if (!isDemoCheckoutEnabled()) {
+            return new NextResponse("Demo checkout is turned off", { status: 403 });
         }
 
         const session = await auth();

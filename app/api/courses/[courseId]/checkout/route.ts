@@ -2,7 +2,7 @@ import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 import { rateLimit, tooManyRequests } from "@/lib/rate-limit";
-import Razorpay from "razorpay";
+import { getRazorpay, isDemoCheckoutEnabled, isRazorpayConfigured, PAYMENTS_UNAVAILABLE } from "@/lib/razorpay";
 import { v4 as uuidv4 } from "uuid";
 
 export async function POST(req: Request, props: { params : Promise<{ courseId : string }> }) {
@@ -77,16 +77,14 @@ export async function POST(req: Request, props: { params : Promise<{ courseId : 
             return NextResponse.json({ url: `/course/${course.id}/view?paymentId=${uuidv4()}` });
         }
 
-        // Initialize Razorpay
-        if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET) {
-            console.warn("Razorpay keys missing. Mocking success URL.");
+        if (!isRazorpayConfigured()) {
+            if (!isDemoCheckoutEnabled()) {
+                return new NextResponse(PAYMENTS_UNAVAILABLE, {status: 503});
+            }
             return NextResponse.json({ url: `/checkout/${course.id}?amount=${amount}${coupon ? `&coupon=${encodeURIComponent(coupon)}` : ""}` });
         }
 
-        const razorpay = new Razorpay({
-            key_id: process.env.RAZORPAY_KEY_ID,
-            key_secret: process.env.RAZORPAY_KEY_SECRET,
-        });
+        const razorpay = getRazorpay();
 
         const options = {
             amount: amount * 100, // amount in smallest currency unit (paise)

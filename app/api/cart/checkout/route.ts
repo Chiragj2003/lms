@@ -10,7 +10,7 @@ import {
     getCartCourseIds,
     purchaseCourses
 } from "@/lib/cart";
-import { getRazorpay, isRazorpayConfigured } from "@/lib/razorpay";
+import { getRazorpay, isDemoCheckoutEnabled, isRazorpayConfigured, PAYMENTS_UNAVAILABLE } from "@/lib/razorpay";
 
 export async function POST() {
     try {
@@ -48,6 +48,9 @@ export async function POST() {
         }
 
         if (!isRazorpayConfigured()) {
+            if (!isDemoCheckoutEnabled()) {
+                return new NextResponse(PAYMENTS_UNAVAILABLE, { status : 503 });
+            }
             return NextResponse.json({ url : "/checkout/cart" });
         }
 

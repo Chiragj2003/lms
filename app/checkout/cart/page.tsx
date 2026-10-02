@@ -6,7 +6,7 @@ import { ChevronLeft } from "lucide-react";
 import { auth } from "@/auth";
 import { getCartCourseIds } from "@/lib/cart";
 import { formatPrice } from "@/lib/format";
-import { isRazorpayConfigured } from "@/lib/razorpay";
+import { isDemoCheckoutEnabled } from "@/lib/razorpay";
 import { getCourseCardsByIds } from "@/server/course";
 import { CartMockPaymentForm } from "@/components/checkout/cart-mock-payment-form";
 
@@ -23,8 +23,9 @@ const CartCheckoutPage = async () => {
         return redirect("/tutor/courses");
     }
 
-    // With real payments configured the cart page opens Razorpay directly.
-    if (isRazorpayConfigured()) {
+    // The demo page is only for the demo gateway; with real payments the
+    // cart page opens Razorpay directly.
+    if (!isDemoCheckoutEnabled()) {
         return redirect("/cart");
     }
 
