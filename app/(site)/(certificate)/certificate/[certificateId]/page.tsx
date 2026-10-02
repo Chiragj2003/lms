@@ -1,9 +1,8 @@
 import { auth } from "@/auth";
-import { Button } from "@/components/ui/button";
 import { DownloadCertificateButton } from "@/components/utils/download-certificate-button";
 import { getCertificateById } from "@/server/certificate";
 import { Metadata } from "next";
-import Image from "next/image";
+import { notFound } from "next/navigation";
 
 export const metadata : Metadata = {
     title : "Certificate"
@@ -42,22 +41,10 @@ const CertificatePage = async (props: CertificatePageProps) => {
     const session = await auth();
     const certificate = await getCertificateById(params.certificateId);
 
+    // The site's 404 page, with a real 404 status (this used to render its
+    // own "not found" message with a 200).
     if (!certificate) {
-        return (
-            <div className="h-full px-6" >
-                <div className="h-full flex flex-col items-center justify-center gap-y-10">
-                    <div className="relative h-64 md:h-72 aspect-square">
-                        <Image
-                            src="/assets/error-404.png"
-                            alt=""
-                            fill
-                            className="object-contain"
-                        />
-                    </div>
-                    <p className="text-zinc-700 font-semibold" >Certificate not found</p>
-                </div>
-            </div>
-        )
+        notFound();
     }
 
     const result = splitString(certificate.course.title);
