@@ -29,6 +29,11 @@ export const useQuery = ({
         });
 
         const res = await fetch(fetch_url, {cache : "no-store"});
+        // Error replies are plain text; surface them instead of failing to
+        // parse them as JSON.
+        if (!res.ok) {
+            throw new Error((await res.text()) || "Something went wrong");
+        }
         return res.json();
     }
 
@@ -37,7 +42,8 @@ export const useQuery = ({
         fetchNextPage,
         hasNextPage,
         isFetchingNextPage,
-        status
+        status,
+        error
     } = useInfiniteQuery({
         initialPageParam: undefined,
         queryKey: [queryKey],
@@ -51,6 +57,7 @@ export const useQuery = ({
         fetchNextPage,
         hasNextPage,
         isFetchingNextPage,
-        status
+        status,
+        error
     }
 }

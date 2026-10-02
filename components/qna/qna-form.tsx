@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { QNASchema } from "@/schemas/qna.schema";
 import { HiPaperAirplane } from "react-icons/hi2";
 import { toast } from "sonner";
+import { errorMessage } from "@/lib/utils";
 import { QNAResponse } from "@/types";
 
 
@@ -47,8 +48,7 @@ export const QNAForm = ({
             addData(response.data);
             form.setValue("question", "");
         } catch (error) {
-            console.log(error);
-            toast.error("Something went wrong");
+            toast.error(errorMessage(error));
         }
     }
 
