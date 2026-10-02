@@ -1,6 +1,22 @@
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
+import { isRecordNotFound } from "@/lib/prisma-errors";
 import { NextResponse } from "next/server";
+import * as z from "zod";
+
+const ResourceSchema = z.object({
+    name : z.string().trim().min(1).max(200),
+    url : z.string().url().max(2048),
+});
+
+// The chapter must sit in a course the signed-in tutor owns. Previously only
+// the course in the URL was checked, so a tutor could attach files to — or
+// rewrite resources on — any chapter on the platform.
+const findOwnedChapter = (courseId: string, chapterId: string, tutorId: string) =>
+    db.chapter.findFirst({
+        where : { id : chapterId, courseId, course : { tutorId } },
+        select : { id : true }
+    });
 
 export async function POST(
     req: Request,
@@ -14,38 +30,32 @@ export async function POST(
             return new NextResponse("Unauthorized attempt", {status: 401});
         }
 
-        const { name, url } : { name : string, url: string }  = await req.json();
-        if (!name || !url) {
-            return new NextResponse("Name and URL required", {status: 401});
+        const parsed = ResourceSchema.safeParse(await req.json());
+        if (!parsed.success) {
+            return new NextResponse("Name and URL required", {status: 400});
         }
 
-
-        const courseTutor = await db.course.findUnique({
-            where : {
-                id : params.courseId,
-                tutorId : session.user.id
-            }
-        });
-
-        if ( !courseTutor ) {
+        const chapter = await findOwnedChapter(params.courseId, params.chapterId, session.user.id);
+        if ( !chapter ) {
             return new NextResponse("Unauthorized attempt", {status: 401});
         }
 
         const resource = await db.attachment.create({
             data : {
-                chapterId : params.chapterId,
-                name,
-                url
+                chapterId : chapter.id,
+                name : parsed.data.name,
+                url : parsed.data.url
             }
         })
 
         return NextResponse.json(resource);
-        
+
     } catch (error) {
         console.error("CHAPTER RESOURCE POST API ERROR", error);
         return new NextResponse("Internal server error", {status: 500});
     }
 }
+
 
 export async function PATCH(
     req: Request,
@@ -63,40 +73,34 @@ export async function PATCH(
         const id = searchParams.get("id");
 
         if (!id) {
-            return new NextResponse("Resource Id required", {status: 401});
+            return new NextResponse("Resource Id required", {status: 400});
         }
 
-        const { name, url } : { name : string, url: string }  = await req.json();
-        if (!name || !url) {
-            return new NextResponse("Name and URL required", {status: 401});
+        const parsed = ResourceSchema.safeParse(await req.json());
+        if (!parsed.success) {
+            return new NextResponse("Name and URL required", {status: 400});
         }
 
-
-        const courseTutor = await db.course.findUnique({
-            where : {
-                id : params.courseId,
-                tutorId : session.user.id
-            }
-        });
-
-        if ( !courseTutor ) {
+        const chapter = await findOwnedChapter(params.courseId, params.chapterId, session.user.id);
+        if ( !chapter ) {
             return new NextResponse("Unauthorized attempt", {status: 401});
         }
 
         const resource = await db.attachment.update({
             where : {
-                id
+                id,
+                chapterId : chapter.id
             },
-            data : {
-                name,
-                url
-            }
+            data : parsed.data
         });
 
         return NextResponse.json(resource);
-        
+
     } catch (error) {
-        console.error("CHAPTER RESOURCE POST API ERROR", error);
+        if (isRecordNotFound(error)) {
+            return new NextResponse("Resource not found", {status: 404});
+        }
+        console.error("CHAPTER RESOURCE PATCH API ERROR", error);
         return new NextResponse("Internal server error", {status: 500});
     }
 }

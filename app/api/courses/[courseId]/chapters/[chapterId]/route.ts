@@ -1,5 +1,7 @@
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
+import { isRecordNotFound } from "@/lib/prisma-errors";
+import { ChapterUpdateSchema } from "@/schemas/chapter-update.schema";
 import { NextResponse } from "next/server";
 
 
@@ -14,7 +16,13 @@ export async function PATCH(
         if ( !session || !session.user || !session.user.id) {
             return new NextResponse("Unauthorized attempt", {status: 401});
         }
-        const { isPublished, ...values } = await req.json();
+
+        // Only the fields the chapter forms edit; the body used to be spread
+        // into the update, so any column or nested relation was writable.
+        const parsed = ChapterUpdateSchema.safeParse(await req.json());
+        if (!parsed.success) {
+            return new NextResponse("Invalid chapter fields", {status: 400});
+        }
 
         const courseTutor = await db.course.findUnique({
             where : {
@@ -27,18 +35,22 @@ export async function PATCH(
             return new NextResponse("Unauthorized attempt", {status: 401});
         }
 
+        // Scoped to the owned course: matching on chapterId alone let a tutor
+        // edit any chapter on the platform by pairing it with their own course.
         const chapter = await db.chapter.update({
             where : {
-                id : params.chapterId
+                id : params.chapterId,
+                courseId : params.courseId
             },
-            data : {
-                ...values
-            }
+            data : parsed.data
         });
 
         return NextResponse.json(chapter);
-        
+
     } catch (error) {
+        if (isRecordNotFound(error)) {
+            return new NextResponse("Chapter not found", {status: 404});
+        }
         console.error("CHAPTER PATCH API ERROR", error);
         return new NextResponse("Internal server error", {status: 500});
     }
@@ -51,7 +63,7 @@ export async function DELETE(
 ) {
     const params = await props.params;
     try {
-        
+
         const session = await auth();
         if ( !session || !session.user || !session.user.id) {
             return new NextResponse("Unauthorized attempt", {status: 401});
@@ -70,13 +82,15 @@ export async function DELETE(
 
         await db.chapter.delete({
             where : {
-                id : params.chapterId
+                id : params.chapterId,
+                courseId : params.courseId
             }
         });
 
         const publishedChaptersInCourse = await db.chapter.findMany({
             where : {
-                courseId : params.courseId
+                courseId : params.courseId,
+                isPublished : true
             }
         });
 
@@ -94,7 +108,10 @@ export async function DELETE(
         return NextResponse.json({success: true});
 
     } catch (error) {
-        console.error("CHAPTER PATCH API ERROR", error);
+        if (isRecordNotFound(error)) {
+            return new NextResponse("Chapter not found", {status: 404});
+        }
+        console.error("CHAPTER DELETE API ERROR", error);
         return new NextResponse("Internal server error", {status: 500});
     }
 }

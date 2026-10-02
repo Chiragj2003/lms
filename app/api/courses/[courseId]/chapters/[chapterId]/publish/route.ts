@@ -1,5 +1,6 @@
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
+import { isRecordNotFound } from "@/lib/prisma-errors";
 import { NextResponse } from "next/server";
 
 export async function PATCH(
@@ -27,7 +28,8 @@ export async function PATCH(
 
         const chapter = await db.chapter.update({
             where : {
-                id : params.chapterId
+                id : params.chapterId,
+                courseId : params.courseId
             },
             data : {
                 isPublished : true
@@ -35,8 +37,11 @@ export async function PATCH(
         });
 
         return NextResponse.json(chapter);
-        
+
     } catch (error) {
+        if (isRecordNotFound(error)) {
+            return new NextResponse("Chapter not found", {status: 404});
+        }
         console.error("CHAPTER PUBLISH PATCH API ERROR", error);
         return new NextResponse("Internal server error", {status: 500});
     }

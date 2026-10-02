@@ -1,5 +1,6 @@
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
+import { isRecordNotFound } from "@/lib/prisma-errors";
 import { NextResponse } from "next/server";
 
 
@@ -28,7 +29,8 @@ export async function PATCH(
 
         await db.quiz.update({
             where : {
-                chapterId : params.chapterId
+                chapterId : params.chapterId,
+                chapter : { courseId : params.courseId }
             },
             data : {
                 isPublished : true
@@ -38,7 +40,10 @@ export async function PATCH(
         return NextResponse.json({success : true});
         
     } catch (error) {
-        console.error("CHAPTER QUIZ POST API ERROR", error);
+        if (isRecordNotFound(error)) {
+            return new NextResponse("Quiz not found", {status: 404});
+        }
+        console.error("CHAPTER QUIZ PUBLISH API ERROR", error);
         return new NextResponse("Internal server error", {status: 500});
     }
 }

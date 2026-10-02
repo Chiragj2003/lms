@@ -28,9 +28,11 @@ export async function POST(
             return new NextResponse("Unauthorized attempt", {status: 401});
         }
 
-        const quiz = await db.quiz.findUnique({
+        // The quiz must belong to a chapter of the owned course.
+        const quiz = await db.quiz.findFirst({
             where : {
-                chapterId : params.chapterId
+                chapterId : params.chapterId,
+                chapter : { courseId : params.courseId }
             },
             select : {
                 id: true
@@ -38,7 +40,7 @@ export async function POST(
         });
 
         if (!quiz) {
-            return new NextResponse("Quiz not found");
+            return new NextResponse("Quiz not found", {status: 404});
         }
 
         const question = await db.quizQuestion.create({
@@ -88,10 +90,17 @@ export async function PATCH(
         }
 
 
-        await Promise.all(items.map(async(item)=>(
-            db.quizQuestion.update({
+        if (!Array.isArray(items) || items.some((item)=>typeof item?.id !== "string" || !Number.isInteger(item?.position))) {
+            return new NextResponse("Invalid question order", {status: 400});
+        }
+
+        // Scoped to this chapter's quiz in the owned course, so ids from
+        // another tutor's quiz match nothing.
+        await db.$transaction(items.map((item)=>(
+            db.quizQuestion.updateMany({
                 where : {
-                    id : item.id
+                    id : item.id,
+                    quiz : { chapterId : params.chapterId, chapter : { courseId : params.courseId } }
                 },
                 data : {
                     position : item.position
