@@ -20,7 +20,7 @@ export const QNACard = ({
 }: QNACardProps ) => {
     
     return (
-        <div className="max-w-2xl w-full mx-auto border border-zinc-200 p-4 rounded-md">
+        <div className="max-w-2xl w-full mx-auto border border-border bg-card p-4 rounded-md">
             <div className="flex items-start gap-x-6" >
                 <div className="h-8 md:h-10 aspect-square shrink-0">
                     <Avatar className="h-full w-full">
@@ -29,8 +29,8 @@ export const QNACard = ({
                     </Avatar>
                 </div>
                 <div className="flex flex-col">
-                    <h3 className="text-zinc-700 font-medium text-sm" >{data.user?.name}</h3>
-                    <p className="text-zinc-600 text-xs">
+                    <h3 className="text-foreground font-medium text-sm" >{data.user?.name}</h3>
+                    <p className="text-muted-foreground text-xs">
                         { format(data.createdAt, "dd LLL yyyy")}
                     </p>
                 </div>
@@ -41,6 +41,16 @@ export const QNACard = ({
                     className="py-2"
                 />
             </div>
+            {
+                data.solution && (
+                    <div className="rounded-lg bg-accent/60 border border-primary/20 p-4 space-y-2">
+                        <p className="text-xs font-semibold uppercase tracking-wide text-primary">
+                            Answer from {data.solution.tutor?.name || "the instructor"}
+                        </p>
+                        <p className="text-sm text-foreground whitespace-pre-wrap">{data.solution.answer}</p>
+                    </div>
+                )
+            }
         </div>
     )
 }

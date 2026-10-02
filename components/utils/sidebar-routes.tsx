@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 import { usePathname } from "next/navigation";
-import { BarChart, LayoutDashboard, LibraryBig, Plus } from "lucide-react";
+import { BarChart, LibraryBig, MessageCircleQuestion, Plus } from "lucide-react";
 import { SidebarItem } from "./sidebar-item";
 
 export const SidebarRoutes = () => {
@@ -15,6 +15,12 @@ export const SidebarRoutes = () => {
             Icon : LibraryBig,
             href : "/tutor/courses",
             active : pathname === "/tutor/courses"
+        },
+        {
+            label : "Questions",
+            Icon : MessageCircleQuestion,
+            href : "/tutor/questions",
+            active : pathname === "/tutor/questions"
         },
         {
             label : "Analytics",

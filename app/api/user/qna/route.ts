@@ -39,7 +39,7 @@ export async function GET (
                     chapterId : id
                 },
                 include : {
-                    solution : true,
+                    solution : { include : { tutor : { select : { name : true } } } },
                     user : {
                         select : {
                             id : true,
@@ -63,7 +63,7 @@ export async function GET (
                     chapterId : id
                 },
                 include : {
-                    solution : true,
+                    solution : { include : { tutor : { select : { name : true } } } },
                     user : {
                         select : {
                             id : true,
@@ -130,7 +130,7 @@ export async function POST (req: Request) {
                 userId : session.user.id
             },
             include : {
-                solution : true,
+                solution : { include : { tutor : { select : { name : true } } } },
                 user : {
                     select : {
                         id : true,
