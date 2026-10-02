@@ -2,6 +2,7 @@ import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { CouponSchema } from "@/schemas/coupon.schema";
 import { NextResponse } from "next/server";
+import { Prisma } from "@prisma/client";
 
 export async function POST(req: Request, props: { params : Promise<{ courseId: string }> }) {
     const params = await props.params;
@@ -16,7 +17,7 @@ export async function POST(req: Request, props: { params : Promise<{ courseId: s
         const validatedData = await CouponSchema.safeParseAsync(body); 
 
         if (!validatedData.success) {
-            return new NextResponse("Invalid fields", {status: 401});
+            return new NextResponse(validatedData.error.issues[0]?.message || "Invalid fields", {status: 400});
         }
 
         const courseTutor = await db.course.findUnique({
@@ -27,7 +28,7 @@ export async function POST(req: Request, props: { params : Promise<{ courseId: s
         });
 
         if ( !courseTutor ) {
-            return new NextResponse("Unauthorized attempt", {status: 401});
+            return new NextResponse("Course not found", {status: 404});
         }
 
         const data = validatedData.data;
@@ -45,6 +46,11 @@ export async function POST(req: Request, props: { params : Promise<{ courseId: s
         return NextResponse.json(coupon);
 
     } catch (error) {
+        // Codes are unique per course; a repeat used to surface as a 500.
+        if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
+            return new NextResponse("This course already has a coupon with that code", { status: 409 });
+        }
+        console.error("COUPON POST API ERROR", error);
         return new NextResponse("Internal server error", { status: 500});
     }
 }

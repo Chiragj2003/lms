@@ -21,7 +21,7 @@ export async function PUT( req: Request ) {
         const validatedData = await RatingSchema.safeParseAsync(body);
 
         if (!validatedData.success) {
-            return new NextResponse("Invalid fields", {status: 400});
+            return new NextResponse(validatedData.error.issues[0]?.message || "Invalid fields", {status: 400});
         }
 
         const data = validatedData.data;
@@ -40,6 +40,18 @@ export async function PUT( req: Request ) {
 
         if (!purchase) {
             return new NextResponse("You must purchase this course before leaving a review", {status: 403});
+        }
+
+        // Stars and the written review are saved separately. A comment alone
+        // used to create a review with no rating at all.
+        if (data.star === undefined) {
+            const existing = await db.rate.findUnique({
+                where : { userId_courseId : { userId : session.user.id, courseId : data.courseId } },
+                select : { star : true }
+            });
+            if (!existing?.star) {
+                return new NextResponse("Pick a star rating first", {status: 400});
+            }
         }
 
         const rating =  await db.rate.upsert({

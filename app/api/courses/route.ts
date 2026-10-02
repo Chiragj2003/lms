@@ -21,7 +21,7 @@ export async function POST (req: Request) {
         const isValidatedData = await CourseSchema.safeParseAsync(body);
 
         if (!isValidatedData.success){
-            return new NextResponse("Title is required", { status: 401});
+            return new NextResponse(isValidatedData.error.issues[0]?.message || "Title is required", { status: 400});
         }
 
         const course = await db.course.create({
