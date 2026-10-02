@@ -13,6 +13,14 @@ interface CertificatePageProps {
     params : Promise<{ certificateId: string }>
 }
 
+// The certificate SVG is rendered with dangerouslySetInnerHTML, and the
+// learner's name, course title and tutor name are all user-controlled. Each
+// value sits inside a CDATA section, where the only way out is "]]>"; a name
+// containing it could close the section and inject markup (stored XSS).
+// Splitting it across two CDATA sections keeps the text exactly as written.
+const cdataSafe = (value : string | null | undefined) =>
+    String(value ?? "").replace(/]]>/g, "]]]]><![CDATA[>");
+
 function splitString(str : string) {
     const midIndex = Math.ceil(str.length / 2);
     let splitIndex = str.lastIndexOf(' ', midIndex);
@@ -64,15 +72,15 @@ const CertificatePage = async (props: CertificatePageProps) => {
         ]]></tspan></text><text dx="0" dy="0" font-family="&quot;eGYjkPJVzEd1:::Roboto&quot;" font-size="25" font-weight="700" transform="translate(120 383.443512)" fill="#454545" stroke-width="0"><tspan y="0" font-weight="700" stroke-width="0"><![CDATA[
         CERTIFICATE OF COMPLETION
         ]]></tspan></text><text dx="0" dy="0" font-family="&quot;eGYjkPJVzEd1:::Noto Serif&quot;" font-size="90" font-weight="700" transform="translate(120 495.905281)" stroke-width="0"><tspan y="0" font-weight="700" stroke-width="0"><![CDATA[
-        ${result.firstPart}
+        ${cdataSafe(result.firstPart)}
         ]]></tspan><tspan x="0" y="90" font-weight="700" stroke-width="0"><![CDATA[
-        ${result.secondPart}
+        ${cdataSafe(result.secondPart)}
         ]]></tspan><tspan x="0" y="180" font-weight="700" stroke-width="0"><![CDATA[
         
         ]]></tspan></text><text dx="0" dy="0" font-family="&quot;eGYjkPJVzEd1:::Roboto&quot;" font-size="25" font-weight="700" transform="translate(120 653.443512)" fill="#454545" stroke-width="0"><tspan y="0" font-weight="700" stroke-width="0"><![CDATA[
-        Instructor ${certificate.course.tutor.name} 
+        Instructor ${cdataSafe(certificate.course.tutor.name)}
         ]]></tspan></text><text dx="0" dy="0" font-family="&quot;eGYjkPJVzEd1:::Lora&quot;" font-size="75" font-weight="700" transform="translate(120 824.592995)" fill="#252525" stroke-width="0"><tspan y="0" font-weight="700" stroke-width="0"><![CDATA[
-        ${certificate.user.name} 
+        ${cdataSafe(certificate.user.name)}
         ]]></tspan></text><text dx="0" dy="0" font-family="&quot;eGYjkPJVzEd1:::Montserrat&quot;" font-size="20" font-weight="700" transform="translate(120 893.443512)" fill="#454545" stroke-width="0"><tspan y="0" font-weight="700" stroke-width="0"><![CDATA[
         Certificate Id ${certificate.id} 
         ]]></tspan></text>
