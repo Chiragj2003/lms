@@ -1,6 +1,8 @@
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
+import { deleteUnusedUploads } from "@/lib/storage-cleanup";
+import { isRecordNotFound } from "@/lib/prisma-errors";
 import { CourseUpdateSchema } from "@/schemas/course-update.schema";
 
 export async function PATCH(req: Request, props: { params : Promise<{ courseId : string }> }) {
@@ -63,17 +65,28 @@ export async function DELETE(req: Request, props: { params : Promise<{ courseId 
             return new NextResponse("Unauthorized attempt", {status: 401});
         }
 
-        await db.course.delete({
+        const removed = await db.course.delete({
             where : {
                 id : params.courseId,
                 tutorId : session.user.id
             },
+            select : {
+                chapters : { select : { videoUrl : true, attachments : { select : { url : true } } } }
+            }
         });
+
+        await deleteUnusedUploads(removed.chapters.flatMap((chapter) => [
+            chapter.videoUrl,
+            ...chapter.attachments.map((a) => a.url)
+        ]));
 
         return NextResponse.json({success : true});
 
         
     } catch (error) {
+        if (isRecordNotFound(error)) {
+            return new NextResponse("Course not found", {status: 404});
+        }
         console.error("COURSES DELETE API ERROR", error);
         return new NextResponse("Internal server error", {status: 500});
     }
