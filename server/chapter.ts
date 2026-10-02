@@ -3,13 +3,17 @@
 import { db } from "@/lib/db";
 import { Cerificate, Chapter } from "@prisma/client";
 
-export const getChapterById = async(chapterId: string, courseId: string)=>{
+// Tutor editor: only the course's own tutor may load a chapter. Without the
+// tutor check, any tutor could open another tutor's draft chapter (video,
+// transcript, attachments) by putting its ids in the URL.
+export const getChapterById = async(chapterId: string, courseId: string, tutorId: string)=>{
     try {
         
         const chapter = await db.chapter.findUnique({
             where : {
                 id : chapterId,
-                courseId: courseId
+                courseId: courseId,
+                course : { tutorId }
             },
             include : {
                 attachments: true,
@@ -206,9 +210,12 @@ export const getQuiz = async(courseId: string, userId: string, chapterId: string
             return null;
         }
 
-        const quiz = await db.quiz.findUnique({
+        // Scoped to the course checked above: looking the quiz up by chapter
+        // alone let a tutor load any other course's quiz, answers included.
+        const quiz = await db.quiz.findFirst({
             where : {
-                chapterId
+                chapterId,
+                chapter : { courseId }
             },
             include : {
                 questions : {
