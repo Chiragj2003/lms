@@ -177,4 +177,4 @@ npm run build      # Production build
 
 ## 👨‍💻 Author
 
-**Chirag Jain** · GitHub: [@Chiragj2003](https://github.com/Chiragj2003)
+**Chirag Joshi** · GitHub: [@Chiragj2003](https://github.com/Chiragj2003)
