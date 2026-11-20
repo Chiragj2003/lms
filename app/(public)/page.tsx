@@ -42,12 +42,12 @@ const HomePage = () => {
                             <div className="absolute inset-0 lg:left-10 rounded-[48px] bg-peri p-6 flex flex-col gap-4 overflow-hidden">
                                 <div className="relative flex-1 overflow-hidden rounded-[32px] bg-white/30">
                                     <Image
-                                        src="/assets/hero.avif"
+                                        src="/assets/hero-learner.webp"
                                         alt=""
                                         fill
                                         priority
                                         sizes="(min-width: 1024px) 560px, 100vw"
-                                        className="object-cover mix-blend-multiply"
+                                        className="object-contain p-4 sm:p-6"
                                     />
                                 </div>
                                 <div className="flex justify-between rounded-full bg-white px-4 py-3">
@@ -67,14 +67,14 @@ const HomePage = () => {
                                     ))}
                                 </div>
                             </div>
-                            <div className="absolute left-0 top-10 hidden sm:flex w-60 flex-col gap-3 rounded-3xl bg-white p-5 shadow-float">
+                            <div className="absolute left-0 top-10 hidden xl:flex w-60 flex-col gap-3 rounded-3xl bg-white p-5 shadow-float">
                                 <span className="inline-flex w-fit items-center gap-1.5 rounded-full bg-mint px-3 py-1 text-xs font-medium">
                                     <SquareCheckBig className="size-3.5" />
                                     Chapter quiz
                                 </span>
                                 <p className="text-[17px] font-medium leading-snug">Test what stuck before moving on</p>
                             </div>
-                            <div className="absolute -right-2 bottom-28 hidden sm:flex items-center gap-3 rounded-3xl bg-lilac p-4 pr-6 shadow-float">
+                            <div className="absolute -right-2 bottom-28 hidden xl:flex items-center gap-3 rounded-3xl bg-lilac p-4 pr-6 shadow-float">
                                 <span className="size-11 rounded-full bg-ink text-white flex items-center justify-center">
                                     <Award className="size-5" />
                                 </span>
