@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { ChevronLeft, ChevronRight, SearchX } from "lucide-react";
+import Image from "next/image";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import { searchCourses } from "@/server/course";
 import { CardWithRating } from "@/components/courses/ui/card-with-ratings";
@@ -41,9 +42,7 @@ const SearchPage = async (props: SearchPageProps) => {
                 <div className="max-w-2xl mx-auto space-y-8">
                     <SearchForm />
                     <div className="flex flex-col items-center justify-center rounded-[32px] bg-white px-6 py-14 text-center">
-                        <div className="size-24 rounded-full bg-peri-soft flex items-center justify-center" aria-hidden="true">
-                            <SearchX className="size-10 text-ink" />
-                        </div>
+                        <Image src="/assets/illustrations/not-found.webp" alt="" width={865} height={900} sizes="240px" className="h-44 sm:h-52 w-auto" aria-hidden="true" />
                         <div className="mt-6">
                             <h3 className="text-2xl font-medium tracking-tight text-ink mb-2">
                                 {query ? `No courses found for "${query}"` : "No courses available yet"}

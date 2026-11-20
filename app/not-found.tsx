@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Compass } from "lucide-react";
 
 import { Header } from "@/components/utils/header";
@@ -13,9 +14,15 @@ export default function NotFound() {
             <main className="flex-1">
                 <PageContainer className="py-6 md:py-10">
                     <div className="relative overflow-hidden rounded-[40px] bg-peri px-6 py-14 sm:px-12 sm:py-16 text-ink">
-                        <svg aria-hidden="true" viewBox="0 0 150 110" className="pointer-events-none absolute -right-4 -bottom-4 h-72 w-[26rem] opacity-30" fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M30 92 L70 48 L104 82" /><circle cx="112" cy="30" r="16" /><path d="M104 54v10M120 54v10M20 104h120" />
-                        </svg>
+                        <Image
+                            src="/assets/illustrations/not-found.webp"
+                            alt=""
+                            width={865}
+                            height={900}
+                            priority
+                            aria-hidden="true"
+                            className="pointer-events-none mx-auto mb-6 w-56 h-auto lg:absolute lg:right-12 lg:top-1/2 lg:-translate-y-1/2 lg:mb-0 lg:w-[380px]"
+                        />
                         <div className="relative max-w-xl space-y-5">
                             <p className="text-[120px] sm:text-[180px] leading-[0.9] font-semibold tracking-tight" aria-hidden="true">404</p>
                             <h1 className="text-display-sm">This page wandered off the roadmap.</h1>

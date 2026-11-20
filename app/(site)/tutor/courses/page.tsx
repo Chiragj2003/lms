@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { PageContainer } from "@/components/ui/page-container";
 import { SectionHeader } from "@/components/ui/section-header";
 import { EmptyState } from "@/components/ui/empty-state";
-import { BookOpen, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
@@ -36,7 +36,7 @@ const CoursesPage = async() => {
             {courses.length === 0 ? (
                 <EmptyState
                     className="rounded-[32px] bg-white py-14"
-                    icon={<BookOpen />}
+                    illustration="/assets/illustrations/first-course.webp"
                     title="No courses yet"
                     description="You haven't created any courses. Start building your first course today!"
                     action={

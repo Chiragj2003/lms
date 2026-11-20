@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { toast } from "sonner";
-import { ShoppingCart, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 
 import { useCart } from "@/hooks/use-cart";
 import { useSession } from "@/lib/auth-client";
@@ -80,7 +80,7 @@ const CartPage = () => {
             { items.length === 0 ? (
                 <EmptyState
                     className="rounded-[32px] bg-white py-16"
-                    icon={<ShoppingCart />}
+                    illustration="/assets/illustrations/empty-cart.webp"
                     title="Your cart is empty"
                     description="Add a course or two and check out together."
                     action={

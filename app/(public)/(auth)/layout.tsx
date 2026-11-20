@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { redirect } from "next/navigation";
 import { Award, PlayCircle, Sparkles } from "lucide-react";
 
@@ -35,6 +36,15 @@ const AuthLayout = async ({
                         <p className="text-display-sm">
                             Learn a skill,<br /><span className="font-bold">prove it.</span>
                         </p>
+                        <Image
+                            src="/assets/illustrations/sign-in.webp"
+                            alt=""
+                            width={900}
+                            height={870}
+                            priority
+                            aria-hidden="true"
+                            className="pointer-events-none mx-auto w-full max-w-[340px] h-auto"
+                        />
                         <ul className="relative space-y-3">
                             {HIGHLIGHTS.map(({ icon : Icon, text }) => (
                                 <li key={text} className="flex items-center gap-3 rounded-full bg-white/70 py-2 pl-2 pr-5 text-sm">
@@ -45,9 +55,6 @@ const AuthLayout = async ({
                                 </li>
                             ))}
                         </ul>
-                        <svg aria-hidden="true" viewBox="0 0 150 110" className="pointer-events-none absolute right-0 top-24 h-56 w-80 opacity-30" fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M30 92 L70 48 L104 82" /><circle cx="112" cy="30" r="16" /><path d="M104 54v10M120 54v10M20 104h120" />
-                        </svg>
                     </aside>
                     <section className="flex items-center justify-center rounded-[40px] bg-white p-8 md:p-12">
                         <div className="w-full max-w-sm">

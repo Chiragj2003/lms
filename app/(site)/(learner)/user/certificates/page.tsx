@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Award } from "lucide-react";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Button } from "@/components/ui/button";
 import { Metadata } from "next";
@@ -40,7 +39,7 @@ const CertificatesPage = async() => {
             { certificates.length === 0 && (
                 <EmptyState
                     className="rounded-[32px] bg-white py-14"
-                    icon={<Award />}
+                    illustration="/assets/illustrations/no-certificates.webp"
                     title="No certificates yet"
                     description="Finish every chapter of a course to earn its certificate."
                     action={

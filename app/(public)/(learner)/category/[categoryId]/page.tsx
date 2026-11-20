@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { PackageOpen } from "lucide-react";
 import { Metadata } from "next";
 
 import { Card } from "@/components/courses/ui/card";
@@ -58,7 +57,7 @@ const CategoryPage = async (props: CategoryPageProps) => {
             { (!courses || courses.courses.length === 0) ? (
                 <EmptyState
                     className="rounded-[32px] bg-white py-16"
-                    icon={<PackageOpen />}
+                    illustration="/assets/illustrations/no-courses.webp"
                     title="No courses yet"
                     description="We're still adding courses to this category. Check back soon, or explore other categories."
                     action={

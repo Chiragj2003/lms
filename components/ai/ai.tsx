@@ -112,6 +112,21 @@ export const AI = ({
             <div 
                 className='flex flex-col gap-y-8 px-4 py-6 min-h-full max-w-3xl w-full mx-auto'
             >
+                {getUserChat(chapterId, session.data?.user.id||"").length === 0 && (
+                    <div className='flex flex-1 flex-col items-center justify-center gap-y-3 text-center'>
+                        <Image
+                            src="/assets/illustrations/ai-assistant.webp"
+                            alt=""
+                            width={256}
+                            height={247}
+                            className='size-32 object-contain'
+                        />
+                        <h3 className='text-lg font-medium text-ink'>Ask about this chapter</h3>
+                        <p className='text-sm text-muted-foreground max-w-xs'>
+                            Stuck on something? Ask a question and the assistant answers from this chapter.
+                        </p>
+                    </div>
+                )}
                 {
                     getUserChat(chapterId, session.data?.user.id||"").map((message)=>(
                         <div 
@@ -128,13 +143,13 @@ export const AI = ({
                                 </div>
                             </div>
                             <div className='w-full flex items-start gap-x-4'>
-                                <div className='h-9 w-9 relative rounded-full bg-peri shrink-0 overflow-hidden flex items-center justify-center'>
+                                <div className='size-10 relative shrink-0'>
                                     <Image
-                                        src="/assets/ai-avatar.png"
-                                        height={20}
-                                        width={20}
-                                        alt='AI'
-                                        className='object-contain'
+                                        src="/assets/illustrations/ai-assistant.webp"
+                                        height={40}
+                                        width={40}
+                                        alt='AI assistant'
+                                        className='size-10 object-contain'
                                     />
                                 </div>
                                 <div className='w-[calc(100%-52px)]'>

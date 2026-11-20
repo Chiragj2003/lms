@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { BookOpen } from "lucide-react";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Button } from "@/components/ui/button";
 import { KeyedMutator } from "swr";
@@ -58,7 +57,7 @@ export const UserCourses = () => {
                                 {data.length === 0 && (
                                     <EmptyState
                                         className="sm:col-span-2 lg:col-span-3 xl:col-span-4 w-full rounded-[32px] bg-white py-14"
-                                        icon={<BookOpen />}
+                                        illustration="/assets/illustrations/no-courses.webp"
                                         title="No courses yet"
                                         description="Courses you buy show up here, ready to resume."
                                         action={
