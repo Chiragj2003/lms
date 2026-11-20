@@ -1,26 +1,28 @@
-import { NextResponse, type NextRequest } from "next/server";
-import { getSessionCookie } from "better-auth/cookies";
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
 /**
- * Signed-out visitors to account-only pages get a real redirect to /login.
- *
- * The pages already redirect themselves, but they stream, so the browser
- * received a 200 page that bounced client-side. This only checks that a
- * session cookie exists (no database call); the pages and API routes still
- * do the real session and permission checks.
+ * Clerk runs on every request so `auth()` works in pages and API routes.
+ * Signed-out visitors to account-only pages are sent to /login; the pages
+ * and API routes still do their own role and ownership checks.
  */
-export function proxy(request: NextRequest) {
-    if (getSessionCookie(request)) {
-        return NextResponse.next();
+const isAccountPage = createRouteMatcher([
+    "/user(.*)",
+    "/tutor(.*)",
+    "/checkout(.*)",
+    "/course/:courseId/quiz(.*)",
+]);
+
+export default clerkMiddleware(async (auth, request) => {
+    if (isAccountPage(request)) {
+        await auth.protect();
     }
-    return NextResponse.redirect(new URL("/login", request.url));
-}
+});
 
 export const config = {
     matcher : [
-        "/user/:path*",
-        "/tutor/:path*",
-        "/checkout/:path*",
-        "/course/:courseId/quiz/:path*",
+        // Skip Next.js internals and static files
+        "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest|avif|mp4|lottie)).*)",
+        // Always run for API routes
+        "/(api|trpc)(.*)",
     ],
 };

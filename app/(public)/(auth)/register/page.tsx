@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { FcGoogle } from "react-icons/fc";
-import { FaGithub } from "react-icons/fa6";
-import { OauthButton } from "@/components/auth/oauth-btn";
+import { SignUp } from "@clerk/nextjs";
+
+import { clerkAppearance } from "@/components/auth/clerk-appearance";
 
 
 const RegisterPage = () => {
@@ -17,20 +17,12 @@ const RegisterPage = () => {
                     Sign up free and start learning — or teaching — today.
                 </p>
             </div>
-            <div className="flex flex-col gap-3">
-                <OauthButton
-                    title="Sign up with Google"
-                    provider="google"
-                    Icon={FcGoogle}
-                    redirect="/user"
-                />
-                <OauthButton
-                    title="Sign up with GitHub"
-                    provider="github"
-                    Icon={FaGithub}
-                    redirect="/user"
-                />
-            </div>
+            <SignUp
+                routing="hash"
+                signInUrl="/login"
+                fallbackRedirectUrl="/user"
+                appearance={clerkAppearance}
+            />
             <p className="text-sm text-muted-foreground">
                 Already have an account?{" "}
                 <Link href="/login" className="font-semibold text-ink underline underline-offset-4">

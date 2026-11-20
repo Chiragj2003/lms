@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 import "./globals.css";
+import { ClerkProvider } from "@clerk/nextjs";
 import { auth } from "@/auth";
 import { Toaster } from "sonner";
 import { NavigateProvider } from "@/providers/navigate.provider";
@@ -37,8 +38,7 @@ export default async function RootLayout({
     return (
         <html lang="en">
             <body className={`${outfit.variable} font-sans antialiased`}>
-                {/* Better Auth's useSession fetches its own state, so no
-                    session provider wrapper is needed. */}
+                <ClerkProvider signInUrl="/login" signUpUrl="/register">
                 <QueryProvider>
                     <EdgeStoreProvider>
                         <Toaster
@@ -54,6 +54,7 @@ export default async function RootLayout({
                         {children}
                     </EdgeStoreProvider>
                 </QueryProvider>
+                </ClerkProvider>
             </body>
         </html>
     );

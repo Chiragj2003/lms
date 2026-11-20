@@ -1,6 +1,7 @@
 "use client";
 
-import { signOut, useSession } from "@/lib/auth-client";
+import { useClerk } from "@clerk/nextjs";
+import { useSession } from "@/lib/auth-client";
 
 import {
     DropdownMenu,
@@ -23,6 +24,7 @@ import { useCart } from "@/hooks/use-cart";
 export const UserAvatar = () => {
 
     const session = useSession();
+    const { signOut } = useClerk();
     const router = useRouter();
     const pathname = usePathname();
 

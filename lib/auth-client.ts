@@ -1,19 +1,26 @@
-import { createAuthClient } from "better-auth/react";
-import { customSessionClient } from "better-auth/client/plugins";
+"use client";
 
-import type { auth } from "@/lib/auth";
+import useSWR from "swr";
+import { useAuth } from "@clerk/nextjs";
 
-// No baseURL: the client talks to /api/auth on whatever origin served the
-// page. Pinning it to NEXT_PUBLIC_APP_URL broke sign-in whenever the app ran
-// anywhere else (another local port, a preview deployment).
-export const authClient = createAuthClient({
-    // Carries the server's customSession shape (role, profile) through to
-    // useSession() on the client, fully typed.
-    plugins : [customSessionClient<typeof auth>()]
-});
+import type { AppSession } from "@/auth";
 
-export const {
-    signIn,
-    signOut,
-    useSession
-} = authClient;
+const fetchSession = async (url: string): Promise<AppSession | null> => {
+    const res = await fetch(url, { cache : "no-store" });
+    return res.ok ? res.json() : null;
+};
+
+/**
+ * Same shape the components already read ({ data, isPending }), backed by
+ * Clerk. Clerk says whether someone is signed in; /api/me adds the database
+ * id, role and profile flag.
+ */
+export const useSession = () => {
+    const { isLoaded, userId } = useAuth();
+    const { data, isLoading } = useSWR(userId ? ["/api/me", userId] : null, ([url]) => fetchSession(url));
+
+    return {
+        data : userId ? data ?? null : null,
+        isPending : !isLoaded || (!!userId && isLoading),
+    };
+};

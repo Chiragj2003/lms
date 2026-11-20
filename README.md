@@ -46,12 +46,12 @@ A full-stack Learning Management System (LMS): tutors create and sell courses, l
 - Cart saved to the learner's account
 
 ### 🤖 AI assistant
-- Chapter-aware chat powered by **Ollama**, called from the server (`/api/ai/chat`), so it works when deployed
+- Chapter-aware chat powered by **Google Gemini**, called from the server (`/api/ai/chat`), so it works when deployed
 - Uses the chapter's title and transcript as context
 - Only available to people who can watch the chapter
 
 ### 🔐 Security
-- **Better Auth** with Google and GitHub sign-in
+- **Clerk** sign-in (email, Google and more, configured in the Clerk Dashboard)
 - Database sessions with a short-lived cookie cache
 - Role checks and ownership checks on every tutor endpoint
 - Paid chapters, Q&A and the AI assistant only for people who can watch the chapter
@@ -65,12 +65,12 @@ A full-stack Learning Management System (LMS): tutors create and sell courses, l
 | Framework | [Next.js 16](https://nextjs.org/) (App Router, Turbopack), [React 19](https://react.dev/), TypeScript |
 | Styling | [Tailwind CSS](https://tailwindcss.com/), [shadcn/ui](https://ui.shadcn.com/) (Radix UI), Lucide icons, next-themes |
 | Database | [PostgreSQL](https://www.postgresql.org/) on [Neon](https://neon.tech/), [Prisma 6](https://www.prisma.io/) |
-| Auth | [Better Auth](https://www.better-auth.com/) (Google, GitHub OAuth) |
+| Auth | [Clerk](https://clerk.com/) |
 | State & data | [Zustand](https://zustand-demo.pmnd.rs/), [TanStack Query](https://tanstack.com/query), [SWR](https://swr.vercel.app/), React Hook Form + [Zod](https://zod.dev/) |
 | Payments | [Razorpay](https://razorpay.com/) |
 | Files & media | [EdgeStore](https://edgestore.dev/) (videos, files), [Cloudinary](https://cloudinary.com/) (images) |
 | Rich content | [BlockNote](https://www.blocknotejs.org/) editor, [Excalidraw](https://excalidraw.com/) |
-| AI | [Ollama](https://ollama.com/) |
+| AI | [Google Gemini](https://ai.google.dev/) |
 | UI extras | Recharts, Embla Carousel, @hello-pangea/dnd, Lottie, react-confetti |
 
 ## 🚀 Getting started
@@ -81,7 +81,7 @@ A full-stack Learning Management System (LMS): tutors create and sell courses, l
 - Google and/or GitHub OAuth app
 - EdgeStore and Cloudinary accounts
 - Optional: Razorpay keys (without them, set `DEMO_CHECKOUT=true` locally to try the purchase flow)
-- Optional: Ollama (without it, the AI assistant is turned off)
+- Optional: a Gemini API key (without it, the AI assistant is turned off)
 
 ### Setup
 
@@ -102,13 +102,13 @@ A full-stack Learning Management System (LMS): tutors create and sell courses, l
    | Variables | Purpose |
    | --- | --- |
    | `DATABASE_URL` | Postgres connection string |
-   | `AUTH_SECRET`, `NEXT_PUBLIC_APP_URL` | Better Auth secret and the app's origin |
-   | `GOOGLE_CLIENT_ID/SECRET`, `GITHUB_CLIENT_ID/SECRET` | OAuth sign-in (callback: `/api/auth/callback/google` or `/github`) |
+   | `NEXT_PUBLIC_APP_URL` | The app's origin |
+   | `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`, `CLERK_SECRET_KEY` | Clerk sign-in (Clerk Dashboard → API keys) |
    | `RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET`, `RAZORPAY_WEBHOOK_SECRET` | Payments. Set both keys or neither |
 | `DEMO_CHECKOUT` | `true` enables the free demo gateway when Razorpay isn't set up. Local/demo only |
    | `EDGE_STORE_ACCESS_KEY/SECRET_KEY` | Video and file uploads |
    | `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME` | Course images |
-   | `OLLAMA_HOST`, `OLLAMA_API_KEY`, `OLLAMA_MODEL` | AI assistant (optional) |
+   | `GEMINI_API_KEY`, `GEMINI_MODEL` | AI assistant (optional) |
 
 3. **Create the database tables**
    ```bash
@@ -172,7 +172,7 @@ npm run build      # Production build
 1. Import the repository in Vercel.
 2. Add every variable from `.env` in **Project → Settings → Environment Variables**. Set `NEXT_PUBLIC_APP_URL` to your real domain.
 3. Add your production callback URLs to the Google and GitHub OAuth apps.
-4. For the AI assistant, `OLLAMA_HOST` must be reachable from Vercel, for example Ollama Cloud with `OLLAMA_API_KEY`. `localhost` won't work there.
+4. Add `GEMINI_API_KEY` for the AI assistant, and your Clerk production keys (Clerk's development keys are for local use only).
 5. In the Razorpay dashboard, point the webhook at `https://YOUR-DOMAIN/api/webhook`.
 
 ## 👨‍💻 Author

@@ -2,12 +2,10 @@
 
 import { useRouter } from "next/navigation";
 
-import type { auth } from "@/lib/auth";
-
-type Session = Awaited<ReturnType<typeof auth.api.getSession>>;
+import type { AppSession } from "@/auth";
 
 interface NavigateProviderProps {
-    session : Session
+    session : AppSession | null
 }
 
 export const NavigateProvider = ({
