@@ -16,7 +16,7 @@ export const CompletedChaptersChart = async({
     }
 
     return (
-        <div className="max-w-5xl w-full py-10 md:py-24 mx-auto px-6">
+        <div className="w-full h-full">
             <ChaptersChart data={data} />
         </div>
     )

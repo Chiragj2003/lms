@@ -3,7 +3,6 @@
 import { RichText as Preview } from "@/components/utils/rich-text";
 
 import Link from "next/link";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 
@@ -17,7 +16,7 @@ import {
     SubCategory,
 } from "@prisma/client";
 import { Button } from "@/components/ui/button";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, PlayCircle } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Stars } from "@/components/rating/stars";
 import { PageContainer } from "@/components/ui/page-container";
@@ -58,107 +57,101 @@ export const Header = ({
     const router = useRouter();
     
     return (
-        <header className="bg-zinc-900 border-b border-border py-12 md:py-20 relative overflow-hidden">
-            {/* Background elements */}
-            <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/3 w-96 h-96 bg-primary/20 rounded-full blur-3xl opacity-50" />
-            <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/4 w-[500px] h-[500px] bg-highlight/10 rounded-full blur-3xl opacity-50" />
-            
-            <PageContainer className="relative z-10">
-                <div className="flex items-center gap-12">
-                    <div className="w-full lg:w-2/3 space-y-6">
-                        {/* Breadcrumbs */}
-                        {subCategory && (
-                            <div className="flex items-center gap-x-2 text-sm">
-                                <Link
-                                    href={`/categories#${subCategory?.categoryId}`}
-                                    className="text-highlight font-semibold hover:text-highlight/80 transition-colors"
-                                >
-                                    { subCategory?.category.name }
-                                </Link>
-                                <ChevronRight className="h-4 w-4 text-zinc-500" />
-                                <Link
-                                    href={`/category/${subCategory?.id}`}
-                                    className="text-highlight font-semibold hover:text-highlight/80 transition-colors"
-                                >
-                                    { subCategory?.name }
-                                </Link>
-                            </div>
-                        )}
-                        
-                        {/* Title & Description */}
-                        <div className="space-y-4 max-w-3xl">
-                            <h1 className="text-3xl md:text-5xl lg:text-6xl text-white font-bold tracking-tight">
-                                {title}
-                            </h1>
-                            <p className="text-zinc-300 md:text-xl leading-relaxed">
-                                {shortDescription}
-                            </p>
-                        </div>
-                        
-                        {/* Ratings & Metadata */}
-                        <div className="flex flex-wrap items-center gap-4 text-sm">
-                            <div className="flex items-center gap-x-2 bg-zinc-800/50 px-3 py-1.5 rounded-full border border-zinc-700">
-                                <span className="text-white font-bold">{avgRating ? avgRating.toFixed(1) : 0}</span>
-                                <Stars avgRating={`${avgRating}`} />
-                            </div>
-                            <span className="text-zinc-400 font-medium">({ratings} ratings)</span>
-                            <span className="text-zinc-600 font-medium hidden sm:block">•</span>
-                            <span className="text-zinc-400 font-medium">{purchases} Students enrolled</span>
-                        </div>
-                        
-                        {/* Instructor */}
-                        <div className="pt-2">
-                            <HoverCard>
-                                <HoverCardTrigger className="inline-flex items-center gap-x-2 text-zinc-300 cursor-default md:cursor-pointer">
-                                    Created by <span className="text-highlight font-semibold underline underline-offset-4 decoration-highlight/30 hover:decoration-highlight transition-all">{tutorName}</span>
-                                </HoverCardTrigger>
-                                <HoverCardContent className="w-72 md:w-96 p-4 rounded-xl border-border shadow-xl" align="start" >
-                                    <div className="flex items-start gap-x-4">
-                                        <Avatar className="h-12 w-12 border-2 border-primary/20">
-                                            <AvatarImage src={tutorImage||""} />
-                                            <AvatarFallback className="bg-primary/10 text-primary font-semibold">{tutorName?.charAt(0)}</AvatarFallback>
-                                        </Avatar>
-                                        <div className="flex flex-col gap-y-2 flex-1">
-                                            <h2 className="text-foreground font-semibold" >{tutorName}</h2>
-                                            <div className="text-sm text-muted-foreground line-clamp-3">
-                                                <Preview value={tutorProfile||""} />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </HoverCardContent>
-                            </HoverCard>
-                        </div>
-                        
-                        {/* Action: owners continue; everyone else can only
-                            try the free chapter, if the course has one. */}
-                        {(isPurchased || previewChapterId) && (
-                            <div className="pt-6">
-                                <Button
-                                    size="lg"
-                                    className="h-14 px-8 rounded-xl text-base w-full sm:w-auto"
-                                    onClick={()=>router.push(isPurchased
-                                        ? `/course/${id}/view`
-                                        : `/course/${id}/view/chapter/${previewChapterId}`)}
-                                >
-                                    {isPurchased ? "Continue learning" : "Preview for free"}
-                                </Button>
-                            </div>
-                        )}
-                    </div>
-                    
-                    {/* Decorative Right Side */}
-                    <div className="w-1/3 hidden lg:flex items-center justify-end">
-                        <div className="max-w-[400px] w-full relative aspect-square opacity-90 drop-shadow-2xl hover:scale-105 transition-transform duration-500">
-                            <Image
-                                src="/assets/13923473_04_13_21_05.svg"
-                                fill
-                                alt="Course illustration"
-                                className="object-contain drop-shadow-xl"
-                            />
-                        </div>
-                    </div>
+        <PageContainer className="pt-4">
+        <header className="relative overflow-hidden rounded-[40px] bg-peri px-6 py-10 sm:px-10 sm:py-12 text-ink">
+            <svg aria-hidden="true" viewBox="0 0 150 110" className="pointer-events-none absolute -right-4 -bottom-4 hidden h-64 w-96 opacity-30 md:block" fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round">
+                <path d="M30 92 L70 48 L104 82" /><circle cx="112" cy="30" r="16" /><path d="M104 54v10M120 54v10M20 104h120" />
+            </svg>
+            <div className="relative max-w-3xl space-y-5">
+                {/* Breadcrumbs */}
+                {subCategory && (
+                    <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-x-1.5 text-sm text-ink-2">
+                        <Link
+                            href={`/categories#${subCategory?.categoryId}`}
+                            className="hover:underline underline-offset-4"
+                        >
+                            { subCategory?.category.name }
+                        </Link>
+                        <ChevronRight className="size-4" aria-hidden="true" />
+                        <Link
+                            href={`/category/${subCategory?.id}`}
+                            className="hover:underline underline-offset-4"
+                        >
+                            { subCategory?.name }
+                        </Link>
+                    </nav>
+                )}
+
+                <div className="space-y-4">
+                    <h1 className="text-display">
+                        {title}
+                    </h1>
+                    <p className="text-ink-2 text-lg md:text-xl leading-relaxed">
+                        {shortDescription}
+                    </p>
                 </div>
-            </PageContainer>
+
+                {/* Ratings & metadata */}
+                <div className="flex flex-wrap items-center gap-2 text-sm">
+                    <span className="inline-flex h-8 items-center gap-x-2 rounded-full bg-white px-3.5">
+                        <span className="font-semibold">{avgRating ? avgRating.toFixed(1) : 0}</span>
+                        <Stars avgRating={`${avgRating}`} />
+                        <span className="text-ink-2">({ratings} ratings)</span>
+                    </span>
+                    <span className="inline-flex h-8 items-center rounded-full bg-white px-3.5">
+                        {purchases} {purchases === 1 ? "learner" : "learners"} enrolled
+                    </span>
+                    <span className="inline-flex h-8 items-center rounded-full bg-white px-3.5">
+                        Updated {lastUpdated.toLocaleDateString("en-IN", { month : "short", year : "numeric" })}
+                    </span>
+                </div>
+
+                {/* Instructor */}
+                <HoverCard>
+                    <HoverCardTrigger className="inline-flex items-center gap-x-3 cursor-default md:cursor-pointer">
+                        <Avatar className="size-12 ring-2 ring-white">
+                            <AvatarImage src={tutorImage||""} />
+                            <AvatarFallback className="bg-lilac">{tutorName?.charAt(0)}</AvatarFallback>
+                        </Avatar>
+                        <span className="text-left">
+                            <span className="block text-xs text-ink-2">Created by</span>
+                            <span className="font-semibold underline underline-offset-4 decoration-ink/30">{tutorName}</span>
+                        </span>
+                    </HoverCardTrigger>
+                    <HoverCardContent className="w-72 md:w-96 p-4 rounded-3xl border-0 shadow-float" align="start" >
+                        <div className="flex items-start gap-x-4">
+                            <Avatar className="h-12 w-12">
+                                <AvatarImage src={tutorImage||""} />
+                                <AvatarFallback className="bg-lilac">{tutorName?.charAt(0)}</AvatarFallback>
+                            </Avatar>
+                            <div className="flex flex-col gap-y-2 flex-1">
+                                <h2 className="text-foreground font-semibold" >{tutorName}</h2>
+                                <div className="text-sm text-muted-foreground line-clamp-3">
+                                    <Preview value={tutorProfile||""} />
+                                </div>
+                            </div>
+                        </div>
+                    </HoverCardContent>
+                </HoverCard>
+
+                {/* Action: owners continue; everyone else can only
+                    try the free chapter, if the course has one. */}
+                {(isPurchased || previewChapterId) && (
+                    <div className="pt-2">
+                        <Button
+                            size="lg"
+                            className="w-full sm:w-auto"
+                            onClick={()=>router.push(isPurchased
+                                ? `/course/${id}/view`
+                                : `/course/${id}/view/chapter/${previewChapterId}`)}
+                        >
+                            <PlayCircle className="size-5" />
+                            {isPurchased ? "Continue learning" : "Preview for free"}
+                        </Button>
+                    </div>
+                )}
+            </div>
         </header>
+        </PageContainer>
     )
 }

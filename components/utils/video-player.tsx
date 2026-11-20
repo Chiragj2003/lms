@@ -144,10 +144,10 @@ export const VideoPlayer = ({
 
 
     return (
-        <div className="relative w-full aspect-video md:aspect-[5/2] overflow-hidden bg-neutral-900">
+        <div className="relative w-full aspect-video md:aspect-[5/2] overflow-hidden rounded-[24px] bg-[#1C1D24]">
             {
                 isBuffering && !isLocked && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-neutral-800 pointer-events-none">
+                    <div className="absolute inset-0 flex items-center justify-center bg-[#25262D] pointer-events-none">
                         <Loader2 className="h-8 w-8 animate-spin text-secondary" />
                     </div>
                 )
@@ -155,8 +155,8 @@ export const VideoPlayer = ({
                 isLocked && (
                     <div className="absolute inset-0 flex items-center justify-center backdrop-brightness-50 flex-col gap-2 text-secondary" style={{ backgroundImage : `url('${thumbnail}')`, backgroundRepeat : "no-repeat", backgroundSize : "cover" }} >
                         <div className="h-full w-full backdrop-brightness-[.2] flex flex-col items-center justify-center space-y-2">
-                            <Lock className="h-8 w-8"/>
-                            <p className="text-sm">
+                            <span className="size-16 rounded-full bg-white text-ink flex items-center justify-center"><Lock className="size-6"/></span>
+                            <p className="text-sm font-medium text-white">
                                 This chapter is locked
                             </p>
                         </div>

@@ -75,7 +75,7 @@ export const VideoForm = ({
     }
 
     return (
-        <div className="mt-6 bg-card border border-border rounded-2xl shadow-sm p-4 transition-transform">
+        <div className="mt-4 bg-white rounded-3xl p-5 transition-transform">
             <div className="flex items-center justify-between font-medium text-foreground">
                 <span className="font-semibold">Chapter Video</span>
                 <Button
@@ -102,7 +102,7 @@ export const VideoForm = ({
             {
                 !isEditing ? (
                     !initialData.videoUrl ? (
-                        <div className="flex items-center justify-center aspect-video bg-muted rounded-md mt-2">
+                        <div className="flex items-center justify-center aspect-video bg-soft rounded-2xl mt-2">
                             <VideoIcon className="h-10 w-10 text-muted-foreground" />
                         </div>
                     ) : (

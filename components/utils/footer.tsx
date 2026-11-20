@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { GraduationCap } from "lucide-react";
+import { Logo } from "./logo";
 
 const footerLinks = {
     platform: [
@@ -21,21 +21,14 @@ const footerLinks = {
 
 export const Footer = () => {
     return (
-        <footer className="bg-zinc-900 text-zinc-300">
-            <div className="max-w-[1280px] mx-auto px-6 md:px-10 lg:px-16">
+        <footer className="bg-ink text-[#D2D3DB] rounded-t-[36px] mt-16">
+            <div className="max-w-[1320px] mx-auto px-4 sm:px-6">
                 {/* Main footer content */}
-                <div className="py-12 md:py-16 grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div className="py-14 md:py-16 grid grid-cols-2 md:grid-cols-4 gap-8">
                     {/* Brand */}
                     <div className="col-span-2 md:col-span-1">
-                        <Link href="/" className="flex items-center gap-x-2 mb-4">
-                            <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
-                                <GraduationCap className="h-5 w-5 text-white" />
-                            </div>
-                            <span className="text-lg font-bold text-white">
-                                LearnIt
-                            </span>
-                        </Link>
-                        <p className="text-sm text-zinc-400 leading-relaxed max-w-xs">
+                        <Logo inverted className="mb-4" />
+                        <p className="text-sm text-[#D2D3DB] leading-relaxed max-w-xs">
                             An interactive learning platform with video courses,
                             quizzes, certificates, and AI-powered support. Learn at
                             your pace, or teach what you know.
@@ -52,7 +45,7 @@ export const Footer = () => {
                                 <li key={link.label}>
                                     <Link
                                         href={link.href}
-                                        className="text-sm text-zinc-400 hover:text-white transition-colors"
+                                        className="text-sm text-[#D2D3DB] hover:text-white transition-colors"
                                     >
                                         {link.label}
                                     </Link>
@@ -71,7 +64,7 @@ export const Footer = () => {
                                 <li key={link.label}>
                                     <Link
                                         href={link.href}
-                                        className="text-sm text-zinc-400 hover:text-white transition-colors"
+                                        className="text-sm text-[#D2D3DB] hover:text-white transition-colors"
                                     >
                                         {link.label}
                                     </Link>
@@ -90,7 +83,7 @@ export const Footer = () => {
                                 <li key={link.label}>
                                     <Link
                                         href={link.href}
-                                        className="text-sm text-zinc-400 hover:text-white transition-colors"
+                                        className="text-sm text-[#D2D3DB] hover:text-white transition-colors"
                                     >
                                         {link.label}
                                     </Link>
@@ -101,12 +94,12 @@ export const Footer = () => {
                 </div>
 
                 {/* Bottom bar */}
-                <div className="border-t border-zinc-800 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
-                    <p className="text-xs text-zinc-500">
+                <div className="border-t border-[#2B2C34] py-6 flex flex-col md:flex-row items-center justify-between gap-4">
+                    <p className="text-xs text-[#A9AAB5]">
                         &copy; {new Date().getFullYear()} LearnIt. All rights reserved.
                     </p>
                     <div className="flex items-center gap-x-4">
-                        <span className="text-xs text-zinc-500">
+                        <span className="text-xs text-[#A9AAB5]">
                             Built with Next.js, Prisma & Razorpay
                         </span>
                     </div>

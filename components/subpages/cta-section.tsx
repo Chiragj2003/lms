@@ -8,37 +8,36 @@ export const CTASection = () => {
     const router = useRouter();
 
     return (
-        <section className="py-24 relative overflow-hidden bg-zinc-900">
-            {/* Background decorative elements */}
-            <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-                <div className="absolute -top-24 -left-24 w-96 h-96 bg-primary/20 rounded-full blur-3xl opacity-50"></div>
-                <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-highlight/20 rounded-full blur-3xl opacity-50"></div>
-            </div>
-
-            <PageContainer className="relative z-10 text-center">
-                <div className="max-w-3xl mx-auto space-y-8">
-                    <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tight">
-                        Ready to level up your skills?
-                    </h2>
-                    <p className="text-lg text-zinc-400">
-                        Pick a course, learn at your own pace with an AI assistant on hand,
-                        and earn a certificate when you finish.
-                    </p>
-                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-                        <Button 
-                            size="lg" 
-                            className="w-full sm:w-auto text-base h-14 px-8 rounded-xl"
+        <section className="py-16 md:py-20">
+            <PageContainer>
+                <div className="relative overflow-hidden rounded-[40px] bg-ink px-6 py-12 sm:px-12 sm:py-14 flex flex-wrap items-center justify-between gap-8">
+                    <div aria-hidden="true" className="pointer-events-none absolute -right-16 -top-16 size-72 rounded-full bg-peri opacity-30" />
+                    <div aria-hidden="true" className="pointer-events-none absolute right-40 bottom-[-60px] size-40 rounded-full bg-lilac opacity-30" />
+                    <div className="relative max-w-xl space-y-3">
+                        <h2 className="text-display-sm text-white">
+                            Teach what you know. Learn what you don&apos;t.
+                        </h2>
+                        <p className="text-base text-[#D2D3DB]">
+                            Pick a course and learn at your own pace with an AI assistant on hand,
+                            or build your own course with chapters, quizzes and coupons.
+                        </p>
+                    </div>
+                    <div className="relative flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+                        <Button
+                            size="lg"
+                            variant="peri"
+                            className="w-full sm:w-auto"
                             onClick={() => router.push('/search')}
                         >
-                            Browse Courses
+                            Browse courses
                         </Button>
-                        <Button 
-                            variant="outline" 
-                            size="lg" 
-                            className="w-full sm:w-auto text-base h-14 px-8 rounded-xl bg-transparent text-white border-zinc-700 hover:bg-white/10 hover:text-white"
+                        <Button
+                            size="lg"
+                            variant="ink"
+                            className="w-full sm:w-auto"
                             onClick={() => router.push('/register')}
                         >
-                            Become a Tutor
+                            Become a tutor
                         </Button>
                     </div>
                 </div>

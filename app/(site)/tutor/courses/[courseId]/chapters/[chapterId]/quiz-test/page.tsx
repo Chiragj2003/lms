@@ -27,19 +27,19 @@ const QuizPage = async (props: QuizPageProps) => {
     }
 
     return (
-        <PageContainer className="py-10 space-y-12">
+        <PageContainer className="pb-10 space-y-8">
             <div className="flex items-center justify-between">
                 <div className="w-full">
                     <Link
                         href={`/tutor/courses/${params.courseId}/chapters/${params.chapterId}`}
-                        className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition mb-6 font-medium group"
+                        className="inline-flex h-10 items-center rounded-full bg-white px-4 text-sm text-ink hover:bg-soft transition mb-6 font-medium group"
                     >
                         <ArrowLeft className="h-4 w-4 mr-2 group-hover:-translate-x-1 transition-transform" />
                         Back to chapter setup
                     </Link>
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 w-full">
                         <div className="flex flex-col gap-y-2">
-                            <h1 className="text-3xl font-bold text-foreground">
+                            <h1 className="text-display-sm">
                                 Quiz Builder
                             </h1>
                             <p className="text-sm text-muted-foreground font-medium">Add questions and answers to test learners.</p>

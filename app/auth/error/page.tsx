@@ -18,13 +18,13 @@ export default async function AuthErrorPage(
     const message = (error && MESSAGES[error]) || "Something went wrong while signing you in.";
 
     return (
-        <div className="min-h-screen flex items-center justify-center px-6 bg-background">
-            <div className="w-full max-w-md text-center space-y-6 bg-card border border-border rounded-3xl shadow-card p-10">
-                <div className="mx-auto h-12 w-12 rounded-full bg-destructive/10 text-destructive flex items-center justify-center">
-                    <AlertCircle className="h-6 w-6" />
+        <div className="min-h-screen flex items-center justify-center px-4 bg-background">
+            <div className="w-full max-w-md text-center space-y-6 bg-white rounded-[40px] p-10">
+                <div className="mx-auto size-20 rounded-full bg-[#FDE4E1] text-destructive flex items-center justify-center">
+                    <AlertCircle className="size-8" />
                 </div>
                 <div className="space-y-2">
-                    <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">
+                    <h1 className="text-display-sm">
                         We couldn&apos;t sign you in
                     </h1>
                     <p className="text-muted-foreground">{message}</p>

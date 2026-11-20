@@ -1,6 +1,9 @@
 "use client";
 
-import Image from "next/image"; 
+import Link from "next/link";
+import { BookOpen } from "lucide-react";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Button } from "@/components/ui/button";
 import { KeyedMutator } from "swr";
 
 import { useSWRQuery } from "@/hooks/useSWRQuery";
@@ -32,16 +35,16 @@ export const UserCourses = () => {
     }
 
     return (
-        <section className="py-12">
+        <section className="pt-8">
             <PageContainer>
-                <div className="mb-10">
-                    <SectionHeader 
-                        title="Enrolled Courses"
+                <div className="mb-5">
+                    <SectionHeader
+                        title="My courses"
                         subtitle="Pick up where you left off or start a new chapter."
                     />
                 </div>
                 
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                     {
                         isLoading ? (
                             <>
@@ -53,20 +56,17 @@ export const UserCourses = () => {
                         ) : (
                             <>
                                 {data.length === 0 && (
-                                    <div className="sm:col-span-2 lg:col-span-3 xl:col-span-4 w-full py-16 flex flex-col items-center justify-center bg-card border border-border rounded-2xl">
-                                        <div className="relative h-40 aspect-square opacity-60 mb-6">
-                                            <Image
-                                                src="/assets/empty.jpg"
-                                                fill
-                                                alt="No courses"
-                                                className="object-contain"
-                                            />
-                                        </div>
-                                        <h3 className="text-xl font-semibold text-foreground mb-2">No courses yet</h3>
-                                        <p className="text-muted-foreground text-center max-w-md">
-                                            You haven&apos;t enrolled in any courses yet. Check out our wide range of courses and enroll today!
-                                        </p>
-                                    </div>
+                                    <EmptyState
+                                        className="sm:col-span-2 lg:col-span-3 xl:col-span-4 w-full rounded-[32px] bg-white py-14"
+                                        icon={<BookOpen />}
+                                        title="No courses yet"
+                                        description="Courses you buy show up here, ready to resume."
+                                        action={
+                                            <Button asChild>
+                                                <Link href="/search">Browse courses</Link>
+                                            </Button>
+                                        }
+                                    />
                                 )} 
                                 {
                                     data.map(course=>(

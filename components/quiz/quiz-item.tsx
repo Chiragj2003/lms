@@ -102,7 +102,7 @@ export const QuizItem = ({
 
 
     return (
-        <div className="w-full bg-card border border-border rounded-2xl shadow-sm border-l-8 border-l-primary group">
+        <div className="w-full bg-white rounded-[28px] group">
             <div className="flex items-center justify-center h-6">
                 <GripHorizontal className="h-6 w-6 text-muted-foreground hidden group-hover:block"/>
             </div>
@@ -113,7 +113,7 @@ export const QuizItem = ({
                     placeholder="Question"
                     aria-label="Question"
                     onChange={(e)=>setQuestion(e.target.value)}
-                    className="rounded-none h-12 border-0 border-b-2 border-border outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-primary focus:bg-muted font-medium text-foreground"
+                    className="h-12 outline-none font-medium text-ink"
                 />
                 <div className="flex flex-col gap-y-2 w-full">
                     {options.map((option, index)=>(

@@ -43,7 +43,7 @@ export const CouponList = ({
             {
                 coupons.map((coupon)=>(
                     <div 
-                        className="w-full p-4 bg-muted border border-border rounded-md"
+                        className="w-full p-4 bg-soft rounded-2xl"
                         key={coupon.id}
                     >
                         <div className="text-foreground font-medium line-clamp-1">

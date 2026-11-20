@@ -90,16 +90,16 @@ export const Overview = ({
     const router = useRouter();
 
     return (
-        <div className="w-full px-6 md:px-10 pb-10 pt-6">
+        <div className="w-full">
             <div className="w-full flex flex-col gap-y-8">
-                <h1 className="text-zinc-700 text-lg md:text-xl font-medium">
+                <h1 className="text-ink text-lg md:text-xl font-medium">
                     {shortDescription}
                 </h1>
                 <div className="flex items-center justify-between">
                     <div className="flex items-center justify-start gap-4 gap-x-10">
                         <div className="flex flex-col">
-                            <span className="text-zinc-800 font-semibold">{purchases}</span>
-                            <span className="text-zinc-600 text-xs font-medium">
+                            <span className="text-ink font-semibold">{purchases}</span>
+                            <span className="text-muted-foreground text-xs font-medium">
                                 students
                             </span>
                         </div>
@@ -121,10 +121,10 @@ export const Overview = ({
                     <span className="text-base font-medium">Last updated {format(updatedAt, "MMMM yyyy")}</span>
                 </div>
             </div>
-            <Separator className="mt-8 text-zinc-300"/>
+            <Separator className="mt-8"/>
             <div className="mt-8 space-y-6 w-full">
                 <div className="flex items-center gap-x-6">
-                    <div className="h-14 w-14 shrink-0 relative">
+                    <div className="size-14 shrink-0 relative rounded-full bg-peri-soft p-2.5">
                         <Image
                             src="/assets/certificate.png"
                             alt=""
@@ -133,7 +133,7 @@ export const Overview = ({
                         />
                     </div>
                     <div>
-                        <h2 className="text-xl text-zinc-700 font-semibold">Certificate</h2>
+                        <h2 className="text-xl text-ink font-medium tracking-tight">Certificate</h2>
                         <p className="text-sm text-muted-foreground">Earn your LearnIt certificate by completing every chapter.</p>
                     </div>
                 </div>
@@ -148,13 +148,13 @@ export const Overview = ({
                     </Button>
                 </div>
             </div>
-            <Separator className="mt-8 text-zinc-300"/>
+            <Separator className="mt-8"/>
             {
                 quizId && (
                     <>
                         <div className="mt-8 space-y-6 w-full">
                         <div className="flex items-center gap-x-6">
-                            <div className="h-14 w-14 shrink-0 relative">
+                            <div className="size-14 shrink-0 relative rounded-full bg-peri-soft p-2.5">
                                 <Image
                                     src="/assets/exam.png"
                                     alt=""
@@ -163,8 +163,8 @@ export const Overview = ({
                                 />
                             </div>
                             <div>
-                                <h2 className="text-xl text-zinc-700 font-semibold">Quiz</h2>
-                                <p className="text-sm text-zinc-700 font-medium">Take a quiz to test and enhance your knowledge.</p>
+                                <h2 className="text-xl text-ink font-medium tracking-tight">Quiz</h2>
+                                <p className="text-sm text-muted-foreground">Take a quiz to test and enhance your knowledge.</p>
                             </div>
                         </div>
                         <div className="w-full">
@@ -181,13 +181,13 @@ export const Overview = ({
                             </Button>
                         </div>
                     </div>
-                    <Separator className="mt-8 text-zinc-300"/>
+                    <Separator className="mt-8"/>
                     </>
                 )
             }
             <div className="mt-8 space-y-3 w-full">
                 <div className="flex items-center gap-x-6">
-                    <div className="h-14 w-14 shrink-0 relative">
+                    <div className="size-14 shrink-0 relative rounded-full bg-peri-soft p-2.5">
                         <Image
                             src="/assets/about.png"
                             alt=""
@@ -196,15 +196,15 @@ export const Overview = ({
                         />
                     </div>
                     <div>
-                        <h2 className="text-xl text-zinc-700 font-semibold">Chapter Description</h2>
+                        <h2 className="text-xl text-ink font-medium tracking-tight">Chapter Description</h2>
                     </div>
                 </div>
                 <Preview value={description} />
             </div>
-            <Separator className="mt-8 text-zinc-300"/>
+            <Separator className="mt-8"/>
             <div className="mt-8 space-y-3 w-full">
                 <div className="flex items-start gap-x-6">
-                    <div className="h-14 w-14 shrink-0 relative">
+                    <div className="size-14 shrink-0 relative rounded-full bg-peri-soft p-2.5">
                         <Image
                             src="/assets/avatar.png"
                             alt=""
@@ -213,8 +213,8 @@ export const Overview = ({
                         />
                     </div>
                     <div>
-                        <h2 className="text-xl text-zinc-700 font-semibold">{tutor.name}</h2>
-                        <p className="text-sm text-zinc-700 font-medium">{tutor.profile?.headline || "Instructor"}</p>
+                        <h2 className="text-xl text-ink font-medium tracking-tight">{tutor.name}</h2>
+                        <p className="text-sm text-muted-foreground">{tutor.profile?.headline || "Instructor"}</p>
                         <div className="flex items-center justify-start flex-wrap gap-4 mt-4">
                             {
                                 SOCIAL_LINKS.map(({ key, label, icon : Icon, className }) => {

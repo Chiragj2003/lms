@@ -1,31 +1,21 @@
-import { GraduationCap } from "lucide-react";
-import Link from "next/link";
 import { SidebarRoutes } from "./sidebar-routes";
+import { Logo } from "./logo";
 
 
 export const Sidebar = () => {
     return (
-        <aside className="h-full flex flex-col overflow-y-auto">
-            {/* Branding */}
-            <div className="p-4 pt-5 pb-6">
-                <Link href="/" className="flex items-center gap-x-2.5">
-                    <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
-                        <GraduationCap className="h-5 w-5 text-white" />
-                    </div>
-                    <span className="text-base font-bold text-white tracking-tight">
-                        LearnIt
-                    </span>
-                </Link>
-            </div>
-            
-            {/* Navigation */}
-            <div className="flex-1 py-2">
-                <SidebarRoutes/>
+        <aside className="h-full flex flex-col overflow-y-auto px-2 py-3 text-white">
+            <div className="px-3 pt-1 pb-6">
+                <Logo inverted label="Studio" />
             </div>
 
-            {/* Footer */}
-            <div className="p-4 border-t border-zinc-800">
-                <p className="text-xs text-zinc-500">Tutor Portal</p>
+            <nav className="flex-1" aria-label="Tutor studio">
+                <SidebarRoutes/>
+            </nav>
+
+            <div className="mx-2 mt-6 rounded-2xl bg-ink-soft p-4">
+                <p className="text-sm font-medium text-white">Tutor studio</p>
+                <p className="mt-1 text-xs text-[#A9AAB5]">Build courses, answer learners and track sales.</p>
             </div>
         </aside>
     )

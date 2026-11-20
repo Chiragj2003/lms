@@ -60,47 +60,48 @@ const CheckoutPage = async ({ params, searchParams } : CheckoutPageProps) => {
         : course.price ?? 0;
 
     return (
-        <main className="min-h-screen grid md:grid-cols-2">
+        <main className="min-h-screen bg-frame p-2 sm:p-4">
+        <div className="min-h-[calc(100vh-2rem)] grid md:grid-cols-2 gap-2.5 rounded-[36px] bg-ink p-2.5">
             {/* Order summary */}
-            <section className="bg-muted border-r border-border px-6 py-10 md:px-12 md:py-16">
+            <section className="rounded-[28px] bg-peri px-6 py-10 md:px-12 md:py-16 text-ink">
                 <div className="max-w-md ml-auto w-full space-y-8">
                     <Link
                         href={`/course/${course.id}`}
-                        className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground"
+                        className="inline-flex h-10 items-center rounded-full bg-white/60 px-4 text-sm font-medium text-ink hover:bg-white"
                     >
                         <ChevronLeft className="h-4 w-4 mr-1" />
                         Back to course
                     </Link>
 
                     <div className="space-y-2">
-                        <p className="text-sm text-muted-foreground">Enrol in course</p>
-                        <p className="text-4xl font-semibold text-foreground">{formatPrice(amount)}</p>
+                        <p className="text-sm text-ink-2">Enrol in course</p>
+                        <p className="text-5xl font-semibold tracking-tight text-ink">{formatPrice(amount)}</p>
                     </div>
 
                     <div className="flex gap-4 pt-2">
-                        <div className="relative w-28 aspect-video rounded-md overflow-hidden shrink-0 bg-muted">
+                        <div className="relative w-28 aspect-video rounded-2xl overflow-hidden shrink-0 bg-white/50">
                             {course.image && (
                                 <Image src={course.image} alt="" fill sizes="7rem" className="object-cover" />
                             )}
                         </div>
                         <div className="space-y-1">
                             <p className="font-medium text-foreground leading-snug">{course.title}</p>
-                            <p className="text-sm text-muted-foreground line-clamp-2">{course.shortDescription}</p>
+                            <p className="text-sm text-ink-2 line-clamp-2">{course.shortDescription}</p>
                         </div>
                     </div>
 
-                    <dl className="border-t border-border pt-4 space-y-2 text-sm">
-                        <div className="flex justify-between text-muted-foreground">
+                    <dl className="border-t border-ink/15 pt-4 space-y-2 text-sm">
+                        <div className="flex justify-between text-ink-2">
                             <dt>Subtotal</dt>
                             <dd>{formatPrice(course.price ?? 0)}</dd>
                         </div>
                         {amount !== (course.price ?? 0) && (
-                            <div className="flex justify-between text-success">
+                            <div className="flex justify-between text-mint-deep">
                                 <dt>Discount</dt>
                                 <dd>-{formatPrice((course.price ?? 0) - amount)}</dd>
                             </div>
                         )}
-                        <div className="flex justify-between font-semibold text-foreground border-t border-border pt-2">
+                        <div className="flex justify-between font-semibold text-foreground border-t border-ink/15 pt-2">
                             <dt>Total due</dt>
                             <dd>{formatPrice(amount)}</dd>
                         </div>
@@ -109,9 +110,9 @@ const CheckoutPage = async ({ params, searchParams } : CheckoutPageProps) => {
             </section>
 
             {/* Payment form */}
-            <section className="px-6 py-10 md:px-12 md:py-16">
+            <section className="rounded-[28px] bg-white px-6 py-10 md:px-12 md:py-16">
                 <div className="max-w-md mr-auto w-full space-y-6">
-                    <h1 className="text-xl font-semibold text-foreground">Pay with card</h1>
+                    <h1 className="text-display-sm">Pay with card</h1>
                     <MockPaymentForm
                         amount={amount}
                         confirmUrl={`/api/courses/${course.id}/checkout/confirm`}
@@ -119,6 +120,7 @@ const CheckoutPage = async ({ params, searchParams } : CheckoutPageProps) => {
                     />
                 </div>
             </section>
+        </div>
         </main>
     );
 };

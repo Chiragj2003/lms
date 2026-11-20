@@ -32,12 +32,12 @@ export const OauthButton = ({
 
     return (
         <Button
-            className="w-full h-12 text-base font-semibold"
+            className="w-full"
             variant="outline"
             size="lg"
             onClick={handleOauth}
         >
-            <Icon className="h-5 w-5 mr-3" />
+            <Icon className="size-5" />
             <span>
                 {title}
             </span>

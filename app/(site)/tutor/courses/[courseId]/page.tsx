@@ -58,7 +58,7 @@ const CoursePage = async (props: CoursePageProps) => {
     const completionText = `(${completedFields}/${totalFields})`
 
     return (
-        <div className="min-h-screen bg-muted/20">
+        <div className="min-h-full">
             {
                 !course.isPublished && (
                     <Banner variant="warning" label="This course is unpublished. It will not be visible to learners." />
@@ -66,11 +66,11 @@ const CoursePage = async (props: CoursePageProps) => {
             }
             
             {/* Sticky Header */}
-            <div className="sticky top-0 z-40 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
+            <div className="sticky top-0 z-40 w-full bg-background/90 backdrop-blur">
                 <PageContainer className="py-4">
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <div className="flex flex-col gap-y-1">
-                            <h1 className="text-2xl font-bold text-foreground">
+                            <h1 className="text-display-sm">
                                 Course Builder
                             </h1>
                             <div className="flex items-center gap-x-3">
@@ -92,16 +92,16 @@ const CoursePage = async (props: CoursePageProps) => {
                     
                     {/* Sticky Sidebar Nav */}
                     <div className="hidden lg:flex flex-col w-64 shrink-0 sticky top-32 space-y-2">
-                        <a href="#basics" className="px-4 py-3 rounded-lg text-sm font-medium hover:bg-muted text-foreground transition-colors flex items-center gap-x-3">
-                            <LayoutDashboard className="w-4 h-4 text-primary" />
+                        <a href="#basics" className="h-12 px-4 rounded-2xl text-[15px] font-medium bg-white hover:bg-soft text-ink transition-colors flex items-center gap-x-3">
+                            <LayoutDashboard className="w-4 h-4 text-ink" />
                             Basic Info
                         </a>
-                        <a href="#curriculum" className="px-4 py-3 rounded-lg text-sm font-medium hover:bg-muted text-foreground transition-colors flex items-center gap-x-3">
-                            <ListChecks className="w-4 h-4 text-primary" />
+                        <a href="#curriculum" className="h-12 px-4 rounded-2xl text-[15px] font-medium bg-white hover:bg-soft text-ink transition-colors flex items-center gap-x-3">
+                            <ListChecks className="w-4 h-4 text-ink" />
                             Curriculum
                         </a>
-                        <a href="#pricing" className="px-4 py-3 rounded-lg text-sm font-medium hover:bg-muted text-foreground transition-colors flex items-center gap-x-3">
-                            <IndianRupee className="w-4 h-4 text-primary" />
+                        <a href="#pricing" className="h-12 px-4 rounded-2xl text-[15px] font-medium bg-white hover:bg-soft text-ink transition-colors flex items-center gap-x-3">
+                            <IndianRupee className="w-4 h-4 text-ink" />
                             Pricing & Sales
                         </a>
                     </div>
@@ -111,9 +111,9 @@ const CoursePage = async (props: CoursePageProps) => {
                         
                         {/* Section 1: Basics */}
                         <section id="basics" className="space-y-6 scroll-mt-32">
-                            <div className="flex flex-col gap-y-2 pb-4 border-b border-border">
-                                <h2 className="text-2xl text-foreground font-bold flex items-center gap-x-2">
-                                    <LayoutDashboard className="w-5 h-5 text-primary" />
+                            <div className="flex flex-col gap-y-1">
+                                <h2 className="text-2xl text-ink font-medium tracking-tight flex items-center gap-x-3">
+                                    <LayoutDashboard className="size-9 p-2 rounded-full bg-peri text-ink" />
                                     Customize your course
                                 </h2>
                                 <p className="text-muted-foreground text-sm">Provide the foundational details that learners will see.</p>
@@ -136,9 +136,9 @@ const CoursePage = async (props: CoursePageProps) => {
 
                         {/* Section 2: Curriculum */}
                         <section id="curriculum" className="space-y-6 scroll-mt-32">
-                            <div className="flex flex-col gap-y-2 pb-4 border-b border-border">
-                                <h2 className="text-2xl text-foreground font-bold flex items-center gap-x-2">
-                                    <ListChecks className="w-5 h-5 text-primary" />
+                            <div className="flex flex-col gap-y-1">
+                                <h2 className="text-2xl text-ink font-medium tracking-tight flex items-center gap-x-3">
+                                    <ListChecks className="size-9 p-2 rounded-full bg-peri text-ink" />
                                     Course chapters
                                 </h2>
                                 <p className="text-muted-foreground text-sm">Organize your course content into chapters and quizzes.</p>
@@ -148,9 +148,9 @@ const CoursePage = async (props: CoursePageProps) => {
 
                         {/* Section 3: Pricing */}
                         <section id="pricing" className="space-y-6 scroll-mt-32">
-                            <div className="flex flex-col gap-y-2 pb-4 border-b border-border">
-                                <h2 className="text-2xl text-foreground font-bold flex items-center gap-x-2">
-                                    <IndianRupee className="w-5 h-5 text-primary" />
+                            <div className="flex flex-col gap-y-1">
+                                <h2 className="text-2xl text-ink font-medium tracking-tight flex items-center gap-x-3">
+                                    <IndianRupee className="size-9 p-2 rounded-full bg-peri text-ink" />
                                     Sell your course
                                 </h2>
                                 <p className="text-muted-foreground text-sm">Set your price and manage promotional coupons.</p>

@@ -46,8 +46,9 @@ export const CourseForm = () => {
 
     return (
         <div className="w-full flex justify-center md:items-center h-full py-10 md:py-6">
-            <div className="w-full max-w-xl bg-card border border-border rounded-2xl shadow-sm p-6 md:p-8">
-                <h1 className="text-xl md:text-2xl font-bold text-foreground" >Name your course</h1>
+            <div className="w-full max-w-xl bg-white rounded-[32px] p-6 md:p-8">
+                <span className="inline-flex h-8 items-center rounded-full bg-peri px-4 text-sm font-medium text-ink">Step 1 of 4</span>
+                <h1 className="text-display-sm mt-4" >Name your course</h1>
                 <p className="text-sm text-muted-foreground mt-1">What would you like to name your course? You can change it later.</p>
                 <Form {...form}>
                     <form
@@ -64,7 +65,7 @@ export const CourseForm = () => {
                                         <FormControl>
                                             <Input
                                                 placeholder="e.g. Advanced Backend Development"
-                                                className="rounded-lg h-11"
+                                                className="h-14 text-lg"
                                                 {...field}
                                                 disabled = {isSubmitting}
                                             />
@@ -80,7 +81,7 @@ export const CourseForm = () => {
                         <div className="w-full grid grid-cols-2 gap-4">
                             <Button
                                 variant="outline"
-                                className="rounded-lg h-11 font-semibold"
+                                className="h-12"
                                 type="button"
                                 onClick={()=>router.push("/tutor/courses")}
                                 disabled = {isSubmitting}
@@ -88,7 +89,7 @@ export const CourseForm = () => {
                                 Cancel
                             </Button>
                             <Button
-                                className="rounded-lg h-11 font-semibold"
+                                className="h-12"
                                 type="submit"
                                 disabled = {isSubmitting || !isValid}
                             >

@@ -9,8 +9,8 @@ interface CourseProgressProps {
 }
 
 const colorByVariant = {
-    default : "text-primary",
-    success : "text-success"
+    default : "text-ink",
+    success : "text-mint-deep"
 }
 
 const sizeByVariant = {
@@ -26,7 +26,7 @@ export const CourseProgress = ({
     return (
         <div>
             <Progress
-                className="bg-muted"
+                className="bg-ink/10"
                 value={value}
                 variant={variant}
             />

@@ -23,9 +23,9 @@ export const Reviews = ({
 
     return (
         <>
-            <section className="my-20 w-full">
-                <div className="max-w-3xl mx-auto space-y-6">
-                    <h2 className="text-2xl md:text-3xl font-bold text-foreground">
+            <section className="w-full rounded-[32px] bg-white p-5 sm:p-8">
+                <div className="w-full space-y-6">
+                    <h2 className="text-2xl md:text-3xl font-medium tracking-tight text-ink">
                         Course Reviews
                     </h2> 
                     <div className="flex flex-col space-y-4">
@@ -37,7 +37,7 @@ export const Reviews = ({
                     </div>
                     <Button
                         variant="outline"
-                        className="w-full h-12 rounded-xl text-sm font-semibold text-foreground border-border hover:bg-muted/50"
+                        className="w-full"
                         onClick={()=>setOpen(true)}
                     >
                         See All Reviews

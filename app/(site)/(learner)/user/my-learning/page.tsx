@@ -24,15 +24,15 @@ const MyLearningPage = async() => {
     }
     
     return (
-        <PageContainer className="py-12 md:py-20 min-h-screen">
-            <div className="mb-12">
-                <SectionHeader 
-                    title="My Learning Analytics"
-                    subtitle="Track your progress and study habits."
+        <PageContainer className="py-6 md:py-8">
+            <div className="mb-6">
+                <SectionHeader
+                    title="My learning"
+                    subtitle="Your progress, completed chapters and study time."
                 />
             </div>
             
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 <div className="lg:col-span-2">
                     <CoursesProgress userId={session.user.id} />
                 </div>

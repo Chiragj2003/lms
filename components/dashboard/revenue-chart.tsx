@@ -30,9 +30,9 @@ export const RevenueChart = ({
     const empty = !data.some((d) => d.total > 0);
 
     return (
-        <Card className="rounded-2xl">
+        <Card className="rounded-[28px] p-2">
             <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">Revenue by Course</CardTitle>
+                <CardTitle className="text-xl font-medium tracking-tight">Revenue by Course</CardTitle>
             </CardHeader>
             <CardContent>
                 {empty ? (

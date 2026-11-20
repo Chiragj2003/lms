@@ -39,7 +39,7 @@ const QuestionsPage = async ({ searchParams } : QuestionsPageProps) => {
     ];
 
     return (
-        <PageContainer className="py-10 space-y-8">
+        <PageContainer className="pb-10 space-y-6">
             <SectionHeader
                 title="Questions"
                 subtitle="Learners' questions on your chapters. Your answers appear under the question in the chapter's Q&A."
@@ -53,10 +53,10 @@ const QuestionsPage = async ({ searchParams } : QuestionsPageProps) => {
                             href={tab.href}
                             aria-current={filter === tab.key ? "page" : undefined}
                             className={cn(
-                                "px-4 py-2 rounded-full text-sm font-medium border transition-colors",
+                                "inline-flex h-10 items-center px-5 rounded-full text-sm font-medium transition-colors",
                                 filter === tab.key
-                                    ? "bg-primary text-primary-foreground border-primary"
-                                    : "bg-background text-muted-foreground border-border hover:text-foreground"
+                                    ? "bg-ink text-white"
+                                    : "bg-white text-ink hover:bg-soft"
                             )}
                         >
                             {tab.label}
@@ -78,7 +78,7 @@ const QuestionsPage = async ({ searchParams } : QuestionsPageProps) => {
                     <div className="space-y-6 max-w-3xl">
                         {
                             questions.map((qna) => (
-                                <article key={qna.id} className="bg-card border border-border rounded-2xl shadow-sm p-5 md:p-6 space-y-4">
+                                <article key={qna.id} className="bg-white rounded-[28px] p-5 md:p-6 space-y-4">
                                     <div className="flex items-start justify-between gap-4">
                                         <div className="flex items-center gap-3 min-w-0">
                                             <Avatar className="h-9 w-9">

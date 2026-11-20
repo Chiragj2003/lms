@@ -10,6 +10,8 @@ import { CouponCheckoutForm } from "@/components/checkout/coupon-checkout-form";
 import { useCart } from "@/hooks/use-cart";
 import { useSession } from "@/lib/auth-client";
 import { Course } from "@prisma/client";
+import { cn } from "@/lib/utils";
+import { toneFor } from "@/lib/tones";
 
 
 interface SubscriptionCardProps {
@@ -57,8 +59,8 @@ export const SubscriptionCard = ({
     });
 
     return (
-        <div className="w-full h-fit shrink-0 bg-card border border-border rounded-2xl shadow-lg overflow-hidden">
-            <div className="aspect-video w-full relative bg-muted">
+        <div className="w-full h-fit shrink-0 bg-white rounded-[32px] p-2.5 shadow-float">
+            <div className={cn("aspect-video w-full relative rounded-[24px] overflow-hidden", toneFor(courseId).bg)}>
                 <Image
                     src={poster}
                     alt={title}
@@ -66,26 +68,26 @@ export const SubscriptionCard = ({
                     className="object-cover"
                 />
             </div>
-            <div className="p-6 md:p-8 w-full">
+            <div className="px-4 pt-5 pb-4 w-full">
                 {
                     isPurchased ? (
                         <div className="space-y-4">
                             <p className="text-sm font-medium text-foreground">
                                 You own this course — you have lifetime access.
                             </p>
-                            <Button asChild size="lg" className="w-full h-12 text-base font-semibold">
+                            <Button asChild size="lg" className="w-full">
                                 <Link href={`/course/${courseId}/view`}>Go to course</Link>
                             </Button>
                         </div>
                     ) : (
                 <div className="space-y-6">
                     <div className="space-y-4">
-                        <h3 className="text-3xl text-foreground font-bold" >{formatPrice(appliedPrice)}</h3>
+                        <p className="text-[40px] leading-none text-ink font-semibold tracking-tight">{formatPrice(appliedPrice)}</p>
                         {
                             !isTutor && (
                                 <Button
-                                    className="w-full h-12 text-base font-semibold"
-                                    variant={items.find(item=>item.id===courseId) ? "secondary" : "default"}
+                                    className="w-full"
+                                    variant={items.find(item=>item.id===courseId) ? "outline" : "default"}
                                     size="lg"
                                     onClick={toggleCartItem}
                                 >
@@ -98,14 +100,14 @@ export const SubscriptionCard = ({
                     </div>
                     {
                         isTutor ? (
-                            <div className="p-4 rounded-xl bg-muted border border-border text-sm text-muted-foreground">
+                            <div className="p-4 rounded-2xl bg-peri-soft text-sm text-ink-2">
                                 You&apos;re signed in as a tutor. Tutor accounts can browse and review courses, but cannot enrol in them.
                             </div>
                         ) : (
                             <>
                                 <div className="relative flex items-center justify-center my-6">
                                     <div className="absolute h-px w-full bg-border" />
-                                    <span className="text-xs z-10 bg-card px-2 font-medium text-muted-foreground uppercase tracking-wider">OR</span>
+                                    <span className="text-xs z-10 bg-white px-3 font-medium text-muted-foreground uppercase tracking-wider">or buy now</span>
                                 </div>
                                 <CouponCheckoutForm
                                     courseId={courseId}

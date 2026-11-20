@@ -40,11 +40,11 @@ const QuizPage = async (props:  QuizPageProps) => {
 
     return (
         <main
-            className="px-6 max-w-3xl w-full mx-auto"
+            className="px-4 sm:px-6 max-w-4xl w-full mx-auto"
         >
-            <div className="py-10 flex flex-col items-start gap-y-3">
-                <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground">Quiz</h1>
-                <Badge className="px-3 py-1">
+            <div className="pt-8 pb-6 flex flex-col items-start gap-y-3">
+                <h1 className="text-display-sm">Quiz</h1>
+                <Badge variant="pink" className="h-8 px-4 text-sm">
                     {quiz._count.questions} {quiz._count.questions === 1 ? "question" : "questions"}
                 </Badge>
             </div>

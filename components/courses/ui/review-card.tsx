@@ -16,11 +16,11 @@ export const ReviewCard = ({
     review
 }: ReviewCardProps ) => {
     return (
-        <div className="w-full relative z-10 bg-muted/30 rounded-xl p-6 space-y-4 border border-border">
+        <div className="w-full relative z-10 bg-soft rounded-3xl p-5 space-y-3">
             <div className="flex items-center gap-x-6">
-                <Avatar className="bg-muted">
+                <Avatar>
                     <AvatarImage src={review.user.image??""} />
-                    <AvatarFallback className="bg-muted text-foreground font-semibold" >{review.user.name?.charAt(0)}</AvatarFallback>
+                    <AvatarFallback className="bg-peri text-ink font-semibold" >{review.user.name?.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <div className="w-full flex items-end flex-wrap justify-between">
                     <div className="flex flex-col gap-y-1">
@@ -33,7 +33,7 @@ export const ReviewCard = ({
                     </div>
                 </div>
             </div>
-            <p className="text-muted-foreground text-[15px] font-medium" >{review.comment}</p>
+            <p className="text-ink-2 text-[15px]" >{review.comment}</p>
         </div>
     )
 }

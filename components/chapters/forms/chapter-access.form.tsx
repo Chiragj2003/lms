@@ -67,7 +67,7 @@ export const ChapterAccessForm = ({
     }
 
     return (
-        <div className="mt-6 bg-card border border-border rounded-2xl shadow-sm p-4 transition-transform">
+        <div className="mt-4 bg-white rounded-3xl p-5 transition-transform">
             <div className="flex items-center justify-between font-medium text-foreground">
                 <span className="font-semibold">Chapter Access Settings</span>
                 <Button
@@ -107,7 +107,7 @@ export const ChapterAccessForm = ({
                                     control={form.control}
                                     name="isFree"
                                     render={({field})=>(
-                                        <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                                        <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-2xl bg-peri-soft p-4">
                                             <FormControl>
                                                 <Checkbox
                                                     checked={field.value}

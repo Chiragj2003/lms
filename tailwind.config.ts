@@ -88,6 +88,17 @@ const config = {
           500: '#8b5cf6',
           600: '#7c3aed',
         },
+        /* ── Pastel tile palette (design v2) ──
+           Content tiles rotate through these; text on them stays ink. */
+        ink: { DEFAULT: '#121216', 2: '#2E2F38', soft: '#25262D' },
+        frame: '#DCE0EA',
+        soft: '#F4F5F9',
+        peri: { DEFAULT: '#9CB3FB', deep: '#7B97F4', soft: '#E1E8FE' },
+        lilac: { DEFAULT: '#E7A3F2', soft: '#F5E0F9' },
+        peach: { DEFAULT: '#F4973A', soft: '#FDE6CF' },
+        mint: { DEFAULT: '#BDEDC9', soft: '#E3F8E8', deep: '#1D7340' },
+        sun: { DEFAULT: '#FBE2A0', soft: '#FEF3D6' },
+        aqua: { DEFAULT: '#CBEEF6', soft: '#E6F7FB' },
         /* Semantic tokens from CSS variables */
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
@@ -132,22 +143,26 @@ const config = {
         },
       },
       borderRadius: {
-        'xl': '1rem',
+        'sm': '0.625rem',
+        'md': '0.75rem',
         'lg': 'var(--radius)',
-        'md': 'calc(var(--radius) - 2px)',
-        'sm': 'calc(var(--radius) - 4px)',
-        '2xl': '1.25rem',
-        '3xl': '1.5rem',
+        'xl': '1.25rem',
+        '2xl': '1.5rem',
+        '3xl': '2rem',
+        '4xl': '2.5rem',
       },
       boxShadow: {
-        'card': '0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04)',
-        'card-hover': '0 8px 24px rgba(0,0,0,0.10)',
-        'elevated': '0 4px 12px rgba(0,0,0,0.08)',
-        'float': '0 12px 32px rgba(0,0,0,0.12)',
+        'card': '0 1px 2px rgba(18,18,22,0.04)',
+        'card-hover': '0 18px 40px -20px rgba(18,18,22,0.28)',
+        'elevated': '0 8px 24px -12px rgba(18,18,22,0.18)',
+        'float': '0 24px 48px -24px rgba(18,18,22,0.30)',
+      },
+      fontFamily: {
+        sans: ['var(--font-outfit)', 'system-ui', 'sans-serif'],
       },
       fontSize: {
-        'display': ['3.5rem', { lineHeight: '1.1', fontWeight: '700', letterSpacing: '-0.02em' }],
-        'display-sm': ['2.25rem', { lineHeight: '1.15', fontWeight: '700', letterSpacing: '-0.02em' }],
+        'display': ['clamp(2.5rem, 5.4vw, 4.75rem)', { lineHeight: '1.02', fontWeight: '500', letterSpacing: '-0.035em' }],
+        'display-sm': ['clamp(2rem, 3.4vw, 2.875rem)', { lineHeight: '1.08', fontWeight: '500', letterSpacing: '-0.028em' }],
       },
       keyframes: {
         'accordion-down': {

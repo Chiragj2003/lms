@@ -45,8 +45,8 @@ export const Quiz = ({
 
 
     return (
-        <div className="space-y-10 w-full py-20">
-            <div className="flex flex-col gap-y-6">
+        <div className="space-y-6 w-full pb-10">
+            <div className="flex flex-col gap-y-3">
                 {
                     quiz.questions.map((question)=>(
                         <QuestionCard
@@ -63,7 +63,6 @@ export const Quiz = ({
             >
                 <Button
                     size="lg"
-                    className="font-semibold"
                     type="submit"
                     onClick={onSubmit}
                     disabled={isLoading}

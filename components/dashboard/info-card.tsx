@@ -12,8 +12,8 @@ export const InfoCard = ({
     src
 }: InfoCardProps ) => {
     return (
-        <div className="border rounded-md flex items-center gap-x-6 p-3 border-zinc-300 border-l-4 shadow-sm">
-            <div className="h-14 w-14 md:h-16 md:w-16 shrink-0 relative">
+        <div className={`rounded-3xl flex items-center gap-x-5 p-5 ${label === "Completed" ? "bg-mint" : "bg-aqua"}`}>
+            <div className="size-14 shrink-0 relative rounded-full bg-white/70 p-3">
                 <Image
                     src={src}
                     fill
@@ -22,8 +22,8 @@ export const InfoCard = ({
                 />
             </div>
             <div className="flex flex-col text-sm">
-                <h1 className="text-lg font-semibold text-zinc-700">{label}</h1>
-                <span className="text-zinc-600 font-medium" >{numberOfItems} {numberOfItems===1?"Course" :"Courses"}</span>
+                <h2 className="text-sm text-ink-2">{label}</h2>
+                <span className="text-[32px] leading-tight font-medium tracking-tight text-ink" >{numberOfItems} <span className="text-base text-ink-2">{numberOfItems===1?"course" :"courses"}</span></span>
             </div>
         </div>
     )

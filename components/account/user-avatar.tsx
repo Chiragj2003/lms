@@ -34,32 +34,32 @@ export const UserAvatar = () => {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild className="md:cursor-pointer">
-                <Avatar>
+                <Avatar className="size-11 bg-peri ring-2 ring-white" aria-label="Account menu" role="button">
                     <AvatarImage src={session.data?.user.image||""} />
                     <AvatarFallback>{session.data?.user.name?.charAt(0)}</AvatarFallback>
                 </Avatar>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-60 md:w-72 rounded-lg border border-zinc-400 pb-4" align="end" >
-                <div className="p-3 flex items-center gap-x-3">
+            <DropdownMenuContent className="w-64 md:w-72 rounded-3xl border-0 p-2 pb-3 shadow-float" align="end" >
+                <div className="p-3 mb-1 flex items-center gap-x-3 rounded-2xl bg-peri-soft">
                     <Avatar className="h-12 w-12">
                         <AvatarImage src={session.data?.user.image||""} />
                         <AvatarFallback>{session.data?.user.name?.charAt(0)}</AvatarFallback>
                     </Avatar>
                     <div className="w-[calc(100%-4.75rem)]">
-                        <h2 className="font-bold text-zinc-800 line-clamp-1">{session.data?.user.name}</h2>
-                        <p className="text-zinc-700 text-xs truncate" >{session.data?.user.email}</p>
+                        <h2 className="font-semibold text-ink line-clamp-1">{session.data?.user.name}</h2>
+                        <p className="text-ink-2 text-xs truncate" >{session.data?.user.email}</p>
                     </div>
                 </div>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
-                    className="rounded-lg font-medium text-zinc-700 py-2"
+                    className="rounded-xl font-medium text-ink py-2.5"
                     onClick={()=>router.push("/user")}
                 >
                     <User className="mr-3 h-5 w-5" />
                     <span>Profile</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem
-                    className="rounded-lg font-medium text-zinc-700 py-2"
+                    className="rounded-xl font-medium text-ink py-2.5"
                     onClick={()=>router.push("/user/edit-profile")}
                 >
                     <TbUserEdit className="mr-3 h-5 w-5" />
@@ -67,7 +67,7 @@ export const UserAvatar = () => {
                 </DropdownMenuItem>
                 <DropdownMenuItem
                     className={cn(
-                        "rounded-lg font-medium text-zinc-700 py-2",
+                        "rounded-xl font-medium text-ink py-2.5",
                         pathname.includes("/tutor/courses") && "hidden"
                     )}
                     onClick={()=>router.push(isTutor ? "/tutor/courses" : "/user/my-learning")}
@@ -79,7 +79,7 @@ export const UserAvatar = () => {
                     // Tutors sell courses, they don't buy them.
                     !isTutor && (
                         <DropdownMenuItem
-                            className="rounded-lg font-medium text-zinc-700 py-2"
+                            className="rounded-xl font-medium text-ink py-2.5"
                             onClick={()=>router.push("/cart")}
                         >
                             <ShoppingBag className="mr-3 ml-1 h-4 w-4" />
@@ -88,7 +88,7 @@ export const UserAvatar = () => {
                     )
                 }
                 <DropdownMenuItem
-                    className="rounded-lg font-medium text-zinc-700 py-2"
+                    className="rounded-xl font-medium text-ink py-2.5"
                     onClick={async()=>{
                         // The cart lives on the server once signed in; the
                         // browser copy mustn't carry over to the next user.

@@ -10,7 +10,7 @@ const RegisterPage = () => {
     return (
         <div className="space-y-8">
             <div className="space-y-2">
-                <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">
+                <h1 className="text-display-sm">
                     Create your account
                 </h1>
                 <p className="text-sm text-muted-foreground">
@@ -33,7 +33,7 @@ const RegisterPage = () => {
             </div>
             <p className="text-sm text-muted-foreground">
                 Already have an account?{" "}
-                <Link href="/login" className="font-semibold text-primary hover:underline underline-offset-4">
+                <Link href="/login" className="font-semibold text-ink underline underline-offset-4">
                     Log in
                 </Link>
             </p>

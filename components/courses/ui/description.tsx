@@ -34,9 +34,9 @@ export const Description = ({
     const collapsed = overflows && !expanded;
 
     return (
-        <section className="w-full">
-            <div className="max-w-3xl mx-auto">
-                <h2 className="text-2xl md:text-3xl font-bold text-foreground">
+        <section className="w-full rounded-[32px] bg-white p-5 sm:p-8">
+            <div className="w-full">
+                <h2 className="text-2xl md:text-3xl font-medium tracking-tight text-ink">
                     Course Description
                 </h2>
                 <div
@@ -50,7 +50,7 @@ export const Description = ({
                     </div>
                     {
                         collapsed && (
-                            <div className="bg-gradient-to-b from-transparent to-background h-28 w-full absolute bottom-0 left-0 pointer-events-none"/>
+                            <div className="bg-gradient-to-b from-transparent to-white h-28 w-full absolute bottom-0 left-0 pointer-events-none"/>
                         )
                     }
                 </div>
@@ -59,7 +59,7 @@ export const Description = ({
                         <button
                             type="button"
                             onClick={()=>setExpanded((prev)=>!prev)}
-                            className="mt-3 text-sm font-semibold text-primary hover:underline underline-offset-4"
+                            className="mt-3 inline-flex h-10 items-center rounded-full bg-soft px-5 text-sm font-semibold text-ink hover:bg-frame"
                         >
                             {expanded ? "Show less" : "Show more"}
                         </button>

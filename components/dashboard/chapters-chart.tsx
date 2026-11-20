@@ -42,8 +42,8 @@ export const ChaptersChart = ({ data }: ChaptersChartProps) => {
     return (
         <Card>
             <CardHeader>
-                <CardTitle className="text-zinc-700" >
-                    <Heading className="md:text-4xl font-[600]">
+                <CardTitle className="text-ink" >
+                    <Heading className="text-2xl md:text-3xl font-medium tracking-tight">
                         Chapters Completed
                     </Heading>
                 </CardTitle>

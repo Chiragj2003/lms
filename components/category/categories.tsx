@@ -1,21 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useSWRQuery } from "@/hooks/useSWRQuery";
 import { Category } from "@prisma/client";
+import { ArrowRight, ArrowUpRight, GraduationCap } from "lucide-react";
 
-import {
-    Carousel,
-    CarouselContent,
-    CarouselItem,
-    CarouselNext,
-    CarouselPrevious
-} from '@/components/ui/carousel';
 import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
 import { PageContainer } from "../ui/page-container";
-import { SectionHeader } from "../ui/section-header";
-import { GraduationCap } from "lucide-react";
+import { toneFor } from "@/lib/tones";
+import { cn } from "@/lib/utils";
 
 
 interface Response {
@@ -27,76 +21,61 @@ interface Response {
 }
 
 export const Categories = () => {
-    
-    const router = useRouter();
+
     const {data, error, isLoading}: Response = useSWRQuery('/api/public/category');
 
-    const categories = Array.isArray(data) ? data : [];
+    const categories = Array.isArray(data) ? data.slice(0, 6) : [];
     const shouldRenderSkeleton = isLoading || (!isLoading && !Array.isArray(data));
-    
+
     if ( error ) {
         return null;
     }
 
     return (
-        <section className="py-20 md:py-32 bg-background">
+        <section className="py-16 md:py-20">
             <PageContainer>
-                <div className="mb-10">
-                    <SectionHeader
-                        title="Top Categories"
-                        subtitle="Explore our wide range of professional courses."
-                        action={
-                            <Link href="/categories" className="text-sm font-semibold text-primary hover:underline underline-offset-4">
-                                View all categories
-                            </Link>
-                        }
-                    />
+                <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
+                    <div className="space-y-2">
+                        <p className="text-[13px] font-medium uppercase tracking-[0.08em] text-ink-2">Explore</p>
+                        <h2 className="text-display-sm">Top categories</h2>
+                    </div>
+                    <Button variant="outline" asChild>
+                        <Link href="/categories">
+                            All categories
+                            <ArrowRight className="size-4" />
+                        </Link>
+                    </Button>
                 </div>
-                <div className="relative">
-                    <Carousel
-                        className="w-full"
-                        opts = {{
-                            align : "start",
-                            slidesToScroll : "auto"
-                        }}
-                    >
-                        <CarouselContent className="-ml-4">
-                            { shouldRenderSkeleton ? (
-                                Array.from({ length: 6 }).map((_, i) => (
-                                    <CarouselItem key={i} className="pl-4 basis-auto" >
-                                        <div className="flex items-center gap-4 p-4 pr-8 rounded-2xl border border-border bg-card">
-                                            <Skeleton className="h-12 w-12 rounded-xl" />
-                                            <div className="space-y-2">
-                                                <Skeleton className="h-4 w-24" />
-                                                <Skeleton className="h-3 w-16" />
-                                            </div>
-                                        </div>
-                                    </CarouselItem>
-                                ))
-                                ) : categories.map((category) => (
-                                    <CarouselItem key={category.id} className="pl-4 basis-auto cursor-pointer" >
-                                        <div 
-                                            className="group flex items-center gap-4 p-4 pr-10 rounded-2xl border border-border bg-card hover:border-primary/50 hover:shadow-sm transition-all"
-                                            onClick={()=>router.push(`/category/${category.id}`)}
-                                        >
-                                            <div className="h-12 w-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors">
-                                                <GraduationCap className="h-6 w-6" />
-                                            </div>
-                                            <div>
-                                                <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">{category.name}</h3>
-                                                <p className="text-sm text-muted-foreground">
-                                                    {category._count.courses} {category._count.courses === 1 ? "course" : "courses"}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </CarouselItem>
-                            )) }
-                        </CarouselContent>
-                        <div className="hidden md:block">
-                            <CarouselPrevious className="-left-4 shadow-md bg-white hover:bg-zinc-50 border-border" />
-                            <CarouselNext className="-right-4 shadow-md bg-white hover:bg-zinc-50 border-border" />
-                        </div>
-                    </Carousel>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    { shouldRenderSkeleton ? (
+                        Array.from({ length: 6 }).map((_, i) => (
+                            <Skeleton key={i} className="h-48 rounded-3xl" />
+                        ))
+                    ) : categories.map((category, index) => (
+                        <Link
+                            key={category.id}
+                            href={`/category/${category.id}`}
+                            className={cn(
+                                "group relative flex min-h-48 flex-col justify-between rounded-3xl p-5 text-ink transition-transform duration-300 hover:-translate-y-0.5",
+                                toneFor(index).bg
+                            )}
+                        >
+                            <div className="flex items-start justify-between">
+                                <span className="size-14 rounded-full bg-ink text-white flex items-center justify-center" aria-hidden="true">
+                                    <GraduationCap className="size-6" />
+                                </span>
+                                <span className="size-9 rounded-full bg-white/60 flex items-center justify-center transition-transform duration-300 group-hover:rotate-45" aria-hidden="true">
+                                    <ArrowUpRight className="size-4" />
+                                </span>
+                            </div>
+                            <div>
+                                <h3 className="text-xl font-medium tracking-tight">{category.name}</h3>
+                                <p className="text-sm text-ink-2">
+                                    {category._count.courses} {category._count.courses === 1 ? "course" : "courses"}
+                                </p>
+                            </div>
+                        </Link>
+                    )) }
                 </div>
             </PageContainer>
         </section>

@@ -96,7 +96,7 @@ export const CouponCheckoutForm = ({
             <div className="flex flex-col gap-y-6">
                 {
                     appliedCoupon && (
-                        <div className="w-full py-2 px-3 rounded-lg border border-dashed border-primary/50 bg-accent">
+                        <div className="w-full py-2.5 px-4 rounded-2xl bg-mint-soft">
                             <div className="flex items-center justify-between">
                                 <div className="flex flex-col">
                                     <span className="font-mono font-semibold text-foreground">
@@ -134,7 +134,7 @@ export const CouponCheckoutForm = ({
                                         <FormControl>
                                             <Input
                                                 {...field}
-                                                className="h-10"
+                                                className="h-12 rounded-full px-5"
                                                 disabled = { isLoading || !!appliedCoupon }
                                                 placeholder="Coupon code"
                                                 aria-label="Coupon code"
@@ -146,7 +146,7 @@ export const CouponCheckoutForm = ({
                             <Button
                                 type="submit"
                                 variant="outline"
-                                className="h-10 font-semibold"
+                                className="h-12"
                                 disabled = { isLoading || !!appliedCoupon || !isValid }
                             >
                                 Apply

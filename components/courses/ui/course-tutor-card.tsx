@@ -2,9 +2,11 @@
 
 import { Badge } from "@/components/ui/badge"
 import { Course } from "@prisma/client"
-import { ImageIcon } from "lucide-react"
+import { ImageIcon, Pencil } from "lucide-react"
 import Image from "next/image"
-import { useRouter } from "next/navigation"
+import Link from "next/link"
+import { cn } from "@/lib/utils"
+import { toneFor } from "@/lib/tones"
 
 interface CourseTutorCardProps {
     course : Course
@@ -14,47 +16,42 @@ export const CourseTutorCard = ({
     course
 } : CourseTutorCardProps) => {
 
-    const router = useRouter();
-
     return (
-        <div
-            onClick={()=>router.push(`/tutor/courses/${course.id}`)}
-            className="group w-full flex flex-col bg-card border border-border rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 hover:border-primary/50 cursor-pointer"
+        <Link
+            href={`/tutor/courses/${course.id}`}
+            className="group w-full flex flex-col bg-white rounded-[28px] p-2.5 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-card-hover"
         >
-            <div className="w-full aspect-video bg-muted overflow-hidden relative">
+            <div className={cn("w-full aspect-video rounded-[22px] overflow-hidden relative", toneFor(course.id).bg)}>
                 {
                     course.image ? (
-                        <>
-                            <Image
-                                src={course.image}
-                                alt={course.title}
-                                fill
-                                sizes="(min-width: 768px) 20rem, 18rem"
-                                className="object-cover transition-transform duration-500 group-hover:scale-105"
-                            />
-                            <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-                        </>
+                        <Image
+                            src={course.image}
+                            alt=""
+                            fill
+                            sizes="(min-width: 768px) 20rem, 18rem"
+                            className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
                     ) : (
-                        <div className="h-full w-full flex items-center justify-center bg-muted">
-                            <ImageIcon className="h-8 w-8 text-muted-foreground opacity-50" />
+                        <div className="h-full w-full flex items-center justify-center">
+                            <span className="size-14 rounded-full bg-ink text-white flex items-center justify-center">
+                                <ImageIcon className="size-6" aria-hidden="true" />
+                            </span>
                         </div>
                     )
                 }
+                <Badge variant={course.isPublished ? "success" : "warning"} className="absolute left-3 top-3">
+                    {course.isPublished ? "Published" : "Draft"}
+                </Badge>
             </div>
-            
-            <div className="flex flex-col flex-1 p-4 md:p-5">
-                <h3 className="font-semibold text-foreground line-clamp-2 text-base group-hover:text-primary transition-colors">
+
+            <div className="flex flex-1 items-start justify-between gap-3 px-2.5 pt-4 pb-2">
+                <h3 className="font-medium text-ink line-clamp-2 text-lg leading-snug tracking-tight">
                     {course.title}
                 </h3>
-                
-                <div className="mt-auto pt-4">
-                    <Badge variant={course.isPublished ? "success" : "secondary"}>
-                        {
-                            course.isPublished ? "Published" : "Draft"
-                        }
-                    </Badge>
-                </div>
+                <span aria-hidden="true" className="size-9 shrink-0 rounded-full bg-soft text-ink flex items-center justify-center transition-colors group-hover:bg-ink group-hover:text-white">
+                    <Pencil className="size-4" />
+                </span>
             </div>
-        </div>
+        </Link>
     )
 }

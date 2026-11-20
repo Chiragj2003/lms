@@ -52,7 +52,7 @@ export const RoleForm = () => {
     return (
         <div className="w-full max-w-2xl mx-auto px-6 py-16 space-y-8">
             <div className="text-center space-y-2">
-                <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">
+                <h1 className="text-display-sm">
                     How will you use LearnIt?
                 </h1>
                 <p className="text-sm text-muted-foreground">
@@ -71,28 +71,28 @@ export const RoleForm = () => {
                             disabled={isLoading}
                             onClick={()=>setRole(option.value)}
                             className={cn(
-                                "relative text-left p-6 rounded-2xl border bg-card transition-all",
+                                "relative text-left p-6 rounded-[28px] transition-all min-h-56 flex flex-col",
                                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
                                 selected
-                                    ? "border-primary ring-1 ring-primary bg-accent"
-                                    : "border-border hover:border-primary/50"
+                                    ? "bg-peri shadow-[inset_0_0_0_2px_#121216]"
+                                    : "bg-lilac-soft hover:bg-lilac"
                             )}
                         >
                             {selected && (
-                                <CircleCheck className="absolute top-4 right-4 h-5 w-5 text-primary" />
+                                <CircleCheck className="absolute top-5 right-5 h-6 w-6 text-ink" />
                             )}
-                            <div className="relative h-16 w-16 mb-4">
+                            <div className="relative size-16 mb-4 rounded-full bg-white/70 p-2.5">
                                 <Image src={option.image} alt="" fill sizes="4rem" className="object-contain" />
                             </div>
-                            <p className="font-semibold text-foreground">{option.title}</p>
-                            <p className="text-sm text-muted-foreground mt-1">{option.description}</p>
+                            <p className="mt-auto text-xl font-medium tracking-tight text-ink">{option.title}</p>
+                            <p className="text-sm text-ink-2 mt-1">{option.description}</p>
                         </button>
                     );
                 })}
             </div>
             <Button
                 size="lg"
-                className="w-full h-12 text-base font-semibold"
+                className="w-full"
                 onClick={onSubmit}
                 disabled={isLoading}
             >

@@ -25,7 +25,7 @@ export const QNACard = ({
                 <div className="h-8 md:h-10 aspect-square shrink-0">
                     <Avatar className="h-full w-full">
                         <AvatarImage src={data.user?.image||""} />
-                        <AvatarFallback className="bg-neutral-800 text-zinc-200 font-semibold md:text-lg" >{data.user.name?.charAt(0)}</AvatarFallback>
+                        <AvatarFallback className="bg-lilac text-ink font-semibold md:text-lg" >{data.user.name?.charAt(0)}</AvatarFallback>
                     </Avatar>
                 </div>
                 <div className="flex flex-col">

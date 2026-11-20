@@ -2,7 +2,7 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { CheckCircle, Lock, PlayCircle } from "lucide-react";
+import { Check, Lock, Play } from "lucide-react";
 import { useSidebar } from "@/hooks/use-sidebar";
 
 interface SidebarItemProps {
@@ -25,7 +25,7 @@ export const SidebarItem = ({
     const router = useRouter();
     const { onClose } = useSidebar();
 
-    const Icon = isLocked ? Lock : (isCompleted ? CheckCircle : PlayCircle);
+    const Icon = isLocked ? Lock : (isCompleted ? Check : Play);
 
     const active = pathname.includes(id);
 
@@ -38,28 +38,26 @@ export const SidebarItem = ({
         <button
             onClick={onClick}
             type="button"
+            aria-current={active ? "page" : undefined}
             className={cn(
-                "flex items-center gap-x-2 text-zinc-400 text-sm font-medium transition-all hover:text-zinc-200 hover:bg-zinc-800 focus:outline-none relative",
-                active && "text-white bg-zinc-800",
-                isCompleted && "text-emerald-400 hover:text-emerald-300",
-                isCompleted && active && "bg-emerald-950/30"
+                "flex w-full items-center gap-x-3 rounded-2xl p-2.5 text-left text-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary",
+                active ? "bg-peri-soft text-ink font-semibold" : "text-ink hover:bg-soft",
+                isLocked && !active && "text-muted-foreground"
             )}
         >
-            <div className="flex items-center gap-x-3 p-4 text-left">
-                <Icon
-                    className={cn(
-                        "h-5 w-5 shrink-0",
-                        active && !isCompleted && "text-highlight"
-                    )}
-                />
-                {label}
-            </div>
-            <div className={cn(
-                "absolute right-0 opacity-0 w-1 h-full bg-highlight transition-all rounded-l-full",
-                active && "opacity-100",
-                isCompleted && active && "bg-emerald-500"
+            <span
+                aria-hidden="true"
+                className={cn(
+                    "flex size-8 shrink-0 items-center justify-center rounded-full",
+                    isCompleted ? "bg-mint text-ink" : active ? "bg-ink text-white" : "bg-soft text-ink"
                 )}
-            />
+            >
+                <Icon className="size-4" />
+            </span>
+            <span className="flex-1 min-w-0">{label}</span>
+            <span className="sr-only">
+                {isLocked ? "(locked)" : isCompleted ? "(completed)" : ""}
+            </span>
         </button>
     )
 }

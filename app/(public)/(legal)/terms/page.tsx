@@ -7,17 +7,17 @@ export const metadata: Metadata = {
 
 const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
     <section className="space-y-3">
-        <h2 className="text-xl font-semibold text-foreground">{title}</h2>
+        <h2 className="text-xl font-medium tracking-tight text-ink">{title}</h2>
         <div className="text-muted-foreground leading-relaxed space-y-3">{children}</div>
     </section>
 )
 
 const TermsPage = () => {
     return (
-        <PageContainer size="narrow" className="py-12 md:py-20">
-            <div className="space-y-10">
+        <PageContainer size="narrow" className="py-8 md:py-12">
+            <div className="space-y-10 rounded-[32px] bg-white p-6 sm:p-10">
                 <div className="space-y-2">
-                    <h1 className="text-3xl md:text-4xl font-bold text-foreground">Terms of Service</h1>
+                    <h1 className="text-display-sm">Terms of Service</h1>
                     <p className="text-sm text-muted-foreground">Last updated: {new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}</p>
                 </div>
 
@@ -85,7 +85,7 @@ const TermsPage = () => {
                 <Section title="8. Contact">
                     <p>
                         Questions about these terms can be sent to our{" "}
-                        <a href="/help" className="text-primary underline underline-offset-4">Help Center</a>.
+                        <a href="/help" className="text-ink font-medium underline underline-offset-4">Help Center</a>.
                     </p>
                 </Section>
 

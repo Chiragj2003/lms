@@ -17,7 +17,7 @@ export const Unauthorized = ({
     return (
         <div className="h-full w-full">
             <div className="h-full flex flex-col items-center justify-center p-6 space-y-10 md:space-y-16">
-                <div className="w-52 md:w-60 aspect-square relative">
+                <div className="w-44 md:w-52 aspect-square relative rounded-full bg-peri-soft p-8">
                     <Image
                         src="/assets/3922671_2073829.avif"
                         alt=""
@@ -28,7 +28,7 @@ export const Unauthorized = ({
                 <div
                     className="space-y-4 flex flex-col items-center justify-center"
                 >
-                    <p className="text-sm font-medium text-zinc-700">
+                    <p className="text-base font-medium text-ink text-center">
                         Quiz not found. Explore the course by clicking the button below.
                     </p>
                     <Button

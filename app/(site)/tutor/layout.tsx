@@ -28,15 +28,13 @@ const TutorLayout = async ({
     }
 
     return (
-        <div className="h-full flex w-full">
-            <aside className="hidden h-full bg-zinc-900 md:flex w-56 lg:w-60 flex-col inset-y-0 shrink-0">
-                <Sidebar/>
-            </aside>
-            <div className="h-full w-full md:w-[calc(100%-14rem)] lg:w-[calc(100%-15rem)]">
-                <header
-                    className="h-16 flex items-center border-b border-border z-10 w-full bg-background"
-                >
-                    <div className="px-6 md:px-10 flex items-center justify-between w-full">
+        <div className="h-full w-full bg-frame p-2 sm:p-4">
+            <div className="h-full flex gap-2.5 rounded-[36px] bg-ink p-2.5">
+                <div className="hidden md:block w-60 shrink-0">
+                    <Sidebar/>
+                </div>
+                <div className="h-full min-w-0 flex-1 flex flex-col overflow-hidden rounded-[28px] bg-background">
+                    <header className="h-[72px] shrink-0 flex items-center justify-between gap-3 px-4 sm:px-7">
                         <div className="md:hidden">
                             <TutorHeader/>
                         </div>
@@ -44,11 +42,11 @@ const TutorLayout = async ({
                             <Navigation/>
                         </div>
                         <UserAvatar/>
-                    </div>
-                </header>
-                <main className="h-[calc(100%-4rem)] overflow-y-auto w-full bg-background">
-                    { children }
-                </main>
+                    </header>
+                    <main className="flex-1 overflow-y-auto w-full">
+                        { children }
+                    </main>
+                </div>
             </div>
         </div>
     )

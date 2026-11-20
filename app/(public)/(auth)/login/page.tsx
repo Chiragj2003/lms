@@ -10,7 +10,7 @@ const LoginPage = () => {
     return (
         <div className="space-y-8">
             <div className="space-y-2">
-                <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">
+                <h1 className="text-display-sm">
                     Welcome back
                 </h1>
                 <p className="text-sm text-muted-foreground">
@@ -33,7 +33,7 @@ const LoginPage = () => {
             </div>
             <p className="text-sm text-muted-foreground">
                 Don&apos;t have an account?{" "}
-                <Link href="/register" className="font-semibold text-primary hover:underline underline-offset-4">
+                <Link href="/register" className="font-semibold text-ink underline underline-offset-4">
                     Sign up
                 </Link>
             </p>

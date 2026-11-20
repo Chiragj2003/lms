@@ -29,23 +29,30 @@ const AuthLayout = async ({
     return (
         <div>
             <Header variant="default" />
-            <PageContainer className="py-12 md:py-20">
-                <div className="max-w-4xl mx-auto grid md:grid-cols-2 bg-card border border-border rounded-3xl shadow-card overflow-hidden">
-                    <aside className="hidden md:flex flex-col justify-between gap-10 bg-primary text-primary-foreground p-10">
-                        <p className="text-2xl font-bold tracking-tight leading-snug">
-                            Learn a skill,<br />prove it.
+            <PageContainer className="py-6 md:py-10">
+                <div className="grid md:grid-cols-2 gap-4 min-h-[620px]">
+                    <aside className="relative hidden md:flex flex-col justify-between gap-10 overflow-hidden rounded-[40px] bg-peri p-10 text-ink">
+                        <p className="text-display-sm">
+                            Learn a skill,<br /><span className="font-bold">prove it.</span>
                         </p>
-                        <ul className="space-y-5">
+                        <ul className="relative space-y-3">
                             {HIGHLIGHTS.map(({ icon : Icon, text }) => (
-                                <li key={text} className="flex items-start gap-3 text-sm text-primary-foreground/90">
-                                    <Icon className="h-5 w-5 shrink-0 mt-0.5" />
+                                <li key={text} className="flex items-center gap-3 rounded-full bg-white/70 py-2 pl-2 pr-5 text-sm">
+                                    <span className="size-9 shrink-0 rounded-full bg-ink text-white flex items-center justify-center">
+                                        <Icon className="size-4" aria-hidden="true" />
+                                    </span>
                                     {text}
                                 </li>
                             ))}
                         </ul>
+                        <svg aria-hidden="true" viewBox="0 0 150 110" className="pointer-events-none absolute right-0 top-24 h-56 w-80 opacity-30" fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M30 92 L70 48 L104 82" /><circle cx="112" cy="30" r="16" /><path d="M104 54v10M120 54v10M20 104h120" />
+                        </svg>
                     </aside>
-                    <section className="p-8 md:p-10">
-                        {children}
+                    <section className="flex items-center justify-center rounded-[40px] bg-white p-8 md:p-12">
+                        <div className="w-full max-w-sm">
+                            {children}
+                        </div>
                     </section>
                 </div>
             </PageContainer>

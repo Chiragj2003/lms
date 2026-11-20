@@ -1,6 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, SearchX } from "lucide-react";
 
 import { searchCourses } from "@/server/course";
 import { CardWithRating } from "@/components/courses/ui/card-with-ratings";
@@ -38,20 +37,15 @@ const SearchPage = async (props: SearchPageProps) => {
 
     if (total === 0) {
         return (
-            <PageContainer className="py-20 md:py-32">
-                <div className="max-w-xl mx-auto space-y-8">
+            <PageContainer className="py-12 md:py-20">
+                <div className="max-w-2xl mx-auto space-y-8">
                     <SearchForm />
-                    <div className="flex flex-col items-center justify-center pt-10">
-                        <div className="relative h-48 aspect-square opacity-70">
-                            <Image
-                                src="/assets/empty.jpg"
-                                fill
-                                alt="No results"
-                                className="object-contain"
-                            />
+                    <div className="flex flex-col items-center justify-center rounded-[32px] bg-white px-6 py-14 text-center">
+                        <div className="size-24 rounded-full bg-peri-soft flex items-center justify-center" aria-hidden="true">
+                            <SearchX className="size-10 text-ink" />
                         </div>
-                        <div className="text-center mt-6">
-                            <h3 className="text-xl font-semibold text-foreground mb-2">
+                        <div className="mt-6">
+                            <h3 className="text-2xl font-medium tracking-tight text-ink mb-2">
                                 {query ? `No courses found for "${query}"` : "No courses available yet"}
                             </h3>
                             <p className="text-muted-foreground">
@@ -67,36 +61,31 @@ const SearchPage = async (props: SearchPageProps) => {
     const courseLabel = total === 1 ? "course" : "courses";
 
     return (
-        <div className="min-h-screen bg-muted/20 pb-20">
-            {/* Search Header Banner */}
-            <div className="bg-foreground text-background py-16 md:py-24 px-4 relative overflow-hidden">
-                {/* Subtle decorations */}
-                <div className="absolute inset-0 opacity-10">
-                    <div className="absolute top-10 left-10 w-64 h-64 bg-primary rounded-full blur-3xl" />
-                    <div className="absolute bottom-10 right-10 w-64 h-64 bg-highlight rounded-full blur-3xl" />
-                </div>
-
-                <PageContainer className="relative z-10 flex flex-col items-center text-center space-y-6">
-                    <h1 className="text-3xl md:text-5xl font-bold tracking-tight">
-                        {query ? "Discover your next skill" : "Browse all courses"}
+        <div className="min-h-screen pb-10">
+            {/* Search header */}
+            <PageContainer className="pt-8 md:pt-12">
+                <div className="flex flex-col gap-5">
+                    <p className="text-[13px] font-medium uppercase tracking-[0.08em] text-ink-2">Courses</p>
+                    <h1 className="text-display-sm">
+                        {query ? "Find your next course" : "Browse all courses"}
                     </h1>
-                    <p className="text-muted text-lg max-w-xl mx-auto">
+                    <p className="text-ink-2 text-lg">
                         {query
                             ? `${total} ${courseLabel} found for "${query}"`
                             : `${total} ${courseLabel} available right now`}
                     </p>
-                    <div className="w-full max-w-2xl mx-auto mt-6">
+                    <div className="w-full max-w-2xl">
                         <SearchForm />
                     </div>
-                </PageContainer>
-            </div>
+                </div>
+            </PageContainer>
 
-            <PageContainer className="py-12">
-                <div className="flex items-center justify-between mb-8 border-b border-border pb-4">
-                    <h2 className="text-xl font-bold text-foreground">
+            <PageContainer className="py-10">
+                <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
+                    <h2 className="text-xl font-medium tracking-tight text-ink">
                         All {query ? "Results" : "Courses"} ({total})
                     </h2>
-                    <span className="text-sm font-medium text-muted-foreground">
+                    <span className="inline-flex h-9 items-center rounded-full bg-white px-4 text-sm font-medium text-ink">
                         Most popular first
                     </span>
                 </div>
@@ -107,7 +96,7 @@ const SearchPage = async (props: SearchPageProps) => {
                         <Link href={pageHref(1)} className="text-primary underline underline-offset-4">Back to the first page</Link>
                     </p>
                 ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
                         {
                             courses.map((course)=>(
                                 <CardWithRating
@@ -134,7 +123,7 @@ const SearchPage = async (props: SearchPageProps) => {
                                 Previous
                             </Button>
                         )}
-                        <span className="text-sm text-muted-foreground">
+                        <span className="inline-flex h-11 items-center rounded-full bg-white px-5 text-sm font-medium text-ink">
                             Page {Math.min(page, totalPages)} of {totalPages}
                         </span>
                         {page < totalPages ? (

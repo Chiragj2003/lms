@@ -40,28 +40,28 @@ export const CourseCarousel = ({
                     slidesToScroll : "auto"
                 }}
             >
-                <div className="h-6 hidden md:block">
-                    <CarouselPrevious className="top-0 left-0"/>
-                    <CarouselNext className="top-0 left-14"/>
+                <div className="h-11 hidden md:flex justify-end gap-2 relative">
+                    <CarouselPrevious className="static translate-y-0 size-11 rounded-full bg-white border-0"/>
+                    <CarouselNext className="static translate-y-0 size-11 rounded-full bg-ink text-white border-0 hover:bg-ink-2 hover:text-white"/>
                 </div>
-                <CarouselContent className="space-x-2">
+                <CarouselContent>
                     { isLoading ? (
                         <>
-                            <CarouselItem className="basis-auto" >
+                            <CarouselItem className="basis-[85%] sm:basis-1/2 lg:basis-1/3 xl:basis-1/4" >
                                 <CardSkeleton isBestSeller={bestseller} />
                             </CarouselItem>
-                            <CarouselItem className="basis-auto" >
+                            <CarouselItem className="basis-[85%] sm:basis-1/2 lg:basis-1/3 xl:basis-1/4" >
                                 <CardSkeleton isBestSeller={bestseller} />
                             </CarouselItem>
-                            <CarouselItem className="basis-auto" >
+                            <CarouselItem className="basis-[85%] sm:basis-1/2 lg:basis-1/3 xl:basis-1/4" >
                                 <CardSkeleton isBestSeller={bestseller} />
                             </CarouselItem>
-                            <CarouselItem className="basis-auto" >
+                            <CarouselItem className="basis-[85%] sm:basis-1/2 lg:basis-1/3 xl:basis-1/4" >
                                 <CardSkeleton isBestSeller={bestseller} />
                             </CarouselItem>
                         </>
                         ) : data.map((course) => (
-                            <CarouselItem key={course.id} className="basis-auto cursor-pointer py-8" >
+                            <CarouselItem key={course.id} className="basis-[85%] sm:basis-1/2 lg:basis-1/3 xl:basis-1/4 py-2" >
                                 <CardWithRating course={course} isBestSeller={bestseller} />
                             </CarouselItem>
                     )) }

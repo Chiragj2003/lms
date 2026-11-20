@@ -16,7 +16,7 @@ export const TimeChart = async({
     }
 
     return (
-        <div className="max-w-5xl w-full py-10 md:py-24 mx-auto px-6">
+        <div className="w-full h-full">
             <GraphChart data={data} />
         </div>
     )

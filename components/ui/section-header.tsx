@@ -12,7 +12,7 @@ export function SectionHeader({ title, subtitle, action, className }: SectionHea
   return (
     <div className={cn("flex flex-col sm:flex-row sm:items-center justify-between gap-4", className)}>
       <div className="space-y-1">
-        <h2 className="text-2xl font-semibold tracking-tight">{title}</h2>
+        <h2 className="text-display-sm">{title}</h2>
         {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
       </div>
       {action && <div className="shrink-0">{action}</div>}

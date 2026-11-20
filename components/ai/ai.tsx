@@ -110,7 +110,7 @@ export const AI = ({
            className="h-full w-full relative overflow-y-auto scroll-smooth"
         >
             <div 
-                className='flex flex-col gap-y-16 px-6 py-10 min-h-full max-w-3xl w-full mx-auto'
+                className='flex flex-col gap-y-8 px-4 py-6 min-h-full max-w-3xl w-full mx-auto'
             >
                 {
                     getUserChat(chapterId, session.data?.user.id||"").map((message)=>(
@@ -121,14 +121,14 @@ export const AI = ({
                             <div
                                 className='w-full flex items-center justify-end'
                             >
-                                <div className='max-w-xl w-full p-4 bg-neutral-100 border border-zinc-200/80 rounded-xl rounded-tr-none'>
-                                    <p className='text-zinc-700 text-[15px] font-[400]' >
+                                <div className='max-w-xl w-fit px-4 py-3 bg-ink rounded-[20px] rounded-br-md'>
+                                    <p className='text-white text-[15px]' >
                                         {message.chat}
                                     </p>
                                 </div>
                             </div>
                             <div className='w-full flex items-start gap-x-4'>
-                                <div className='h-9 w-9 relative rounded-full bg-neutral-100 shrink-0 overflow-hidden flex items-center justify-center border border-zinc-200'>
+                                <div className='h-9 w-9 relative rounded-full bg-peri shrink-0 overflow-hidden flex items-center justify-center'>
                                     <Image
                                         src="/assets/ai-avatar.png"
                                         height={20}
@@ -153,10 +153,10 @@ export const AI = ({
                 }
                 <div className='h-0' ref={ref} />
             </div>
-            <div className='px-6 py-6 w-full flex items-center justify-center sticky bottom-0 bg-gradient-to-b from-transparent via-30% via-white to-white'>
+            <div className='px-3 py-3 w-full flex items-center justify-center sticky bottom-0 bg-gradient-to-b from-transparent via-30% via-white to-white'>
                 <Form {...form}>
                     <form
-                        className='max-w-3xl w-full bg-white shadow-md border border-zinc-200 mx-auto h-14 md:h-20 rounded-full overflow-hidden flex items-center px-6'
+                        className='max-w-3xl w-full bg-soft mx-auto h-14 rounded-full overflow-hidden flex items-center pl-5 pr-1.5 focus-within:shadow-[inset_0_0_0_2px_#121216]'
                         onSubmit={form.handleSubmit(onPromptSubmit)}
                     >
                         <FormField
@@ -176,12 +176,13 @@ export const AI = ({
                             )}
                         />
                         <Button
-                            variant="secondary"
-                            className='rounded-full h-8 w-8 md:h-14 md:w-14'
+                            size="icon"
+                            className='shrink-0'
+                            aria-label='Send'
                             type='submit'
                             disabled={loading}
                         >
-                            <ChevronRight className='h-4 w-4 md:h-6 md:w-6 text-zinc-800' />
+                            <ChevronRight className='size-5' />
                         </Button>
                     </form>
                 </Form>

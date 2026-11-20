@@ -37,7 +37,7 @@ export const CertificateModal = () => {
                         />
                     </div>
                     <div className="space-y-4">
-                        <h1 className="text-center font-bold text-zinc-700 text-xl">Congratulations</h1>
+                        <h1 className="text-center font-medium tracking-tight text-ink text-2xl">Congratulations</h1>
                         <p className="text-sm text-zinc-500 font-medium text-center">You have successfully completed this course</p>
                         <Button
                             className="w-full focus:outline-none outline-none focus-visible:ring-0 focus-visible:ring-offset-0"

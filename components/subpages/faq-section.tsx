@@ -1,5 +1,5 @@
 import { PageContainer } from "@/components/ui/page-container";
-import { SectionHeader } from "@/components/ui/section-header";
+import Link from "next/link";
 import {
     Accordion,
     AccordionContent,
@@ -32,23 +32,23 @@ const faqs = [
 
 export const FAQSection = () => {
     return (
-        <section className="py-20 md:py-32 bg-white">
+        <section className="py-16 md:py-20">
             <PageContainer>
-                <div className="max-w-3xl mx-auto">
-                    <div className="text-center mb-12">
-                        <SectionHeader 
-                            title="Frequently Asked Questions" 
-                            subtitle="Everything you need to know about learning on our platform."
-                        />
+                <div className="flex flex-wrap gap-8">
+                    <div className="flex-[1_1_320px] space-y-3">
+                        <p className="text-[13px] font-medium uppercase tracking-[0.08em] text-ink-2">FAQ</p>
+                        <h2 className="text-display-sm">Questions, answered</h2>
+                        <p className="text-muted-foreground">
+                            Can&apos;t find what you need? <Link href="/help" className="font-medium text-ink underline underline-offset-4">Visit the help centre</Link>.
+                        </p>
                     </div>
-                    
-                    <Accordion type="single" collapsible className="w-full">
+                    <Accordion type="single" collapsible defaultValue="item-0" className="flex-[999_1_560px] min-w-0 space-y-2.5">
                         {faqs.map((faq, index) => (
-                            <AccordionItem key={index} value={`item-${index}`} className="border-b border-border py-2">
-                                <AccordionTrigger className="text-left text-base font-semibold text-foreground hover:no-underline hover:text-primary transition-colors">
+                            <AccordionItem key={index} value={`item-${index}`} className="rounded-3xl border-0 bg-white px-6">
+                                <AccordionTrigger className="text-left text-[17px] font-medium text-ink hover:no-underline py-5">
                                     {faq.question}
                                 </AccordionTrigger>
-                                <AccordionContent className="text-muted-foreground leading-relaxed text-sm">
+                                <AccordionContent className="text-muted-foreground leading-relaxed text-[15px]">
                                     {faq.answer}
                                 </AccordionContent>
                             </AccordionItem>

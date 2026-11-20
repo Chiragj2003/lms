@@ -36,36 +36,40 @@ const AnalyticPage = async() => {
     } = await getAnalytics(session.user.id);
 
     return (
-        <PageContainer className="py-10 space-y-10">
+        <PageContainer className="pb-10 space-y-4">
             <SectionHeader 
                 title="Analytics & Revenue"
                 subtitle="Track your course performance, sales, and student engagement."
             />
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                 <StatCard 
-                    label="Total Revenue" 
+                    label="Total Revenue"
+                    tone="peri" 
                     value={formatPrice(totalRevenue)} 
                     icon={<IndianRupee className="h-4 w-4" />} 
                 />
                 <StatCard 
-                    label="Total Sales" 
+                    label="Total Sales"
+                    tone="lilac" 
                     value={totalSales} 
                     icon={<ShoppingCart className="h-4 w-4" />} 
                 />
                 <StatCard 
-                    label="Total Students" 
+                    label="Total Students"
+                    tone="mint" 
                     value={totalStudents} 
                     icon={<Users className="h-4 w-4" />} 
                 />
                 <StatCard
                     label="Average Rating"
+                    tone="sun"
                     value={averageRating ? averageRating.toFixed(1) : "No ratings"}
                     icon={<Star className="h-4 w-4" />}
                 />
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                 <StatCard 
                     label="Courses" 
                     value={totalCourses} 
@@ -88,7 +92,7 @@ const AnalyticPage = async() => {
                 />
             </div>
 
-            <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
                 <MonthlyChart data={monthly} />
                 <RevenueChart data={data} />
             </div>

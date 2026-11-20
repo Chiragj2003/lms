@@ -3,12 +3,12 @@ import {cva, type VariantProps} from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const backgroundVariants = cva(
-    "rounded-full flex items-center justify-center",
+    "rounded-full flex items-center justify-center bg-white",
     {
         variants : {
             variant : {
-                default : "bg-primary/10",
-                success : "bg-success/10",
+                default : "bg-white/70",
+                success : "bg-white/70",
             },
             size : {
                 default : "p-2",
@@ -27,8 +27,8 @@ const iconVariants = cva(
     {
         variants : {
             variant : {
-                default : "text-primary",
-                success : "text-success"
+                default : "text-ink",
+                success : "text-mint-deep"
             },
             size : {
                 default : "h-6 w-6",

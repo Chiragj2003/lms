@@ -82,7 +82,7 @@ const CoursePage = async (props:CoursePageProps) => {
                 />
             )}
 
-            <main className="flex-1 pb-24">
+            <main className="flex-1 pb-10">
                 <CourseHeader
                     id={course.id}
                     title={course.title}
@@ -99,10 +99,10 @@ const CoursePage = async (props:CoursePageProps) => {
                     previewChapterId={course.chapters.find((chapter)=>chapter.isFree)?.id}
                 />
                 
-                <PageContainer className="mt-12 md:mt-16">
-                    <div className="flex flex-col-reverse lg:flex-row gap-12 lg:gap-16 relative items-start">
+                <PageContainer className="mt-6">
+                    <div className="flex flex-col-reverse lg:flex-row gap-6 relative items-start">
                         {/* Main Content Column */}
-                        <div className="w-full lg:w-2/3 space-y-12">
+                        <div className="w-full lg:w-2/3 min-w-0 space-y-6">
                             <Chapters chapters={course.chapters} />
                             <Description description={course.description!} />
                             <InstructorDescription tutor={course.tutor} />

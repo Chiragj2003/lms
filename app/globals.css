@@ -19,65 +19,64 @@ body,
 
 @layer base {
   :root {
-    /* ─── LearnIt — Teal & Coral ───
-       Primary: deep teal for CTAs, links, trust.
-       Accent/highlight: warm coral for badges, emphasis.
-       Surfaces: warm cream background, white cards. */
+    /* ─── LearnIt — soft pastel tiles, bold black actions ───
+       Ink (near-black) carries actions. Periwinkle, lilac, peach, mint,
+       sun and aqua carry content tiles. White panels sit on a cool grey. */
 
-    --background: 40 20% 98%;
-    --foreground: 220 25% 14%;
+    --background: 225 27% 95%;      /* #EDEFF5 page ground */
+    --foreground: 240 10% 8%;       /* #121216 ink */
 
     --card: 0 0% 100%;
-    --card-foreground: 220 25% 14%;
+    --card-foreground: 240 10% 8%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 220 25% 14%;
+    --popover-foreground: 240 10% 8%;
 
-    /* Deep teal — primary brand */
-    --primary: 168 80% 28%;
+    /* Deep periwinkle — links, emphasis, focus */
+    --primary: 228 66% 52%;
     --primary-foreground: 0 0% 100%;
 
-    /* Light warm gray — subtle surfaces */
-    --secondary: 40 15% 96%;
-    --secondary-foreground: 220 25% 14%;
+    /* Soft wells — inputs, chips, secondary buttons */
+    --secondary: 230 25% 96%;
+    --secondary-foreground: 240 10% 8%;
 
-    --muted: 220 14% 96%;
-    --muted-foreground: 220 12% 46%;
+    --muted: 230 25% 96%;
+    --muted-foreground: 232 7% 39%;
 
-    /* Very light teal tint — hover/focus backgrounds */
-    --accent: 168 40% 96%;
-    --accent-foreground: 168 80% 22%;
+    /* Periwinkle tint — hover/selected backgrounds */
+    --accent: 225 93% 94%;
+    --accent-foreground: 240 10% 8%;
 
-    --destructive: 0 72% 51%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive: 4 77% 40%;
+    --destructive-foreground: 0 0% 100%;
 
-    --success: 152 60% 38%;
+    --success: 145 59% 28%;
     --success-foreground: 0 0% 100%;
 
     --warning: 38 92% 50%;
     --warning-foreground: 30 80% 12%;
 
-    --border: 220 15% 91%;
-    --input: 220 15% 91%;
-    --ring: 168 80% 28%;
+    --border: 229 22% 91%;
+    --input: 229 22% 91%;
+    --ring: 228 66% 52%;
 
-    /* Warm coral highlight */
-    --highlight: 24 95% 56%;
-    --highlight-foreground: 0 0% 100%;
+    /* Peach/orange highlight — "today", badges, emphasis fills */
+    --highlight: 30 89% 59%;
+    --highlight-foreground: 240 10% 8%;
 
-    /* Tutor accent — restrained purple */
-    --tutor: 262 60% 55%;
-    --tutor-foreground: 0 0% 100%;
+    /* Tutor accent — periwinkle */
+    --tutor: 225 93% 80%;
+    --tutor-foreground: 240 10% 8%;
 
-    --radius: 0.625rem;
+    --radius: 1rem;
 
     /* Chart palette */
-    --chart-1: 168 80% 28%;
-    --chart-2: 24 95% 56%;
-    --chart-3: 152 60% 38%;
-    --chart-4: 38 92% 50%;
-    --chart-5: 262 60% 55%;
-    --chart-6: 340 75% 55%;
+    --chart-1: 225 93% 80%;
+    --chart-2: 30 89% 59%;
+    --chart-3: 134 58% 84%;
+    --chart-4: 293 75% 79%;
+    --chart-5: 44 92% 81%;
+    --chart-6: 240 10% 8%;
   }
 
   .dark {

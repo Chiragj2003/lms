@@ -11,7 +11,7 @@ import {
   } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import { Chapter } from "@prisma/client";
-import { VideoIcon } from "lucide-react";
+import { Play, VideoIcon } from "lucide-react";
 
 interface ChaptersProps {
     chapters : Chapter[];
@@ -34,26 +34,31 @@ export const Chapters = ({
     const router = useRouter();
 
     return (
-        <div className="w-full mt-20">
-            <div className="max-w-3xl w-full mx-auto space-y-6">
-                <div className="space-y-2">
-                    <h2 className="text-2xl md:text-3xl font-bold text-foreground">
-                        Course Content
+        <section className="w-full rounded-[32px] bg-white p-5 sm:p-8">
+            <div className="w-full space-y-5">
+                <div className="flex flex-wrap items-baseline justify-between gap-2">
+                    <h2 className="text-2xl md:text-3xl font-medium tracking-tight text-ink">
+                        Course content
                     </h2>
-                    <p className="text-sm font-medium text-zinc-500">Course content includes {chapters.length} chapters</p>
+                    <p className="text-sm text-muted-foreground">
+                        {chapters.length} {chapters.length === 1 ? "chapter" : "chapters"}
+                        {chapters.some((c) => c.isFree) && ` · ${chapters.filter((c) => c.isFree).length} free preview`}
+                    </p>
                 </div>
-                <div className="bg-card border border-border rounded-2xl w-full p-4 shadow-sm">
-                    <Accordion type="single" collapsible>
+                <div className="w-full">
+                    <Accordion type="single" collapsible className="space-y-2">
                         {
                             chapters.map((chapter)=>(
-                                <AccordionItem value={chapter.id} key={chapter.id} >
+                                <AccordionItem value={chapter.id} key={chapter.id} className="rounded-[20px] border-0 bg-soft px-4">
                                     <AccordionTrigger className="hover:no-underline">
                                         <div className="flex items-center justify-between w-full pr-3 gap-x-3">
                                             <div className="flex items-center gap-x-3">
-                                                <span className="px-3 py-2 rounded-full bg-primary/10">
-                                                    <VideoIcon className="h-4 w-4 text-primary" />
+                                                <span className={chapter.isFree
+                                                    ? "size-9 shrink-0 rounded-full bg-ink text-white flex items-center justify-center"
+                                                    : "size-9 shrink-0 rounded-full bg-white text-ink flex items-center justify-center"} aria-hidden="true">
+                                                    {chapter.isFree ? <Play className="size-4" /> : <VideoIcon className="size-4" />}
                                                 </span>
-                                                <h2 className="text-zinc-700 font-semibold text-sm text-left">{chapter.title}</h2>
+                                                <h3 className="text-ink font-medium text-[15px] text-left">{chapter.title}</h3>
                                             </div>
                                             <div className="flex items-center gap-x-3">
                                                 {
@@ -64,7 +69,8 @@ export const Chapters = ({
                                                         <Badge
                                                             role="link"
                                                             tabIndex={0}
-                                                            className="cursor-pointer hover:bg-primary/80"
+                                                            variant="info"
+                                                            className="cursor-pointer hover:bg-peri"
                                                             onClick={(e)=>{
                                                                 e.stopPropagation();
                                                                 router.push(`/course/${chapter.courseId}/view/chapter/${chapter.id}`);
@@ -76,11 +82,11 @@ export const Chapters = ({
                                                                 router.push(`/course/${chapter.courseId}/view/chapter/${chapter.id}`);
                                                             }}
                                                         >
-                                                            Preview
+                                                            Free preview
                                                         </Badge>
                                                     )
                                                 }
-                                                <span className="text-sm text-zinc-600">
+                                                <span className="text-sm text-muted-foreground tabular-nums">
                                                     {parseDuration(chapter.duration)}
                                                 </span>
                                             </div>
@@ -96,6 +102,6 @@ export const Chapters = ({
                     </Accordion>
                 </div>
             </div>
-        </div>
+        </section>
     )
 }

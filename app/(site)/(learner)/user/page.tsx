@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { ArrowUpRight, Award, BarChart3, ShoppingCart, UserPen } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -19,7 +19,7 @@ const ProfilePage = async() => {
 
     if (!session.user.profile) {
         return (
-            <div className="flex flex-col items-center justify-center min-h-[60vh]">
+            <div className="flex flex-col items-center justify-center min-h-[60vh] px-4 py-10">
                 <RoleForm/>
             </div>
         )
@@ -28,106 +28,71 @@ const ProfilePage = async() => {
     const courses = await getUserCourses(session.user.id);
     const isTutor = session.user.role === "TUTOR";
 
+    const firstName = session.user.name?.split(" ")[0];
+    const today = new Date().toLocaleDateString("en-IN", { weekday : "long", day : "numeric", month : "long" });
+
+    const actions = [
+        { href : "/user/edit-profile", label : "Edit profile", hint : "Name, bio and social links", icon : UserPen, tone : "bg-peri", show : true },
+        { href : "/cart", label : "Cart", hint : "Courses waiting at checkout", icon : ShoppingCart, tone : "bg-peach", show : !isTutor },
+        { href : "/user/certificates", label : "Certificates", hint : "Download and share", icon : Award, tone : "bg-mint", show : true },
+        {
+            href : isTutor ? "/tutor/analytics" : "/user/my-learning",
+            label : isTutor ? "Analytics" : "My learning",
+            hint : isTutor ? "Sales and engagement" : "Progress and study time",
+            icon : BarChart3,
+            tone : "bg-lilac",
+            show : true
+        },
+    ].filter((action) => action.show);
+
     return (
-        <div className="min-h-screen pb-20">
-            {/* Profile Header */}
-            <section className="bg-zinc-900 pt-16 pb-24 relative overflow-hidden">
-                <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/3 w-96 h-96 bg-primary/20 rounded-full blur-3xl opacity-50" />
-                <PageContainer className="relative z-10">
-                    <div className="flex items-center gap-x-6 md:gap-x-10">
-                        <Avatar className="h-24 w-24 md:h-32 md:w-32 border-4 border-zinc-800 shadow-xl">
+        <div className="pb-10">
+            <PageContainer className="pt-6 md:pt-8">
+                <div className="flex flex-wrap items-center justify-between gap-5">
+                    <div className="flex items-center gap-4">
+                        <Avatar className="size-16 md:size-20 ring-4 ring-white">
                             <AvatarImage src={session.user?.image || ""} alt={session.user.name || "Profile"} />
-                            <AvatarFallback className="text-2xl md:text-4xl font-semibold">
+                            <AvatarFallback className="text-2xl md:text-3xl">
                                 {session.user.name?.charAt(0)}
                             </AvatarFallback>
                         </Avatar>
-                        <div className="space-y-2">
-                            <h1 className="text-3xl md:text-5xl font-bold text-white tracking-tight">
-                                Welcome back, {session.user.name?.split(" ")[0]}!
+                        <div className="space-y-1">
+                            <p className="text-sm text-muted-foreground">{today}</p>
+                            <h1 className="text-display-sm">
+                                Hello, {firstName}
                             </h1>
-                            <p className="text-zinc-400 font-medium md:text-lg">
-                                {isTutor ? "Tutor Dashboard" : "Learner Dashboard"}
-                            </p>
                         </div>
                     </div>
-                </PageContainer>
-            </section>
+                    <span className="inline-flex h-10 items-center rounded-full bg-white px-5 text-sm font-medium text-ink">
+                        {isTutor ? "Tutor account" : "Learner account"}
+                    </span>
+                </div>
 
-            {/* Quick Actions Grid */}
-            <section className="-mt-10 px-4 md:px-0 relative z-20">
-                <PageContainer>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-                        <Link 
-                            className="group flex flex-col items-center justify-center p-6 bg-card border border-border rounded-2xl shadow-sm hover:shadow-md hover:border-primary/50 transition-all duration-300 bg-white"
-                            href="/user/edit-profile"
-                        >
-                            <div className="w-16 h-16 md:w-20 md:h-20 relative mb-4 opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300">
-                                <Image
-                                    src="/assets/profile.png"
-                                    alt="Edit Profile"
-                                    fill
-                                    className="object-contain"
-                                />
-                            </div>
-                            <h3 className="font-semibold text-foreground text-sm md:text-base">Edit Profile</h3>
-                        </Link>
-                        
-                        {!isTutor && (
-                            <Link
-                                className="group flex flex-col items-center justify-center p-6 bg-card border border-border rounded-2xl shadow-sm hover:shadow-md hover:border-primary/50 transition-all duration-300 bg-white"
-                                href="/cart"
-                            >
-                                <div className="w-16 h-16 md:w-20 md:h-20 relative mb-4 opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300">
-                                    <Image
-                                        src="/assets/cart.png"
-                                        alt="Cart"
-                                        fill
-                                        className="object-contain"
-                                    />
-                                </div>
-                                <h3 className="font-semibold text-foreground text-sm md:text-base">Cart</h3>
-                            </Link>
-                        )}
-                        
-                        <Link 
-                            className="group flex flex-col items-center justify-center p-6 bg-card border border-border rounded-2xl shadow-sm hover:shadow-md hover:border-primary/50 transition-all duration-300 bg-white"
-                            href="/user/certificates"
-                        >
-                            <div className="w-16 h-16 md:w-20 md:h-20 relative mb-4 opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300">
-                                <Image
-                                    src="/assets/color-certificate.png"
-                                    alt="Certificates"
-                                    fill
-                                    className="object-contain"
-                                />
-                            </div>
-                            <h3 className="font-semibold text-foreground text-sm md:text-base">My Certificates</h3>
-                        </Link>
-                        
+                <nav aria-label="Quick actions" className="mt-6 grid grid-cols-2 lg:grid-cols-4 gap-3">
+                    {actions.map((action) => (
                         <Link
-                            className="group flex flex-col items-center justify-center p-6 bg-card border border-border rounded-2xl shadow-sm hover:shadow-md hover:border-primary/50 transition-all duration-300 bg-white"
-                            href={isTutor ? "/tutor/analytics" : "/user/my-learning"}
+                            key={action.href}
+                            href={action.href}
+                            className={`group flex min-h-40 flex-col justify-between rounded-3xl p-5 text-ink transition-transform duration-300 hover:-translate-y-0.5 ${action.tone}`}
                         >
-                            <div className="w-16 h-16 md:w-20 md:h-20 relative mb-4 opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300">
-                                <Image
-                                    src="/assets/analyse.png"
-                                    alt="Analytics"
-                                    fill
-                                    className="object-contain"
-                                />
+                            <div className="flex items-start justify-between">
+                                <span className="size-12 rounded-full bg-ink text-white flex items-center justify-center" aria-hidden="true">
+                                    <action.icon className="size-5" />
+                                </span>
+                                <span className="size-9 rounded-full bg-white/60 flex items-center justify-center transition-transform duration-300 group-hover:rotate-45" aria-hidden="true">
+                                    <ArrowUpRight className="size-4" />
+                                </span>
                             </div>
-                            <h3 className="font-semibold text-foreground text-sm md:text-base">
-                                {isTutor ? "Analytics" : "My Learning"}
-                            </h3>
+                            <div>
+                                <h2 className="text-lg font-medium tracking-tight">{action.label}</h2>
+                                <p className="text-xs text-ink-2">{action.hint}</p>
+                            </div>
                         </Link>
-                    </div>
-                </PageContainer>
-            </section>
+                    ))}
+                </nav>
+            </PageContainer>
 
-            {/* User Courses Section */}
-            <div className="mt-16">
-                <UserCourses />
-            </div>
+            <UserCourses />
         </div>
     )
 }

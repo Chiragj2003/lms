@@ -106,7 +106,7 @@ export const NotesForm = ({
                                     <Editor
                                         onChange={field.onChange}
                                         value={field.value}
-                                        className="border-2  py-4 border-zinc-500"
+                                        className="border-0 py-4 rounded-2xl bg-soft"
                                     />
                                 </FormControl>
                             </FormItem>

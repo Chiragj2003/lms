@@ -11,13 +11,13 @@ const EditLayoutPage = ({
 } : EditLayoutPageProps ) => {
 
     return (
-        <PageContainer className="py-10 md:py-16">
-            <h1 className="text-3xl font-bold tracking-tight text-foreground mb-8">Edit profile</h1>
-            <div className="w-full bg-card border border-border rounded-2xl shadow-sm overflow-hidden flex flex-col md:flex-row">
-                <aside className="w-full md:w-64 shrink-0 border-b md:border-b-0 md:border-r border-border p-3">
+        <PageContainer className="py-6 md:py-8">
+            <h1 className="text-display-sm mb-6">Edit profile</h1>
+            <div className="w-full flex flex-col md:flex-row gap-4 items-start">
+                <aside className="w-full md:w-72 shrink-0 rounded-[28px] bg-white p-2">
                     <EditItems/>
                 </aside>
-                <section className="flex-1 min-w-0">
+                <section className="flex-1 min-w-0 w-full rounded-[32px] bg-white">
                     {
                         children
                     }

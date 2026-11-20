@@ -53,7 +53,7 @@ export const MockPaymentForm = ({ amount, confirmUrl, successUrl, onSuccess } : 
         }
     };
 
-    const field = "w-full h-11 px-3 border border-input bg-background rounded-lg text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent";
+    const field = "w-full h-12 px-4 border-[1.5px] border-transparent bg-soft rounded-2xl text-[15px] text-ink focus:outline-none focus:border-ink focus:bg-white";
     const label = "text-sm font-medium text-foreground";
 
     return (
@@ -105,7 +105,7 @@ export const MockPaymentForm = ({ amount, confirmUrl, successUrl, onSuccess } : 
                 type="submit"
                 size="lg"
                 disabled={paying}
-                className="w-full h-12 text-base font-semibold"
+                className="w-full"
             >
                 {paying ? "Processing…" : `Pay ${formatPrice(amount)}`}
             </Button>

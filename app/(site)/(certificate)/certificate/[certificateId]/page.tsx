@@ -1,4 +1,5 @@
 import { auth } from "@/auth";
+import { ShieldCheck } from "lucide-react";
 import { DownloadCertificateButton } from "@/components/utils/download-certificate-button";
 import { getCertificateById } from "@/server/certificate";
 import { Metadata } from "next";
@@ -75,20 +76,26 @@ const CertificatePage = async (props: CertificatePageProps) => {
 
 
     return (
-        <main className="py-10 px-6" >
+        <main className="py-8 px-4 sm:px-6" >
             <div className="w-full max-w-5xl mx-auto">
-                <div className="flex items-center justify-end">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                    <span className="inline-flex h-10 items-center gap-2 rounded-full bg-mint px-4 text-sm font-medium text-[#0F3D22]">
+                        <ShieldCheck className="size-4" aria-hidden="true" />
+                        Verified certificate
+                    </span>
                     <DownloadCertificateButton
                         disabled={!session || !session.user.id || session.user.id!==certificate.userId}
                         certificate={certificateSVG}
                         certificateId={certificate.id}
                     />
                 </div>
-                <div className="w-full aspect-video relative border border-zinc-200 mt-6 overflow-hidden">
+                <div className="mt-5 rounded-[32px] bg-white p-3 shadow-float">
+                <div className="w-full aspect-video relative overflow-hidden rounded-[24px]">
                     <div 
                         className="h-full w-full"
                         dangerouslySetInnerHTML={{ __html: certificateSVG }}
                     />
+                </div>
                 </div>
             </div>
         </main>

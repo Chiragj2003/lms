@@ -45,7 +45,7 @@ const ChapterPage = async (props: ChapterPageProps) => {
     const completionText = `(${completedFields}/${totalFields})`;
 
     return (
-        <div className="min-h-screen bg-muted/20">
+        <div className="min-h-full">
             { !chapter.isPublished && (
                 <Banner
                     variant="warning"
@@ -54,18 +54,18 @@ const ChapterPage = async (props: ChapterPageProps) => {
             ) }
             
             {/* Sticky Header */}
-            <div className="sticky top-0 z-40 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
+            <div className="sticky top-0 z-40 w-full bg-background/90 backdrop-blur">
                 <PageContainer className="py-4">
                     <Link
                         href={`/tutor/courses/${params.courseId}`}
-                        className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition mb-4 font-medium group"
+                        className="inline-flex h-10 items-center rounded-full bg-white px-4 text-sm text-ink hover:bg-soft transition mb-4 font-medium group"
                     >
                         <ArrowLeft className="h-4 w-4 mr-2 group-hover:-translate-x-1 transition-transform" />
                         Back to course setup
                     </Link>
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <div className="flex flex-col gap-y-1">
-                            <h1 className="text-2xl font-bold text-foreground">
+                            <h1 className="text-display-sm">
                                 Chapter Builder
                             </h1>
                             <div className="flex items-center gap-x-3">
@@ -88,16 +88,16 @@ const ChapterPage = async (props: ChapterPageProps) => {
                     
                     {/* Sticky Sidebar Nav */}
                     <div className="hidden lg:flex flex-col w-64 shrink-0 sticky top-40 space-y-2">
-                        <a href="#basics" className="px-4 py-3 rounded-lg text-sm font-medium hover:bg-muted text-foreground transition-colors flex items-center gap-x-3">
-                            <LayoutDashboard className="w-4 h-4 text-primary" />
+                        <a href="#basics" className="h-12 px-4 rounded-2xl text-[15px] font-medium bg-white hover:bg-soft text-ink transition-colors flex items-center gap-x-3">
+                            <LayoutDashboard className="w-4 h-4 text-ink" />
                             Basic Info
                         </a>
-                        <a href="#media" className="px-4 py-3 rounded-lg text-sm font-medium hover:bg-muted text-foreground transition-colors flex items-center gap-x-3">
-                            <Video className="w-4 h-4 text-primary" />
+                        <a href="#media" className="h-12 px-4 rounded-2xl text-[15px] font-medium bg-white hover:bg-soft text-ink transition-colors flex items-center gap-x-3">
+                            <Video className="w-4 h-4 text-ink" />
                             Video & Media
                         </a>
-                        <a href="#resources" className="px-4 py-3 rounded-lg text-sm font-medium hover:bg-muted text-foreground transition-colors flex items-center gap-x-3">
-                            <FileText className="w-4 h-4 text-primary" />
+                        <a href="#resources" className="h-12 px-4 rounded-2xl text-[15px] font-medium bg-white hover:bg-soft text-ink transition-colors flex items-center gap-x-3">
+                            <FileText className="w-4 h-4 text-ink" />
                             Resources & Quiz
                         </a>
                     </div>
@@ -107,9 +107,9 @@ const ChapterPage = async (props: ChapterPageProps) => {
                         
                         {/* Section 1: Basics */}
                         <section id="basics" className="space-y-6 scroll-mt-40">
-                            <div className="flex flex-col gap-y-2 pb-4 border-b border-border">
-                                <h2 className="text-2xl text-foreground font-bold flex items-center gap-x-2">
-                                    <LayoutDashboard className="w-5 h-5 text-primary" />
+                            <div className="flex flex-col gap-y-1">
+                                <h2 className="text-2xl text-ink font-medium tracking-tight flex items-center gap-x-3">
+                                    <LayoutDashboard className="size-9 p-2 rounded-full bg-peri text-ink" />
                                     Customize chapter
                                 </h2>
                                 <p className="text-muted-foreground text-sm">Define the title, description, and preview access.</p>
@@ -123,9 +123,9 @@ const ChapterPage = async (props: ChapterPageProps) => {
 
                         {/* Section 2: Media */}
                         <section id="media" className="space-y-6 scroll-mt-40">
-                            <div className="flex flex-col gap-y-2 pb-4 border-b border-border">
-                                <h2 className="text-2xl text-foreground font-bold flex items-center gap-x-2">
-                                    <Video className="w-5 h-5 text-primary" />
+                            <div className="flex flex-col gap-y-1">
+                                <h2 className="text-2xl text-ink font-medium tracking-tight flex items-center gap-x-3">
+                                    <Video className="size-9 p-2 rounded-full bg-peri text-ink" />
                                     Video content
                                 </h2>
                                 <p className="text-muted-foreground text-sm">Upload the primary learning video and its transcript.</p>
@@ -139,9 +139,9 @@ const ChapterPage = async (props: ChapterPageProps) => {
 
                         {/* Section 3: Resources */}
                         <section id="resources" className="space-y-6 scroll-mt-40">
-                            <div className="flex flex-col gap-y-2 pb-4 border-b border-border">
-                                <h2 className="text-2xl text-foreground font-bold flex items-center gap-x-2">
-                                    <FileText className="w-5 h-5 text-primary" />
+                            <div className="flex flex-col gap-y-1">
+                                <h2 className="text-2xl text-ink font-medium tracking-tight flex items-center gap-x-3">
+                                    <FileText className="size-9 p-2 rounded-full bg-peri text-ink" />
                                     Learning materials
                                 </h2>
                                 <p className="text-muted-foreground text-sm">Attach files, resources, and build a quiz to test knowledge.</p>

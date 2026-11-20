@@ -64,7 +64,7 @@ const ChapterPage = async (props: ChapterPageProps) => {
 
     return (
         <div className="h-full">
-            <div>
+            <div className="space-y-3">
                 {
                     userProgress?.isCompleted && (
                         <Banner
@@ -115,19 +115,19 @@ const ChapterPage = async (props: ChapterPageProps) => {
                         quizResultId={chapter?.quiz?.result[0]?.id}
                     />
                 ) : (
-                    <div className="border-t border-border mt-4 p-6 md:p-10">
-                        <div className="max-w-xl mx-auto text-center space-y-4 p-8 rounded-2xl bg-muted border border-border">
-                            <h2 className="text-xl font-semibold text-foreground">
+                    <div className="mt-3">
+                        <div className="text-center space-y-4 p-8 md:p-10 rounded-[28px] bg-peri">
+                            <h2 className="text-2xl font-medium tracking-tight text-ink">
                                 You&apos;re watching a free preview of {chapter.title}
                             </h2>
-                            <p className="text-sm text-muted-foreground">
+                            <p className="text-sm text-ink-2 max-w-xl mx-auto">
                                 Create a free account to track your progress, take notes and ask questions — then enroll to unlock every chapter.
                             </p>
                             <div className="flex flex-col sm:flex-row gap-3 justify-center">
                                 <Button asChild>
                                     <Link href="/register">Sign up free</Link>
                                 </Button>
-                                <Button asChild variant="outline">
+                                <Button asChild variant="light">
                                     <Link href={`/course/${params.courseId}`}>View course details</Link>
                                 </Button>
                             </div>

@@ -7,12 +7,12 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils"
 
 const progressVariant= cva(
-    "h-full w-full flex-1 bg-primary transition-all",
+    "h-full w-full flex-1 rounded-full bg-ink transition-all",
     {
         variants : {
             variant : {
-                default : "bg-primary",
-                success : "bg-success"
+                default : "bg-ink",
+                success : "bg-mint-deep"
             },
         },
         defaultVariants : {
@@ -32,7 +32,7 @@ const Progress = React.forwardRef<
   <ProgressPrimitive.Root
     ref={ref}
     className={cn(
-      "relative h-4 w-full overflow-hidden rounded-full",
+      "relative h-2.5 w-full overflow-hidden rounded-full",
       className
     )}
     {...props}

@@ -14,12 +14,14 @@ const LayoutPage = ({
     children
 }: LayoutPageProps ) => {
     return (
-        <main className="h-full overflow-y-auto">
-            <Header variant="default" />
-            <section className="h-[calc(100%-5rem)]">
-                {children}
-            </section>
-        </main>
+        <div className="h-full bg-frame p-2 sm:p-4">
+            <div className="h-full flex flex-col rounded-[36px] bg-ink px-2 pb-2 sm:px-2.5 sm:pb-2.5">
+                <Header variant="app" />
+                <main className="flex-1 min-h-0 overflow-y-auto rounded-[28px] bg-background">
+                    {children}
+                </main>
+            </div>
+        </div>
     );
 }
 

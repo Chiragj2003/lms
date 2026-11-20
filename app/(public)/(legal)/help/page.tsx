@@ -2,7 +2,6 @@ import { Metadata } from "next";
 import { Mail } from "lucide-react";
 
 import { PageContainer } from "@/components/ui/page-container";
-import { SectionHeader } from "@/components/ui/section-header";
 import {
     Accordion,
     AccordionContent,
@@ -88,22 +87,20 @@ const TOPICS = [
 
 const HelpPage = () => {
     return (
-        <PageContainer size="narrow" className="py-12 md:py-20">
-            <div className="text-center mb-12">
-                <SectionHeader
-                    title="Help Center"
-                    subtitle="Answers to common questions about learning and teaching on LearnIt."
-                />
+        <PageContainer size="narrow" className="py-8 md:py-12">
+            <div className="text-center mb-10 space-y-3">
+                <h1 className="text-display">How can we help?</h1>
+                <p className="text-lg text-ink-2">Answers to common questions about learning and teaching on LearnIt.</p>
             </div>
 
-            <div className="space-y-10">
+            <div className="space-y-4">
                 {TOPICS.map((section) => (
                     <div key={section.topic}>
-                        <h2 className="text-lg font-semibold text-foreground mb-2">{section.topic}</h2>
-                        <Accordion type="single" collapsible className="w-full">
+                        <h2 className="text-xl font-medium tracking-tight text-ink mb-3 px-1">{section.topic}</h2>
+                        <Accordion type="single" collapsible className="w-full space-y-2">
                             {section.faqs.map((faq, i) => (
-                                <AccordionItem key={i} value={`${section.topic}-${i}`} className="border-b border-border">
-                                    <AccordionTrigger className="text-left text-base font-medium text-foreground hover:no-underline hover:text-primary transition-colors">
+                                <AccordionItem key={i} value={`${section.topic}-${i}`} className="rounded-3xl border-0 bg-white px-6">
+                                    <AccordionTrigger className="text-left text-base font-medium text-ink hover:no-underline py-5">
                                         {faq.q}
                                     </AccordionTrigger>
                                     <AccordionContent className="text-muted-foreground leading-relaxed text-sm">
@@ -116,14 +113,14 @@ const HelpPage = () => {
                 ))}
             </div>
 
-            <div className="mt-16 p-6 rounded-2xl bg-muted border border-border flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="mt-10 p-7 rounded-[32px] bg-ink text-white flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div>
-                    <h3 className="font-semibold text-foreground">Still need help?</h3>
-                    <p className="text-sm text-muted-foreground">Our support team is happy to answer anything not covered here.</p>
+                    <h3 className="text-xl font-medium">Still need help?</h3>
+                    <p className="text-sm text-[#D2D3DB]">Our support team is happy to answer anything not covered here.</p>
                 </div>
                 <a
                     href="mailto:support@learnit.app"
-                    className="inline-flex items-center gap-x-2 text-sm font-semibold text-primary hover:underline underline-offset-4 whitespace-nowrap"
+                    className="inline-flex h-11 items-center gap-x-2 rounded-full bg-peri px-5 text-sm font-semibold text-ink whitespace-nowrap hover:bg-peri-deep"
                 >
                     <Mail className="h-4 w-4" />
                     support@learnit.app

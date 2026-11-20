@@ -24,10 +24,10 @@ export const EditItems = () => {
                             href={item.href}
                             aria-current={active ? "page" : undefined}
                             className={cn(
-                                "px-4 py-2.5 rounded-lg text-sm font-medium transition-colors",
+                                "flex h-12 items-center px-4 rounded-2xl text-[15px] font-medium transition-colors whitespace-nowrap",
                                 active
-                                    ? "bg-accent text-accent-foreground"
-                                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                                    ? "bg-ink text-white"
+                                    : "text-ink hover:bg-soft"
                             )}
                         >
                             {item.label}

@@ -1,4 +1,7 @@
-import Image from "next/image";
+import Link from "next/link";
+import { Award } from "lucide-react";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Button } from "@/components/ui/button";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
 
@@ -21,26 +24,34 @@ const CertificatesPage = async() => {
     const certificates = await getUserCertificates(session.user.id);
 
     return (
-        <PageContainer className="py-12 md:py-20">
-            <h1 className="text-3xl font-bold text-foreground mb-10" >Your Certificates</h1>
+        <PageContainer className="py-6 md:py-8">
+            <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
+                <div className="space-y-1">
+                    <p className="text-sm text-muted-foreground">Earned by finishing every chapter of a course</p>
+                    <h1 className="text-display-sm">Certificates</h1>
+                </div>
+                {certificates.length > 0 && (
+                    <span className="inline-flex h-10 items-center rounded-full bg-white px-5 text-sm font-medium text-ink">
+                        {certificates.length} earned
+                    </span>
+                )}
+            </div>
             
             { certificates.length === 0 && (
-                <div className="mt-20 space-y-6">
-                    <div className="w-60 aspect-square mx-auto relative opacity-80">
-                        <Image
-                            src="/assets/empty.jpg"
-                            fill
-                            alt=""
-                            className="object-contain mix-blend-multiply"
-                        />
-                    </div>
-                    <p className="text-base text-muted-foreground font-medium text-center max-w-md mx-auto">
-                    Your certificate wallet is empty. 📚 Start exploring our courses and earn your first certificate today!
-                    </p>
-                </div>
+                <EmptyState
+                    className="rounded-[32px] bg-white py-14"
+                    icon={<Award />}
+                    title="No certificates yet"
+                    description="Finish every chapter of a course to earn its certificate."
+                    action={
+                        <Button asChild>
+                            <Link href="/user/my-learning">Continue learning</Link>
+                        </Button>
+                    }
+                />
             ) }
             
-            <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {
                     certificates.map((certificate)=>(
                         <CertificateCard

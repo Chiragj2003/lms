@@ -9,13 +9,13 @@ export interface PageContainerProps {
 
 export function PageContainer({ children, className, size = 'default' }: PageContainerProps) {
   const sizeClasses = {
-    default: "max-w-[1280px]",
+    default: "max-w-[1320px]",
     narrow: "max-w-3xl",
     wide: "max-w-7xl",
   }
 
   return (
-    <div className={cn("mx-auto px-6 md:px-10 lg:px-16 w-full", sizeClasses[size], className)}>
+    <div className={cn("mx-auto px-4 sm:px-6 w-full", sizeClasses[size], className)}>
       {children}
     </div>
   )

@@ -48,7 +48,7 @@ export const GraphChart = ({
         <Card>
             <CardHeader>
                 <CardTitle>
-                    <Heading className="md:text-4xl font-[600]">
+                    <Heading className="text-2xl md:text-3xl font-medium tracking-tight">
                         Time Spent By You
                     </Heading>
                 </CardTitle>

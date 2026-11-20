@@ -41,7 +41,7 @@ export const QuizForm = ({
     }
     
     return (
-        <div className="w-full bg-card border border-border rounded-2xl shadow-sm p-4">
+        <div className="w-full bg-white rounded-3xl p-5">
             <p className="text-sm text-muted-foreground mb-4">
                 {initialData.quiz ? "Edit the questions for your existing quiz." : "Create a new quiz to test your students' knowledge."}
             </p>

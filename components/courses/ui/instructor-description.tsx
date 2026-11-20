@@ -37,18 +37,18 @@ export const InstructorDescription = ({
 }: InstructorDescriptionProps ) => {
     
     return (
-        <section className="w-full mt-20" >
-            <div className="max-w-3xl mx-auto space-y-6">
-                <h2 className="text-2xl md:text-3xl font-bold text-foreground">
+        <section className="w-full rounded-[32px] bg-white p-5 sm:p-8" >
+            <div className="w-full space-y-6">
+                <h2 className="text-2xl md:text-3xl font-medium tracking-tight text-ink">
                     Instructor
                 </h2>
-                <div className="bg-card border border-border rounded-2xl p-6 space-y-6 shadow-sm">
+                <div className="space-y-6">
                     <div className="space-y-1">
-                        <h3 className="text-xl md:text-2xl font-semibold text-primary">{tutor.name}</h3>
+                        <h3 className="text-xl md:text-2xl font-medium text-ink">{tutor.name}</h3>
                         <p className="text-muted-foreground text-base font-medium">{tutor.profile?.headline}</p>
                     </div>
                     <div className="flex flex-col md:flex-row md:items-center gap-6">
-                        <div className="relative size-28 md:size-36 rounded-full overflow-hidden bg-muted flex items-center justify-center shrink-0">
+                        <div className="relative size-28 md:size-36 rounded-full overflow-hidden bg-lilac flex items-center justify-center shrink-0">
                             {
                                 tutor.image ? (
                                     <Image
@@ -58,7 +58,7 @@ export const InstructorDescription = ({
                                         className="object-cover"
                                     />
                                 ) : (
-                                    <span className="text-4xl font-bold text-muted-foreground">
+                                    <span className="text-4xl font-semibold text-ink">
                                         {tutor.name?.charAt(0)??"I"}
                                     </span>
                                 )
@@ -66,19 +66,19 @@ export const InstructorDescription = ({
                         </div>
                         <div className="flex flex-col gap-y-3">
                             <div className="flex items-center gap-x-4 text-foreground font-medium">
-                                <SlBadge className="size-5" fill="#27272a" />
+                                <SlBadge className="size-5" fill="#121216" />
                                 <span className="text-sm">{tutor.courses.reduce((prev, curr)=>{
                                     return prev+curr._count.ratings
                                 }, 0).toLocaleString()} Reviews</span>
                             </div>
                             <div className="flex items-center gap-x-4 text-foreground font-medium">
-                                <UsersRound className="size-5" fill="#27272a" />
+                                <UsersRound className="size-5" fill="#121216" />
                                 <span className="text-sm">{tutor.courses.reduce((prev, curr)=>{
                                     return prev+curr._count.purchases
                                 }, 0).toLocaleString()} Students</span>
                             </div>
                             <div className="flex items-center gap-x-4 text-foreground font-medium">
-                                <FaCirclePlay className="size-5" fill="#27272a" />
+                                <FaCirclePlay className="size-5" fill="#121216" />
                                 <span className="text-sm">{tutor._count.courses} Courses</span>
                             </div>
                         </div>

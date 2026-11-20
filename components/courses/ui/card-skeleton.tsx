@@ -13,17 +13,17 @@ export const CardSkeleton = ({
 } : CardSkeletonProps ) => {
     return (
         <div className={cn(
-            "w-72 md:w-80 space-y-6 p-3 pb-6 bg-white shadow-md border rounded-md group",
+            "w-full space-y-5 p-2.5 pb-5 bg-white rounded-[28px] group",
             className
         )}>
-            <Skeleton className='w-full aspect-video bg-zinc-200 rounded-md'/>
+            <Skeleton className='w-full aspect-video rounded-[22px]'/>
             <div className="w-full space-y-3 px-3">
                 <div className='space-y-1.5'>
-                    <Skeleton className='w-full h-5 bg-zinc-200'/>
-                    <Skeleton className='w-36 h-5 bg-zinc-200'/>
+                    <Skeleton className='w-full h-5'/>
+                    <Skeleton className='w-36 h-5'/>
                 </div>
-                <Skeleton className='w-24 h-5 bg-zinc-200'/>
-                { isBestSeller && (<Skeleton className='w-24 h-8 bg-zinc-200 border-b-2 border-zinc-400 rounded-full'/>) }
+                <Skeleton className='w-24 h-5'/>
+                { isBestSeller && (<Skeleton className='w-24 h-8 rounded-full'/>) }
             </div>
         </div>
     )

@@ -14,7 +14,7 @@ export const SidebarRoutes = () => {
             label : "Courses",
             Icon : LibraryBig,
             href : "/tutor/courses",
-            active : pathname === "/tutor/courses"
+            active : pathname.startsWith("/tutor/courses")
         },
         {
             label : "Questions",
@@ -38,7 +38,7 @@ export const SidebarRoutes = () => {
     ], [pathname]);
     
     return (
-        <ul className="flex flex-col w-full list-none space-y-1">
+        <ul className="flex flex-col w-full list-none space-y-1.5">
             {
                 routes.map((route)=>(
                     <SidebarItem

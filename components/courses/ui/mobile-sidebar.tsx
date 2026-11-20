@@ -38,13 +38,13 @@ export const MobileSidebar = ({
             open={isOpen}
             onOpenChange={onOpenChange}
         >
-            <SheetContent className="h-full bg-neutral-800 w-full border-none p-0" side="left">
+            <SheetContent className="h-full bg-white w-full sm:max-w-sm border-none p-0" side="left">
                 <div className="h-full w-full flex flex-col overflow-y-auto chapter-scroll relative">
-                    <SheetHeader className="flex flex-col border-b p-8 space-y-6 sticky top-0 bg-neutral-800">
-                        <SheetTitle className="text-white font-semibold">{course.title}</SheetTitle>
+                    <SheetHeader className="flex flex-col p-6 space-y-4 sticky top-0 bg-white z-10 text-left">
+                        <SheetTitle className="text-lg font-medium tracking-tight text-ink">{course.title}</SheetTitle>
                         {
                             purchase && (
-                                <SheetDescription className="mt-10">
+                                <SheetDescription className="rounded-2xl bg-soft p-3">
                                     <CourseProgress
                                         variant="success"
                                         value={progressCount}
@@ -53,7 +53,7 @@ export const MobileSidebar = ({
                             )
                         }
                     </SheetHeader>
-                    <div className="flex flex-col w-full pl-4">
+                    <div className="flex flex-col gap-1 w-full px-3 pb-4">
                         {
                             course.chapters.map((chapter)=>(
                                 <SidebarItem

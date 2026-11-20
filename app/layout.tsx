@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Outfit } from "next/font/google";
 import "./globals.css";
 import { auth } from "@/auth";
 import { Toaster } from "sonner";
@@ -10,11 +10,11 @@ import { ModalProvider } from "@/providers/modal.provider";
 import { QueryProvider } from "@/providers/query.provider";
 import { CartSync } from "@/components/utils/cart-sync";
 
-const inter = Inter({
+const outfit = Outfit({
     subsets: ["latin"],
-    weight : ["400", "500", "600", "700"],
+    weight : ["300", "400", "500", "600", "700"],
     display : "swap",
-    variable: "--font-inter",
+    variable: "--font-outfit",
 });
 
 
@@ -36,7 +36,7 @@ export default async function RootLayout({
 
     return (
         <html lang="en">
-            <body className={inter.className}>
+            <body className={`${outfit.variable} font-sans antialiased`}>
                 {/* Better Auth's useSession fetches its own state, so no
                     session provider wrapper is needed. */}
                 <QueryProvider>

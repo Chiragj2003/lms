@@ -39,21 +39,23 @@ export const SearchForm = () => {
 
     return (
         <Form {...form}>
-            <form 
-                className="max-w-6xl w-full mx-auto py-10 px-6"
+            <form
+                className="w-full"
                 onSubmit={form.handleSubmit(onSubmit)}
+                role="search"
             >
-                <div className="flex bg-white/60 focus-within:bg-white items-center h-14 md:h-20 rounded-full px-4 md:px-6 transition-all">
-                    <Search className='h-6 w-6 md:h-8 md:w-8 text-foreground' />
-                    <FormField 
+                <div className="flex items-center gap-2 h-16 rounded-full bg-white pl-5 pr-2 shadow-[inset_0_0_0_1px_hsl(var(--border))] focus-within:shadow-[inset_0_0_0_2px_#121216] transition-shadow">
+                    <Search className='size-5 shrink-0 text-ink' aria-hidden="true" />
+                    <FormField
                         control={form.control}
                         name='query'
                         render={({field})=>(
                             <FormItem className='w-full'>
                                 <FormControl className='w-full'>
-                                    <Input 
-                                        className="h-full w-full bg-transparent outline-none placeholder:text-zinc-500 focus:placeholder:text-foreground focus:bg-white focus-visible:ring-0 focus-visible:ring-offset-0 border-none md:text-lg font-medium text-foreground transition-all"
-                                        placeholder='Search courses and keywords'
+                                    <Input
+                                        className="h-12 w-full bg-transparent px-1 border-none focus-visible:bg-transparent text-base text-ink placeholder:text-muted-foreground"
+                                        placeholder='What do you want to learn?'
+                                        aria-label="Search courses"
                                         {...field}
                                     />
                                 </FormControl>
@@ -61,11 +63,11 @@ export const SearchForm = () => {
                         )}
                     />
                     <Button
-                        variant="secondary"
-                        className='rounded-full h-8 w-8 md:h-16 md:w-16'
+                        className='h-12 px-6'
                         type='submit'
                     >
-                        <ChevronRight className='md:h-8 md:w-8 text-foreground' />
+                        Search
+                        <ChevronRight className='size-4' />
                     </Button>
                 </div>
             </form>

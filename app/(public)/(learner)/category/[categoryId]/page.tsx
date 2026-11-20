@@ -1,11 +1,13 @@
-import Image from "next/image";
+import Link from "next/link";
+import { PackageOpen } from "lucide-react";
 import { Metadata } from "next";
 
 import { Card } from "@/components/courses/ui/card";
 import { getCoursesByCategoryId } from "@/server/course";
 import { categoryMetaData } from "@/server/metadata";
 import { PageContainer } from "@/components/ui/page-container";
-import { SectionHeader } from "@/components/ui/section-header";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Button } from "@/components/ui/button";
 
 interface CategoryPageProps {
     params : Promise<{ categoryId : string }>
@@ -33,33 +35,40 @@ const CategoryPage = async (props: CategoryPageProps) => {
     const courses = await getCoursesByCategoryId(params.categoryId);
 
     return (
-        <PageContainer className="py-12 md:py-20 min-h-[60vh]">
+        <PageContainer className="py-6 md:py-8 min-h-[60vh]">
             {courses && (
-                <div className="mb-10">
-                    <SectionHeader 
-                        title={`${courses.category.name} Courses`}
-                        subtitle={`Explore all ${courses.courses.length} courses in this category.`}
-                    />
+                <div className="relative mb-8 overflow-hidden rounded-[40px] bg-lilac px-6 py-10 sm:px-10 sm:py-12 text-ink">
+                    <nav aria-label="Breadcrumb" className="text-sm text-ink-2">
+                        <Link href="/categories" className="underline-offset-4 hover:underline">Categories</Link>
+                        <span aria-hidden="true"> / </span>
+                        <span>{courses.category.name}</span>
+                    </nav>
+                    <h1 className="text-display mt-3">{courses.category.name}</h1>
+                    <div className="mt-5 flex flex-wrap gap-2">
+                        <span className="inline-flex h-8 items-center rounded-full bg-white px-4 text-sm font-medium">
+                            {courses.courses.length} {courses.courses.length === 1 ? "course" : "courses"}
+                        </span>
+                    </div>
+                    <svg aria-hidden="true" viewBox="0 0 150 110" className="pointer-events-none absolute -right-2 -bottom-2 h-56 w-80 opacity-30" fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M30 92 L70 48 L104 82" /><circle cx="112" cy="30" r="16" /><path d="M104 54v10M120 54v10M20 104h120" />
+                    </svg>
                 </div>
             )}
-            
+
             { (!courses || courses.courses.length === 0) ? (
-                <div className="flex flex-col items-center justify-center py-20 bg-card border border-border rounded-2xl">
-                    <div className="w-32 aspect-square relative opacity-50 mb-6">
-                        <Image
-                            src="/assets/bag.png"
-                            fill
-                            alt="Empty category"
-                            className="object-contain"
-                        />
-                    </div>
-                    <h3 className="text-xl font-semibold text-foreground mb-2">No courses yet</h3>
-                    <p className="text-muted-foreground text-center max-w-md">
-                        We are still working on adding courses to this category. Please check back later or explore other categories.
-                    </p>
-                </div>
+                <EmptyState
+                    className="rounded-[32px] bg-white py-16"
+                    icon={<PackageOpen />}
+                    title="No courses yet"
+                    description="We're still adding courses to this category. Check back soon, or explore other categories."
+                    action={
+                        <Button asChild>
+                            <Link href="/categories">Explore categories</Link>
+                        </Button>
+                    }
+                />
             ) : (
-                <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <section aria-label="Courses" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
                     {courses.courses.map((item)=>(
                         <Card
                             course={item}

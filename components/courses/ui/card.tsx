@@ -6,6 +6,8 @@ import { formatPrice } from "@/lib/format";
 import { Course } from "@prisma/client";
 import { MdOutlineShoppingCart, MdOutlineRemoveShoppingCart } from "react-icons/md";
 import { cn } from "@/lib/utils";
+import { toneFor } from "@/lib/tones";
+import { ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/hooks/use-cart";
 import { useSession } from "@/lib/auth-client";
@@ -49,11 +51,11 @@ export const Card = ({
     return (
         <div
             className={cn(
-                "group relative w-full flex flex-col bg-card border border-border rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 hover:border-primary/50",
+                "group relative w-full flex flex-col bg-white rounded-[28px] p-2.5 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-card-hover",
                 className
             )}
         >
-            <div className="w-full aspect-video relative bg-muted overflow-hidden">
+            <div className={cn("w-full aspect-video relative rounded-[22px] overflow-hidden", toneFor(course.id).bg)}>
                 <Image
                     src={course.image!}
                     alt={course.title}
@@ -61,12 +63,12 @@ export const Card = ({
                     sizes="(min-width: 768px) 20rem, 18rem"
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+                <div className="absolute inset-0 bg-ink/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
                 
                 {
                     isBestSeller && (
                         <div className="absolute top-3 left-3 z-10">
-                            <Badge variant="highlight" className="shadow-sm">
+                            <Badge variant="white">
                                 Bestseller
                             </Badge>
                         </div>
@@ -95,8 +97,8 @@ export const Card = ({
                                 variant="secondary"
                                 size="icon"
                                 className={cn(
-                                    "h-10 w-10 rounded-full shadow-md transition-colors",
-                                    inCart ? "bg-primary text-primary-foreground hover:bg-primary/90" : "bg-white text-zinc-900 hover:bg-zinc-100"
+                                    "h-11 w-11 rounded-full shadow-elevated transition-colors",
+                                    inCart ? "bg-ink text-white hover:bg-ink-2" : "bg-white text-ink hover:bg-soft"
                                 )}
                                 aria-label={inCart ? `Remove ${course.title} from cart` : `Add ${course.title} to cart`}
                                 onClick={(e)=>{
@@ -112,19 +114,22 @@ export const Card = ({
                 }
             </div>
             
-            <div className="flex flex-col flex-1 p-4 md:p-5">
+            <div className="flex flex-col flex-1 px-2.5 pt-4 pb-2">
                 <Link
                     href={`/course/${course.id}`}
                     className="outline-none after:absolute after:inset-0"
                 >
-                    <h3 className="font-semibold text-foreground line-clamp-2 text-base group-hover:text-primary transition-colors">
+                    <h3 className="font-medium text-ink line-clamp-2 text-lg leading-snug tracking-tight">
                         {course.title}
                     </h3>
                 </Link>
                 
                 <div className="mt-auto pt-4 flex items-center justify-between">
-                    <span className="font-bold text-lg text-primary">
+                    <span className="font-semibold text-xl text-ink">
                         {formatPrice(course.price!)}
+                    </span>
+                    <span aria-hidden="true" className="size-9 rounded-full bg-ink text-white flex items-center justify-center transition-transform duration-300 group-hover:rotate-45">
+                        <ArrowUpRight className="size-4" />
                     </span>
                 </div>
             </div>
