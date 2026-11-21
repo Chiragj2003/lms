@@ -12,7 +12,6 @@ import {
 } from "react-icons/fa6";
 import { FaFacebookSquare } from "react-icons/fa";
 import { IoMdLink } from "react-icons/io";
-import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { RichText as Preview } from "@/components/utils/rich-text";
 import { Cerificate, UserProgress } from "@prisma/client";
@@ -90,132 +89,44 @@ export const Overview = ({
     const router = useRouter();
 
     return (
-        <div className="w-full">
-            <div className="w-full flex flex-col gap-y-8">
-                <h1 className="text-ink text-lg md:text-xl font-medium">
+        <div className="w-full divide-y divide-border">
+            {/* About */}
+            <div className="pb-7 space-y-4">
+                <h1 className="text-ink text-xl md:text-2xl font-medium tracking-tight">
                     {shortDescription}
                 </h1>
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center justify-start gap-4 gap-x-10">
-                        <div className="flex flex-col">
-                            <span className="text-ink font-semibold">{purchases}</span>
-                            <span className="text-muted-foreground text-xs font-medium">
-                                students
-                            </span>
-                        </div>
-                    </div>
-                    {
-                        isPurchased && (
-                            <CourseProgressButton
-                                chapterId={chapterId}
-                                courseId={courseId}
-                                nextChapterId={nextChapterId}
-                                isCompleted={!!userProgress?.isCompleted}
-                                certificate={!!certificate}
-                            />
-                        )
-                    }
-                </div>
-                <div className="flex items-center gap-x-3">
-                    <FaCircleInfo className="h-5 w-5" />
-                    <span className="text-base font-medium">Last updated {format(updatedAt, "MMMM yyyy")}</span>
+                <div className="flex flex-wrap items-center gap-2 text-sm">
+                    <span className="inline-flex h-8 items-center rounded-full bg-soft px-3 font-medium text-ink">
+                        {purchases} {purchases === 1 ? "student" : "students"}
+                    </span>
+                    <span className="inline-flex h-8 items-center gap-2 rounded-full bg-soft px-3 text-ink-2">
+                        <FaCircleInfo className="size-3.5" aria-hidden />
+                        Last updated {format(updatedAt, "MMMM yyyy")}
+                    </span>
                 </div>
             </div>
-            <Separator className="mt-8"/>
-            <div className="mt-8 space-y-6 w-full">
-                <div className="flex items-center gap-x-6">
+
+            {/* Chapter description */}
+            <div className="py-7 space-y-3">
+                <div className="flex items-center gap-x-4">
                     <div className="size-14 shrink-0 relative rounded-full bg-peri-soft p-2.5">
-                        <Image
-                            src="/assets/certificate.png"
-                            alt=""
-                            fill
-                            className="object-contain"
-                        />
+                        <Image src="/assets/about.png" alt="" fill className="object-contain p-2.5" />
                     </div>
-                    <div>
-                        <h2 className="text-xl text-ink font-medium tracking-tight">Certificate</h2>
-                        <p className="text-sm text-muted-foreground">Earn your LearnIt certificate by completing every chapter.</p>
-                    </div>
-                </div>
-                <div className="w-full">
-                    <Button
-                        className="w-full font-semibold"
-                        variant="outline"
-                        disabled={!certificate}
-                        onClick={()=>router.push(`/certificate/${certificate?.id}`)}
-                    >
-                        {certificate ? "View your certificate" : "Complete every chapter to unlock"}
-                    </Button>
-                </div>
-            </div>
-            <Separator className="mt-8"/>
-            {
-                quizId && (
-                    <>
-                        <div className="mt-8 space-y-6 w-full">
-                        <div className="flex items-center gap-x-6">
-                            <div className="size-14 shrink-0 relative rounded-full bg-peri-soft p-2.5">
-                                <Image
-                                    src="/assets/exam.png"
-                                    alt=""
-                                    fill
-                                    className="object-contain"
-                                />
-                            </div>
-                            <div>
-                                <h2 className="text-xl text-ink font-medium tracking-tight">Quiz</h2>
-                                <p className="text-sm text-muted-foreground">Take a quiz to test and enhance your knowledge.</p>
-                            </div>
-                        </div>
-                        <div className="w-full">
-                            <Button
-                                className="w-full font-semibold"
-                                variant="outline"
-                                // Was gated on having a certificate (copied from the
-                                // button above), which hid the quiz until the whole
-                                // course was finished; owning the course is enough.
-                                disabled={!isPurchased}
-                                onClick={()=>router.push( quizResultId? `/course/${courseId}/quiz/${quizId}/result` : `/course/${courseId}/quiz/${quizId}`)}
-                            >
-                                { quizResultId ? "View result" : "Take test" }
-                            </Button>
-                        </div>
-                    </div>
-                    <Separator className="mt-8"/>
-                    </>
-                )
-            }
-            <div className="mt-8 space-y-3 w-full">
-                <div className="flex items-center gap-x-6">
-                    <div className="size-14 shrink-0 relative rounded-full bg-peri-soft p-2.5">
-                        <Image
-                            src="/assets/about.png"
-                            alt=""
-                            fill
-                            className="object-contain"
-                        />
-                    </div>
-                    <div>
-                        <h2 className="text-xl text-ink font-medium tracking-tight">Chapter Description</h2>
-                    </div>
+                    <h2 className="text-xl text-ink font-medium tracking-tight">Chapter description</h2>
                 </div>
                 <Preview value={description} />
             </div>
-            <Separator className="mt-8"/>
-            <div className="mt-8 space-y-3 w-full">
-                <div className="flex items-start gap-x-6">
+
+            {/* Instructor */}
+            <div className="py-7 space-y-3">
+                <div className="flex items-start gap-x-4">
                     <div className="size-14 shrink-0 relative rounded-full bg-peri-soft p-2.5">
-                        <Image
-                            src="/assets/avatar.png"
-                            alt=""
-                            fill
-                            className="object-contain"
-                        />
+                        <Image src="/assets/avatar.png" alt="" fill className="object-contain p-2.5" />
                     </div>
                     <div>
                         <h2 className="text-xl text-ink font-medium tracking-tight">{tutor.name}</h2>
                         <p className="text-sm text-muted-foreground">{tutor.profile?.headline || "Instructor"}</p>
-                        <div className="flex items-center justify-start flex-wrap gap-4 mt-4">
+                        <div className="flex items-center justify-start flex-wrap gap-2 mt-3">
                             {
                                 SOCIAL_LINKS.map(({ key, label, icon : Icon, className }) => {
                                     const href = safeLink(tutor.profile?.[key]);
@@ -227,9 +138,9 @@ export const Overview = ({
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             aria-label={`${tutor.name || "Instructor"} on ${label}`}
-                                            className="h-9 w-9 rounded-md bg-muted flex items-center justify-center hover:bg-accent transition-colors"
+                                            className="size-9 rounded-full bg-soft flex items-center justify-center hover:bg-frame transition-colors"
                                         >
-                                            <Icon className={`h-6 w-6 ${className}`} aria-hidden />
+                                            <Icon className={`size-5 ${className}`} aria-hidden />
                                         </a>
                                     );
                                 })
@@ -238,6 +149,70 @@ export const Overview = ({
                     </div>
                 </div>
                 <Preview value={tutor.profile?.description||""} />
+            </div>
+
+            {/* Quiz */}
+            {
+                quizId && (
+                    <div className="py-7 flex flex-col sm:flex-row sm:items-center gap-4">
+                        <div className="flex items-center gap-x-4 flex-1">
+                            <div className="size-14 shrink-0 relative rounded-full bg-peri-soft p-2.5">
+                        <Image src="/assets/exam.png" alt="" fill className="object-contain p-2.5" />
+                    </div>
+                            <div>
+                                <h2 className="text-xl text-ink font-medium tracking-tight">Quiz</h2>
+                                <p className="text-sm text-muted-foreground">Test what you learned in this chapter.</p>
+                            </div>
+                        </div>
+                        <Button
+                            variant="outline"
+                            className="sm:w-48"
+                            // Owning the course is enough to take the quiz.
+                            disabled={!isPurchased}
+                            onClick={()=>router.push( quizResultId? `/course/${courseId}/quiz/${quizId}/result` : `/course/${courseId}/quiz/${quizId}`)}
+                        >
+                            { quizResultId ? "View result" : "Take test" }
+                        </Button>
+                    </div>
+                )
+            }
+
+            {/* Progress and certificate, last */}
+            <div className="pt-7 flex flex-col sm:flex-row sm:items-center gap-4">
+                <div className="flex items-center gap-x-4 flex-1">
+                    <div className="size-14 shrink-0 relative rounded-full bg-peri-soft p-2.5">
+                        <Image src="/assets/certificate.png" alt="" fill className="object-contain p-2.5" />
+                    </div>
+                    <div>
+                        <h2 className="text-xl text-ink font-medium tracking-tight">Certificate</h2>
+                        <p className="text-sm text-muted-foreground">
+                            {certificate ? "You've earned it. Nice work!" : "Complete every chapter to earn your LearnIt certificate."}
+                        </p>
+                    </div>
+                </div>
+                <div className="flex flex-col sm:flex-row gap-2">
+                    {
+                        isPurchased && (
+                            <CourseProgressButton
+                                chapterId={chapterId}
+                                courseId={courseId}
+                                nextChapterId={nextChapterId}
+                                isCompleted={!!userProgress?.isCompleted}
+                                certificate={!!certificate}
+                            />
+                        )
+                    }
+                    {
+                        certificate && (
+                            <Button
+                                variant="outline"
+                                onClick={()=>router.push(`/certificate/${certificate.id}`)}
+                            >
+                                View certificate
+                            </Button>
+                        )
+                    }
+                </div>
             </div>
         </div>
     )

@@ -5,7 +5,9 @@ datasource db {
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["typedSql"]
+  // relationJoins: nested includes load in one SQL query (with joins)
+  // instead of one database round trip per level, which made pages slow.
+  previewFeatures = ["typedSql", "relationJoins"]
 }
 
 enum Role {

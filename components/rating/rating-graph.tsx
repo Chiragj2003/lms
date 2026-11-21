@@ -26,16 +26,16 @@ export const RatingGraph = async({
         <div className="w-full flex items-center gap-x-2">
             <div className="flex gap-x-1 items-center">
                 <span className={cn(
-                    "text-sm font-medium text-zinc-500",
+                    "text-sm font-medium text-ink-2 w-3",
                     label === 1 && "pr-1"
                 )}>
                     {label}
                 </span>
                 <FaStar
-                    className="text-zinc-400 h-3 w-3 sm:h-4 sm:w-4"
+                    className="text-[#e6b838] size-3.5"
                 />
             </div>
-            <div className="w-36 sm:w-64 md:w-full h-3 rounded-full bg-gray-200 shrink-0">
+            <div className="flex-1 h-2.5 rounded-full bg-white overflow-hidden">
                 <div 
                     className={cn(
                         "rounded-full h-full",
@@ -46,7 +46,7 @@ export const RatingGraph = async({
                     }}
                 />
             </div>
-            <div className="text-sm text-zinc-500">
+            <div className="text-sm text-ink-2 w-6 text-right">
                 {reviews}
             </div>
         </div>

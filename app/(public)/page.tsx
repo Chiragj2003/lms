@@ -8,9 +8,8 @@ import { CoursesSubPage } from "@/components/subpages/courses.subpage";
 import { FAQSection } from "@/components/subpages/faq-section";
 import { CTASection } from "@/components/subpages/cta-section";
 import Image from "next/image";
-import { Award, GraduationCap, Sparkles, SquareCheckBig } from "lucide-react";
-
-const WEEK = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+import { Award, Sparkles, SquareCheckBig } from "lucide-react";
+import { WeekStrip } from "@/components/subpages/week-strip";
 
 const HomePage = () => {
     return (
@@ -50,22 +49,7 @@ const HomePage = () => {
                                         className="object-contain p-4 sm:p-6"
                                     />
                                 </div>
-                                <div className="flex justify-between rounded-full bg-white px-4 py-3">
-                                    {WEEK.map((day, i) => (
-                                        <div key={day} className="flex flex-col items-center gap-1.5 min-w-8">
-                                            <span className={i === 3 ? "text-xs font-semibold" : "text-xs"}>{day}</span>
-                                            <span className={
-                                                i === 3
-                                                    ? "size-8 rounded-full bg-peach text-ink flex items-center justify-center"
-                                                    : i === 1
-                                                        ? "size-8 rounded-full border-[1.5px] border-dashed border-[#9A9CA8]"
-                                                        : "size-8 rounded-full bg-ink text-white flex items-center justify-center"
-                                            }>
-                                                {i !== 1 && <GraduationCap className="size-4" />}
-                                            </span>
-                                        </div>
-                                    ))}
-                                </div>
+                                <WeekStrip />
                             </div>
                             <div className="absolute left-0 top-10 hidden xl:flex w-60 flex-col gap-3 rounded-3xl bg-white p-5 shadow-float">
                                 <span className="inline-flex w-fit items-center gap-1.5 rounded-full bg-mint px-3 py-1 text-xs font-medium">

@@ -1,9 +1,10 @@
 import Link from "next/link";
-import { GraduationCap } from "lucide-react";
+import Image from "next/image";
 
 import { db } from "@/lib/db";
 import { PageContainer } from "@/components/ui/page-container";
 import { toneFor } from "@/lib/tones";
+import { categoryArt } from "@/lib/category-art";
 import { cn } from "@/lib/utils";
 
 const courseCount = (count: number) => `${count} ${count === 1 ? "course" : "courses"}`;
@@ -43,16 +44,22 @@ const CategoriesPage = async () => {
                             aria-labelledby={`cat-${category.id}`}
                             className="flex flex-col gap-1.5 rounded-[28px] bg-white p-2.5 scroll-mt-24"
                         >
-                            <div className={cn("relative flex min-h-44 flex-col justify-between rounded-[22px] p-5 text-ink", toneFor(index).bg)}>
-                                <div className="flex items-start justify-between">
-                                    <span className="size-14 rounded-full bg-ink text-white flex items-center justify-center" aria-hidden="true">
-                                        <GraduationCap className="size-6" />
-                                    </span>
-                                    <span className="inline-flex h-11 min-w-11 items-center justify-center rounded-full border-[1.5px] border-ink px-3 text-[15px] font-medium">
+                            <div className={cn("relative isolate flex min-h-48 flex-col justify-between overflow-hidden rounded-[22px] p-5 text-ink", toneFor(index).bg)}>
+                                <Image
+                                    src={categoryArt(category.name, index)}
+                                    alt=""
+                                    width={1200}
+                                    height={800}
+                                    sizes="(min-width: 1024px) 420px, (min-width: 640px) 50vw, 100vw"
+                                    aria-hidden="true"
+                                    className="pointer-events-none absolute -right-4 bottom-0 -z-10 h-full w-auto max-w-none object-contain"
+                                />
+                                <div className="flex items-start justify-end">
+                                    <span className="inline-flex h-10 min-w-10 items-center justify-center rounded-full bg-white px-3 text-[15px] font-medium">
                                         {total}
                                     </span>
                                 </div>
-                                <div>
+                                <div className="max-w-[50%]">
                                     <h2 id={`cat-${category.id}`} className="text-2xl font-medium tracking-tight">{category.name}</h2>
                                     <p className="text-sm text-ink-2">{courseCount(total)}</p>
                                 </div>

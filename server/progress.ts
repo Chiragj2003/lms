@@ -9,29 +9,24 @@ import { db } from "@/lib/db";
 export const getUserProgressCount = async (userId: string, courseId: string) => {
     try {   
         
-        const publishedChapters = await db.chapter.findMany({
-            where : {
-                courseId,
-                isPublished : true,
-            },
-            select : {
-                id : true
-            }
-        });
+        // Both counts in parallel; the completed count filters by relation
+        // instead of first fetching every chapter id.
+        const [publishedCount, validCompletedChapters] = await Promise.all([
+            db.chapter.count({
+                where : { courseId, isPublished : true }
+            }),
+            db.userProgress.count({
+                where : {
+                    userId,
+                    isCompleted : true,
+                    chapter : { courseId, isPublished : true }
+                }
+            }),
+        ]);
 
-        const publishedChapterIds = publishedChapters.map((chapters)=>chapters.id);
+        if (publishedCount === 0) return 0;
 
-        const validCompletedChapters = await db.userProgress.count({
-            where : {
-                userId,
-                chapterId : {
-                    in : publishedChapterIds
-                },
-                isCompleted : true
-            }
-        });
-
-        const progressPercentage = (validCompletedChapters/publishedChapterIds.length)*100;
+        const progressPercentage = (validCompletedChapters/publishedCount)*100;
 
         return progressPercentage;
     } catch (error) {

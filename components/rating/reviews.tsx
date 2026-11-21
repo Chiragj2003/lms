@@ -13,7 +13,6 @@ import {
     AvatarImage
 } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Separator } from "../ui/separator";
 
 type Review = Rate & { user : { id: string, name: string|null, image: string|null } };
 
@@ -55,29 +54,28 @@ export const Reviews = ({
 
     return (
         <div
-            className="mt-10 space-y-6 w-full"
+            className="space-y-3 w-full"
         >
-            <h2 className="font-semibold text-foreground md:text-lg">Reviews</h2>
             {
                 reviews.map((review)=>(
-                    <div key={review.id} className="w-full">
-                        <div className="flex items-start w-full gap-x-6 mb-2">
+                    <div key={review.id} className="w-full rounded-3xl bg-soft p-4">
+                        <div className="flex items-start w-full gap-x-4">
                             <div className="h-8 md:h-10 aspect-square shrink-0">
                                 <Avatar className="h-full w-full">
                                     <AvatarImage src={review.user?.image||""} alt="" />
-                                    <AvatarFallback className="bg-muted text-muted-foreground font-semibold md:text-lg" >{review.user.name?.charAt(0)}</AvatarFallback>
+                                    <AvatarFallback className="bg-peri text-ink font-semibold" >{review.user.name?.charAt(0)}</AvatarFallback>
                                 </Avatar>
                             </div>
-                            <div className="space-y-4">
+                            <div className="space-y-2 min-w-0">
                                 <div className="space-y-1">
-                                    <h3 className="text-base text-foreground font-semibold" >{review.user?.name}</h3>
+                                    <h3 className="text-[15px] text-ink font-medium" >{review.user?.name}</h3>
                                     <div className="flex items-center flex-wrap gap-x-6">
                                         <div className="flex gap-x-0.5 items-center" aria-label={`${review.star ?? 0} out of 5 stars`}>
                                             { stars.map((value)=>(
                                                 value <= (review?.star || 0) ? (
                                                     <FaStar
                                                         key={value}
-                                                        className="h-4 w-4 text-amber-500"
+                                                        className="size-4 text-[#e6b838]"
                                                         aria-hidden
                                                     />
                                                 ) : (
@@ -96,14 +94,13 @@ export const Reviews = ({
                                 </div>
                                 {
                                     review.comment && (
-                                        <p className="text-sm text-foreground whitespace-pre-wrap">
+                                        <p className="text-[15px] text-ink-2 whitespace-pre-wrap">
                                             {review.comment}
                                         </p>
                                     )
                                 }
                             </div>
                         </div>
-                        <Separator/>
                     </div>
                 ))
             }

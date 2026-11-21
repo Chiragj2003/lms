@@ -45,56 +45,55 @@ export const AggregatedReview = ({
     if ( isLoading ) {
         return (
             <div className="flex items-center justify-center w-full">
-                <Loader2 className="h-12 w-12 text-zinc-800 animate-spin" />
+                <Loader2 className="size-8 text-ink animate-spin" />
             </div>
         )
     }
 
     
     return (
-        <div className="space-y-6">
-            <Heading className="text-xl md:text-3xl font-bold text-zinc-800">Course Review</Heading>
-            <div className="w-full grid grid-cols-6">
-                <div className="flex h-full items-center justify-between col-span-2">
-                    <div className="flex items-center gap-x-3">
-                        <span className="text-5xl sm:text-7xl font-medium tracking-tight text-ink">
-                            { (data.summary._avg.star || 0).toFixed(1) }
-                        </span>
-                        <FaStar
-                            className="text-zinc-700 h-5 w-5 sm:h-9 sm:w-9"
-                        />
-                    </div>
+        <div className="space-y-4">
+            <Heading className="text-xl font-medium tracking-tight text-ink">Course reviews</Heading>
+            <div className="w-full flex flex-col sm:flex-row gap-5 rounded-3xl bg-soft p-5">
+                <div className="flex sm:flex-col items-center sm:items-start justify-center gap-2 sm:w-32 shrink-0">
+                    <span className="text-5xl font-medium tracking-tight text-ink">
+                        { (data.summary._avg.star || 0).toFixed(1) }
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 text-sm text-ink-2">
+                        <FaStar className="text-[#e6b838] size-4" aria-hidden />
+                        {data.summary._count} {data.summary._count === 1 ? "review" : "reviews"}
+                    </span>
                 </div>
-                <div className="border-l-2 px-2 pl-4 col-span-3 space-y-2 w-full">
+                <div className="flex-1 space-y-2 w-full">
                     <RatingGraph
                         label={5}
                         reviews={data.group.find((value)=>value.star===5)?._count.star || 0}
                         total={data.summary._count}
-                        className = "bg-emerald-500"
+                        className = "bg-ink"
                     />
                     <RatingGraph
                         label={4}
                         reviews={data.group.find((value)=>value.star===4)?._count.star || 0}
                         total={data.summary._count}
-                        className = "bg-emerald-400"
+                        className = "bg-ink"
                     />
                     <RatingGraph
                         label={3}
                         reviews={data.group.find((value)=>value.star===3)?._count.star || 0}
                         total={data.summary._count}
-                        className = "bg-emerald-300"
+                        className = "bg-ink"
                     />
                     <RatingGraph
                         label={2}
                         reviews={data.group.find((value)=>value.star===2)?._count.star || 0}
                         total={data.summary._count}
-                        className = "bg-orange-400"
+                        className = "bg-ink"
                     />
                     <RatingGraph
                         label={1}
                         reviews={data.group.find((value)=>value.star===1)?._count.star || 0}
                         total={data.summary._count}
-                        className = "bg-rose-500"
+                        className = "bg-ink"
                     />
                 </div>
             </div>

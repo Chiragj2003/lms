@@ -97,18 +97,20 @@ export const AI = ({
         
     }
 
+    // Scrolls only the message list. scrollIntoView() also scrolled every
+    // ancestor, so opening the AI tab yanked the whole page down.
     useEffect(()=>{
-        if (ref.current) {
-            ref.current.scrollIntoView();
+        const list = ref.current;
+        if (list) {
+            list.scrollTo({ top : list.scrollHeight });
         }
-    }, [addResponse, messages]);
+    }, [messages]);
 
 
 
     return (
-        <div
-           className="h-full w-full relative overflow-y-auto scroll-smooth"
-        >
+        <div className="h-full w-full flex flex-col">
+            <div ref={ref} className="flex-1 min-h-0 overflow-y-auto scroll-smooth">
             <div 
                 className='flex flex-col gap-y-8 px-4 py-6 min-h-full max-w-3xl w-full mx-auto'
             >
@@ -130,7 +132,7 @@ export const AI = ({
                 {
                     getUserChat(chapterId, session.data?.user.id||"").map((message)=>(
                         <div 
-                            className='w-full space-y-10'
+                            className='w-full space-y-6'
                             key={message.id}
                         >
                             <div
@@ -152,7 +154,7 @@ export const AI = ({
                                         className='size-10 object-contain'
                                     />
                                 </div>
-                                <div className='w-[calc(100%-52px)]'>
+                                <div className='min-w-0 flex-1'>
                                     {
                                         pendingId === message.id && (
                                             <div className='py-1'>
@@ -166,9 +168,9 @@ export const AI = ({
                         </div>
                     ))
                 }
-                <div className='h-0' ref={ref} />
             </div>
-            <div className='px-3 py-3 w-full flex items-center justify-center sticky bottom-0 bg-gradient-to-b from-transparent via-30% via-white to-white'>
+            </div>
+            <div className='shrink-0 px-3 py-3 w-full flex items-center justify-center border-t border-border bg-white'>
                 <Form {...form}>
                     <form
                         className='max-w-3xl w-full bg-soft mx-auto h-14 rounded-full overflow-hidden flex items-center pl-5 pr-1.5 focus-within:shadow-[inset_0_0_0_2px_#121216]'

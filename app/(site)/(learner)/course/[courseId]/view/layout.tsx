@@ -45,18 +45,19 @@ const ViewLayoutPage = async (props: ViewLayoutPageProps) => {
         notFound();
     }
 
-    const progressCount = userId ? await getUserProgressCount(userId, course.id) : 0;
-
-    const purchase = userId
-        ? await db.purchase.findUnique({
-            where : {
-                userId_courseId : {
-                    userId,
-                    courseId : course.id
+    const [progressCount, purchase] = userId
+        ? await Promise.all([
+            getUserProgressCount(userId, course.id),
+            db.purchase.findUnique({
+                where : {
+                    userId_courseId : {
+                        userId,
+                        courseId : course.id
+                    }
                 }
-            }
-        })
-        : null;
+            }),
+        ])
+        : [0, null];
 
     return (
         <>
@@ -65,7 +66,7 @@ const ViewLayoutPage = async (props: ViewLayoutPageProps) => {
                 progressCount={progressCount}
                 purchase={purchase}
             />
-            <div className="h-full w-full flex gap-3 overflow-hidden p-2 sm:p-3">
+            <div className="h-[calc(100dvh-80px)] w-full flex gap-3 overflow-hidden px-3 pb-3 sm:px-6 sm:pb-4">
                 <div className="hidden md:flex h-full w-80 flex-col shrink-0 overflow-hidden rounded-[24px] bg-white z-10 relative">
                     <SideBar
                         course={course}

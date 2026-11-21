@@ -9,18 +9,19 @@ interface LayoutPageProps {
     children: React.ReactNode;
 }
 
-
+/**
+ * Learner pages use the same floating white header as the rest of the
+ * site; the course player sizes itself to the space left under it.
+ */
 const LayoutPage = ({
     children
 }: LayoutPageProps ) => {
     return (
-        <div className="h-full bg-frame p-2 sm:p-4">
-            <div className="h-full flex flex-col rounded-[36px] bg-ink px-2 pb-2 sm:px-2.5 sm:pb-2.5">
-                <Header variant="app" />
-                <main className="flex-1 min-h-0 overflow-y-auto rounded-[28px] bg-background">
-                    {children}
-                </main>
-            </div>
+        <div className="min-h-full flex flex-col">
+            <Header variant="default" />
+            <main className="flex-1">
+                {children}
+            </main>
         </div>
     );
 }

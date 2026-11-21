@@ -14,6 +14,9 @@ const nextConfig = {
             // missing, so a course by a GitHub-signed-in tutor failed to render.
             { protocol : "https", hostname : "lh3.googleusercontent.com" },
             { protocol : "https", hostname : "avatars.githubusercontent.com" },
+            // Profile pictures from Clerk.
+            { protocol : "https", hostname : "img.clerk.com" },
+            { protocol : "https", hostname : "images.clerk.dev" },
             { protocol : "https", hostname : "files.edgestore.dev" },
             // Demo course artwork and placeholder reviewer avatars.
             { protocol : "https", hostname : "picsum.photos" },

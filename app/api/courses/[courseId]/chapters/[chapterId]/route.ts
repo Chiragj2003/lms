@@ -2,8 +2,12 @@ import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { isRecordNotFound } from "@/lib/prisma-errors";
 import { ChapterUpdateSchema } from "@/schemas/chapter-update.schema";
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import { deleteUnusedUploads } from "@/lib/storage-cleanup";
+import { isTranscriptionConfigured, transcribeChapter } from "@/lib/transcribe";
+
+// Leaves time for the automatic transcript that runs after a new video is saved.
+export const maxDuration = 300;
 
 
 export async function PATCH(
@@ -54,6 +58,18 @@ export async function PATCH(
         // A replaced video would otherwise stay in storage forever.
         if (previous?.videoUrl && previous.videoUrl !== chapter.videoUrl) {
             await deleteUnusedUploads([previous.videoUrl]);
+        }
+
+        // A new video gets its transcript written automatically, after the
+        // response is sent, so the AI tutor has something to work from.
+        if (chapter.videoUrl && previous && previous.videoUrl !== chapter.videoUrl && isTranscriptionConfigured()) {
+            after(async () => {
+                try {
+                    await transcribeChapter(chapter.id);
+                } catch (error) {
+                    console.error("AUTO TRANSCRIPT ERROR", error);
+                }
+            });
         }
 
         return NextResponse.json(chapter);

@@ -44,16 +44,19 @@ export const getChapter = async({
 } : GetChapterProps)=> {
     try {
         
-        const purchase = await db.purchase.findUnique({
+        // Independent lookups run together: one at a time they cost a full
+        // database round trip each, which made opening a chapter slow.
+        const [purchase, course, chapter, userProgress, ownedCertificate] = await Promise.all([
+        db.purchase.findUnique({
             where : {
                 userId_courseId : {
                     userId,
                     courseId
                 }
             }
-        });
+        }),
 
-        const course = await db.course.findUnique({
+        db.course.findUnique({
             where : {
                     isPublished : true,
                     id : courseId
@@ -88,12 +91,12 @@ export const getChapter = async({
                     }
                 }
             }
-        });
+        }),
 
-        // Scoped to courseId: the purchase check above is for courseId, so an
+        // Scoped to courseId: the purchase check is for courseId, so an
         // unscoped lookup let an owner of any course open another course's
         // paid chapter by putting its id in the URL.
-        const chapter = await db.chapter.findUnique({
+        db.chapter.findUnique({
             where : {
                 id: chapterId,
                 courseId,
@@ -123,24 +126,33 @@ export const getChapter = async({
                     },
                 }
             }
-        });
+        }),
 
-        let certificate : Cerificate|null = null;
+        db.userProgress.findUnique({
+            where : {
+                userId_chapterId : {
+                    userId,
+                    chapterId
+                }
+            }
+        }),
+
+        db.cerificate.findUnique({
+            where : {
+                userId_courseId : {
+                    userId,
+                    courseId
+                }
+            }
+        }),
+        ]);
+
+        // A certificate only counts alongside a purchase (as before).
+        const certificate : Cerificate|null = purchase ? ownedCertificate : null;
         let nextChapter : Chapter|null = null;
 
         if (!chapter || !course) {
             throw new Error("Chapter or course not found");
-        }
-
-        if (purchase) {
-            certificate = await db.cerificate.findUnique({
-                where : {
-                    userId_courseId : {
-                        userId,
-                        courseId
-                    }
-                }
-            })
         }
 
         if (chapter.isFree || purchase) {
@@ -157,15 +169,6 @@ export const getChapter = async({
                 }
             });
         }
-
-        const userProgress = await db.userProgress.findUnique({
-            where : {
-                userId_chapterId : {
-                    userId,
-                    chapterId
-                }
-            }
-        });
 
         // Whatever is returned here ends up in the page payload, so paid
         // material must never leave the server for a locked chapter — hiding

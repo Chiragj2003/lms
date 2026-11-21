@@ -6,7 +6,7 @@ interface LogoMarkProps {
     inverted?: boolean;
 }
 
-/** The LearnIt mark: an off-centre ring inside a disc. */
+/** The LearnIt mark: an off-centre ring inside a disc (matches app/icon.png). */
 export const LogoMark = ({ className, inverted }: LogoMarkProps) => (
     <span
         aria-hidden="true"
@@ -16,9 +16,8 @@ export const LogoMark = ({ className, inverted }: LogoMarkProps) => (
             className
         )}
     >
-        <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth={1.8}>
-            <circle cx="12" cy="12" r="8" />
-            <circle cx="13.5" cy="12" r="3.5" />
+        <svg viewBox="0 0 24 24" className="size-6" fill="none" stroke="currentColor" strokeWidth={2.6}>
+            <circle cx="12.8" cy="11.2" r="5" />
         </svg>
     </span>
 );

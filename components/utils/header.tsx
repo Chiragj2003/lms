@@ -94,7 +94,7 @@ export const Header = ({ variant }: HeaderProps) => {
             <div
                 className={cn(
                     "mx-auto flex h-[60px] items-center justify-between gap-3 rounded-full pl-3 pr-2 sm:pl-5 transition-shadow duration-300",
-                    isApp ? "max-w-none bg-transparent" : "max-w-[1320px] bg-white",
+                    isApp ? "max-w-none bg-transparent" : isPlayerPage ? "max-w-none bg-white" : "max-w-[1320px] bg-white",
                     isGhost && scrolled && "shadow-elevated"
                 )}
             >

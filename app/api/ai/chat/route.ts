@@ -4,6 +4,7 @@ import * as z from "zod";
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { canAccessChapter } from "@/lib/chapter-access";
+import { richTextToPlain } from "@/lib/rich-text-plain";
 import { rateLimit, tooManyRequests } from "@/lib/rate-limit";
 
 const ChatSchema = z.object({
@@ -77,7 +78,12 @@ export async function POST(req: Request) {
         // feed the model another chapter's transcript.
         const chapter = await db.chapter.findUnique({
             where : { id : chapterId },
-            select : { title : true, transcript : true },
+            select : {
+                title : true,
+                description : true,
+                transcript : true,
+                course : { select : { title : true, shortDescription : true, description : true } },
+            },
         });
 
         if (!chapter) {
@@ -85,6 +91,8 @@ export async function POST(req: Request) {
         }
 
         const transcript = (chapter.transcript ?? "").slice(0, MAX_TRANSCRIPT_CHARS);
+        const chapterDescription = richTextToPlain(chapter.description).slice(0, 4000);
+        const courseDescription = richTextToPlain(chapter.course.description).slice(0, 4000);
         const model = process.env.GEMINI_MODEL || "gemini-flash-lite-latest";
 
         const upstream = await fetch(`${GEMINI_URL}/${model}:streamGenerateContent?alt=sse`, {
@@ -100,12 +108,22 @@ export async function POST(req: Request) {
                 // the learner's text, so a question can't override them.
                 systemInstruction : {
                     parts : [{
-                        text :
-                            "You are a helpful tutor for one chapter of an online course. Answer only questions " +
-                            "related to this chapter's topic and transcript. If a question is unrelated, politely " +
-                            "steer the learner back to the chapter.\n\n" +
-                            `Chapter title: ${chapter.title}\n\n` +
-                            `Chapter transcript:\n${transcript || "(no transcript available)"}`,
+                        text : [
+                            `You are the friendly AI tutor inside the online course "${chapter.course.title}".`,
+                            `The learner is on the chapter "${chapter.title}".`,
+                            "Help them understand this chapter, the course and the subject it teaches. Use the",
+                            "transcript and descriptions below when they cover the question; otherwise answer from",
+                            "your own knowledge of the subject. If asked about the course itself, summarise it from",
+                            "the course details. Only decline questions that have nothing to do with learning this",
+                            "subject, and then suggest a related question instead. Never say you can only use the",
+                            "transcript. Keep answers clear and concise, use Markdown, and include short code",
+                            "examples when they help.",
+                            "",
+                            `Course summary: ${chapter.course.shortDescription || "(none)"}`,
+                            `Course description:\n${courseDescription || "(none)"}`,
+                            `Chapter description:\n${chapterDescription || "(none)"}`,
+                            `Chapter transcript:\n${transcript || "(no transcript for this chapter)"}`,
+                        ].join("\n"),
                     }],
                 },
                 contents : [{ role : "user", parts : [{ text : prompt }] }],

@@ -10,7 +10,7 @@ interface SideBarProps {
     purchase: Purchase|null;
 }
 
-export const SideBar = async({
+export const SideBar = ({
     course,
     progressCount,
     purchase
